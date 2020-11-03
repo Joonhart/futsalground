@@ -5,24 +5,23 @@
 <div class="container">
     <div th:replace="fragments/bodyHeader :: menu('board')" />
     <div>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>글번호</th>
-                <th>작성자</th>
-                <th>제목</th>
-                <th>내용</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td th:text="${boardViewDto.id}"></td>
-                <td th:text="${boardViewDto.writer}"></td>
-                <td th:text="${boardViewDto.title}"></td>
-                <td th:text="${boardViewDto.content}"></td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="form-group">
+            <label th:for="writer">작성자</label>
+            <input type="text" th:field="${boardViewDto.writer}" readonly="readonly" class="form-control">
+        </div>
+        <div class="form-group">
+            <label th:for="title">제목</label>
+            <input type="text" th:field="${boardViewDto.title}" readonly="readonly" class="form-control">
+        </div>
+        <div class="form-group">
+            <label th:for="content">내용</label>
+            <textarea class="form-control" id="content" rows="3" readonly="readonly" th:field="${boardViewDto.content}"></textarea>
+        </div>
+        <div class="text-right">
+            <a class="btn btn-primary" th:href="@{/board}">List</a>
+            <a class="btn btn-primary" onclick="history.back()">Back</a>
+            <a class="btn btn-primary" th:href="@{/board/{id}/edit (id=${boardViewDto.id})}">edit</a>
+        </div>
     </div>
     <div th:replace="fragments/footer :: footer" />
 </div> <!-- /container -->

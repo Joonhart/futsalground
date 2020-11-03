@@ -1,28 +1,66 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header" />
+<style>
+.custom-select {
+    width: 10%;
+}
+</style>
 <body>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: menu('board')" />
     <div>
+        <h2>게시판</h2>
+        <div>총 게시글 : <span th:text="${boardViewDtos.totalElements}"></span></div>
         <table class="table table-striped">
             <thead>
             <tr>
                 <th>글번호</th>
-                <th>작성자</th>
                 <th>제목</th>
-                <th>내용</th>
+                <th>작성자</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="boardViewDto : ${boardViewDtos}">
                 <td th:text="${boardViewDto.id}"></td>
+                <td><a th:text="${boardViewDto.title}" th:href="@{/board/{id} (id=${boardViewDto.id})}"></a></td>
                 <td th:text="${boardViewDto.writer}"></td>
-                <td th:text="${boardViewDto.title}"></td>
-                <td th:text="${boardViewDto.content}"></td>
             </tr>
             </tbody>
         </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${1 == boardViewDtos.pageable.pageNumber + 1} ? 'disabled'">
+                    <a class="page-link" href="#"  th:href="@{/board(page=${boardViewDtos.pageable.pageNumber}-1)}">Previous</a>
+                </li>
+                <li class="page-item" th:classappend="${curPage == i} ? 'disabled'" th:each="i : ${#numbers.sequence(startPage, endPage)}" >
+                    <a class="page-link" href="#" th:href="@{/board(page=${i}-1)}" th:text="${i}" >1</a></li>
+                <li class="page-item" th:classappend="${boardViewDtos.totalPages == boardViewDtos.pageable.pageNumber + 1} ? 'disabled'">
+                    <a class="page-link" href="#" th:href="@{/board(page=${boardViewDtos.pageable.pageNumber}+1)}">Next</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="d-flex justify-content-start">
+            <form class="form-inline" method="get" th:action="@{/board}">
+            <select class="custom-select" id="searchCond" name="searchCond">
+                <option value="" selected>검색조건</option>
+                <option value="title" th:if="">title</option>
+                <option value="content">content</option>
+                <option value="title&content">title&content</option>
+                <option value="writer">writer</option>
+            </select>
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="searchText" class="sr-only">search</label>
+                    <input type="text" class="form-control" id="searchText" name="searchText" placeholder="검색어입력"
+                    th:value="${param.searchText}">
+                </div>
+                <button type="submit" class="btn btn-light">search</button>
+            </form>
+        </div>
+        <div class="text-right">
+            <a type="button" class="btn btn-primary" th:href="@{/board/post}">write</a>
+        </div>
+
     </div>
     <div th:replace="fragments/footer :: footer" />
 </div> <!-- /container -->

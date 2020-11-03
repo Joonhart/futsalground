@@ -5,10 +5,11 @@
 <body>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: menu('board')"/>
-    <form role="form" method="put" action="/board/${boardViewDto.id}/edit"  th:object="${boardViewDto}"
+    <form role="form" method="post" th:object="${boardViewDto}"
           >
         <div class="form-group">
-            <input type="hidden" th.field="*{writer}">
+            <input type="hidden" th:field="*{id}" />
+            <input type="hidden" th:field="*{writer}" />
             <label th:for="title">제목</label>
             <input type="text" th:field="*{title}" class="form-control"
                    placeholder="제목를 입력하세요">

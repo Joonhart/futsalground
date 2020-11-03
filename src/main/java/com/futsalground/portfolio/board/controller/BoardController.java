@@ -6,6 +6,11 @@ import com.futsalground.portfolio.board.model.BoardViewDto;
 import com.futsalground.portfolio.board.service.BoardSaveService;
 import com.futsalground.portfolio.board.service.BoardViewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,8 +29,27 @@ public class BoardController {
     private final BoardViewService boardViewService;
 
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("boardViewDtos", boardViewService.findAll());
+    public String list(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 5)
+            Pageable pageable, @RequestParam(required = false) String searchText, String searchCond) {
+        Page<BoardViewDto> boardViewDtos = null;
+        if (searchCond == null || searchCond.equals("")) {
+            boardViewDtos = boardViewService.findAll(pageable);
+        } else if (searchCond.equals("title")) {
+            boardViewDtos = boardViewService.findByTitleContaining(searchText, pageable);
+        } else if (searchCond.equals("content")) {
+            boardViewDtos = boardViewService.findByContentContaining(searchText, pageable);
+        } else if (searchCond.equals("writer")) {
+            boardViewDtos = boardViewService.findByWriterContaining(searchText, pageable);
+        } else {
+            boardViewDtos = boardViewService.findByTitleContainingOrContentContaining(searchText, searchText, pageable);
+        }
+        int startPage = Math.max(1, boardViewDtos.getPageable().getPageNumber() - 4);
+        int endPage = Math.min(boardViewDtos.getTotalPages(), boardViewDtos.getPageable().getPageNumber() + 4);
+        int curPage = boardViewDtos.getPageable().getPageNumber()+1;
+        model.addAttribute("curPage", curPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("boardViewDtos", boardViewDtos);
         return "board/boardList";
     }
 
@@ -58,11 +82,10 @@ public class BoardController {
         return "board/updateForm";
     }
 
-    @PutMapping("{id}/edit")
-    public String update(@Valid BoardSaveDto boardSaveDto, Model model) throws BoardNotFoundException {
-        boardSaveService.updateBoard(boardSaveDto);
-        model.addAttribute("boardViewDto", boardViewService.findById(boardSaveDto.getId()).orElseThrow(BoardNotFoundException::new));
-        return "board/boardView";
+    @PostMapping("/{id}/edit")
+    public String update(@PathVariable Long id, @ModelAttribute BoardViewDto boardViewDto) throws BoardNotFoundException {
+        boardSaveService.updateBoard(id, boardViewDto.getTitle(), boardViewDto.getContent());
+        return "redirect:/board/" + id;
     }
 
     @DeleteMapping("{id}")
@@ -70,6 +93,4 @@ public class BoardController {
         boardSaveService.deleteBoard(id);
         return "redirect:/board";
     }
-
-
 }

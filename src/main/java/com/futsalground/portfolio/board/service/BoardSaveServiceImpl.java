@@ -1,12 +1,15 @@
 package com.futsalground.portfolio.board.service;
 
+import com.futsalground.portfolio.board.domain.Board;
 import com.futsalground.portfolio.board.exception.BoardNotFoundException;
 import com.futsalground.portfolio.board.model.BoardSaveDto;
-import com.futsalground.portfolio.board.domain.Board;
+import com.futsalground.portfolio.board.model.BoardViewDto;
 import com.futsalground.portfolio.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,12 +30,9 @@ public class BoardSaveServiceImpl implements BoardSaveService {
     }
 
     @Override
-    public Long updateBoard(BoardSaveDto boardSaveDto) throws BoardNotFoundException {
-        Board board = boardRepository.findById(boardSaveDto.getId()).orElseThrow(
-                BoardNotFoundException::new
-        );
-        board.update(board.getTitle(), board.getContent());
-        return board.getId();
+    public void updateBoard(Long id, String title, String content) throws BoardNotFoundException {
+        Board board = boardRepository.findById(id).orElseThrow(BoardNotFoundException::new);
+        board.update(title, content);
     }
 
     @Override

@@ -12,8 +12,7 @@
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" th:replace="fragments/bodyHeader :: menu('home')">
-    </nav>
+    <div th:replace="fragments/bodyHeader :: menu('board')" />
 </header>
 
 <main role="main">
@@ -29,9 +28,9 @@
                 <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
                 <div class="container">
                     <div class="carousel-caption text-left">
-                        <h1>Example headline.</h1>
-                        <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                        <p><a class="btn btn-lg btn-primary" href="#" role="button">Sign up today</a></p>
+                        <h1>풋살 구장 검색</h1>
+                        <p>근처에 있는 풋살 구장을 찾아서 예약하세요</p>
+                        <p><a class="btn btn-lg btn-primary" href="#" role="button">풋살장 보러가기</a></p>
                     </div>
                 </div>
             </div>
@@ -39,9 +38,9 @@
                 <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
                 <div class="container">
                     <div class="carousel-caption">
-                        <h1>Another example headline.</h1>
-                        <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                        <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn more</a></p>
+                        <h1>용병 찾기/구하기</h1>
+                        <p>팀이 없나요? 팀원이 없나요? 용병 게시판에 등록하세요</p>
+                        <p><a class="btn btn-lg btn-primary" href="#" role="button">용병 게시판 가기</a></p>
                     </div>
                 </div>
             </div>
@@ -49,9 +48,9 @@
                 <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
                 <div class="container">
                     <div class="carousel-caption text-right">
-                        <h1>One more for good measure.</h1>
-                        <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                        <p><a class="btn btn-lg btn-primary" href="#" role="button">Browse gallery</a></p>
+                        <h1>축구에 대해 다같이 얘기해보세요</h1>
+                        <p>무엇이든 묻고 대답할 수 있습니다.</p>
+                        <p><a class="btn btn-lg btn-primary" href="#" th:href="@{/board}" role="button">게시판 가기</a></p>
                     </div>
                 </div>
             </div>

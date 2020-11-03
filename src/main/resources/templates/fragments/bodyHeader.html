@@ -9,13 +9,13 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item" th:classappend="${menu} == 'board' ? 'active' : ''">
                         <a class="nav-link" href="/board">Board <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item" th:classappend="${menu} == 'player'? 'active'">
+                    <li class="nav-item" th:classappend="${menu} == 'player' ? 'active' : ''">
                         <a class="nav-link" href="#">Player</a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item" th:classappend="${menu} == 'member' ? 'active' : ''">
                         <a class="nav-link" href="#">JoinUs <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
