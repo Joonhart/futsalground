@@ -4,7 +4,7 @@
 
 <body>
 <div class="container">
-    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div th:replace="fragments/bodyHeader :: menu('board')"/>
     <form role="form" action="/board/post" th:object="${boardSaveDto}"
           method="post">
         <div class="form-group">
