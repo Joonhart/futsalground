@@ -1,5 +1,6 @@
 package com.futsalground.portfolio.board.domain;
 
+import com.futsalground.portfolio.common.domain.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotEmpty;
         sequenceName = "board_seq", allocationSize = 1)
 @EqualsAndHashCode(of = "id")
 @ToString
-public class Board {
+public class Board extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,

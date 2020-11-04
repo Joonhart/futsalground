@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <div class="header" th:fragment="menu(menu)">
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -22,10 +22,11 @@
                         <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                     </li>
                 </ul>
-                <form class="form-inline mt-2 mt-md-0">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
+                    <a class="btn btn-outline-success my-2 mr-2 my-sm-0" sec:authorize="isAnonymous()" th:href="@{/member/join}">가입</a>
+                    <a class="btn btn-outline-success my-2 mr-2 my-sm-0" sec:authorize="isAnonymous()" th:href="@{/member/login}">로그인</a>
+                    <a class="btn btn-outline-success my-2 mr-2 my-sm-0" sec:authorize="isAuthenticated()" th:href="@{/member/logout}">로그아웃</a>
+                    <a class="btn btn-outline-success my-2 mr-2 my-sm-0" sec:authorize="hasRole('ROLE_MEMBER')" th:href="@{/member/mypage}">내정보</a>
+                    <a class="btn btn-outline-success my-2 mr-2 my-sm-0" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}">어드민</a>
             </div>
         </nav>
     </header>

@@ -5,8 +5,7 @@
 <body>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: menu('board')"/>
-    <form role="form" method="post" th:object="${boardViewDto}"
-          >
+    <form role="form" method="post" th:object="${boardViewDto}">
         <div class="form-group">
             <input type="hidden" th:field="*{id}" />
             <input type="hidden" th:field="*{writer}" />
