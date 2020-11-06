@@ -18,7 +18,10 @@
             <input type="text" th:field="*{content}" class="form-control"
                    placeholder="내용를 입력하세요">
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="text-right">
+            <a class="btn btn-primary" onclick="history.back()">Cancel</a>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
     </form>
     <br/>
     <div th:replace="fragments/footer :: footer" />

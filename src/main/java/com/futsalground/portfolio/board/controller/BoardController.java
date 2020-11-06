@@ -1,17 +1,15 @@
 package com.futsalground.portfolio.board.controller;
 
-import com.futsalground.portfolio.board.exception.BoardNotFoundException;
 import com.futsalground.portfolio.board.model.BoardSaveDto;
 import com.futsalground.portfolio.board.model.BoardViewDto;
 import com.futsalground.portfolio.board.service.BoardSaveService;
 import com.futsalground.portfolio.board.service.BoardViewService;
+import com.futsalground.portfolio.exception.BoardNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,7 +43,10 @@ public class BoardController {
         }
         int startPage = Math.max(1, boardViewDtos.getPageable().getPageNumber() - 4);
         int endPage = Math.min(boardViewDtos.getTotalPages(), boardViewDtos.getPageable().getPageNumber() + 4);
+        if (startPage > endPage)  endPage = startPage;
         int curPage = boardViewDtos.getPageable().getPageNumber()+1;
+        int totalPage = boardViewDtos.getTotalPages() == 0 ? 1 : boardViewDtos.getTotalPages();
+        model.addAttribute("totalPage", totalPage);
         model.addAttribute("curPage", curPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
@@ -61,6 +62,7 @@ public class BoardController {
 
     @PostMapping("/post")
     public String post(@Valid BoardSaveDto boardSaveDto, BindingResult result) {
+        System.out.println("boardSaveDto = " + boardSaveDto);
         if (result.hasErrors()) {
             return "board/boardForm";
         }

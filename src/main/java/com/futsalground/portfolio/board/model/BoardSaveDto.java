@@ -1,5 +1,6 @@
 package com.futsalground.portfolio.board.model;
 
+import com.futsalground.portfolio.common.domain.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +21,5 @@ public class BoardSaveDto {
 
     @NotEmpty(message = "내용을 입력해 주세요.")
     private String content;
-
 
 }

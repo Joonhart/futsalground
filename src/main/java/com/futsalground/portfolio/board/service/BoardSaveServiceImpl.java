@@ -1,15 +1,12 @@
 package com.futsalground.portfolio.board.service;
 
 import com.futsalground.portfolio.board.domain.Board;
-import com.futsalground.portfolio.board.exception.BoardNotFoundException;
 import com.futsalground.portfolio.board.model.BoardSaveDto;
-import com.futsalground.portfolio.board.model.BoardViewDto;
 import com.futsalground.portfolio.board.repository.BoardRepository;
+import com.futsalground.portfolio.exception.BoardNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

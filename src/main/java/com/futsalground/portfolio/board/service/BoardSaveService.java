@@ -1,9 +1,7 @@
 package com.futsalground.portfolio.board.service;
 
-import com.futsalground.portfolio.board.exception.BoardNotFoundException;
 import com.futsalground.portfolio.board.model.BoardSaveDto;
-import com.futsalground.portfolio.board.model.BoardViewDto;
-import org.springframework.data.domain.Pageable;
+import com.futsalground.portfolio.exception.BoardNotFoundException;
 
 public interface BoardSaveService {
 
