@@ -1,7 +1,7 @@
 package com.futsalground.portfolio.member.service;
 
 import com.futsalground.portfolio.member.domain.Member;
-import com.futsalground.portfolio.member.domain.MemberType;
+import com.futsalground.portfolio.member.domain.Role;
 import com.futsalground.portfolio.member.model.MemberSaveDto;
 import com.futsalground.portfolio.member.model.MemberViewDto;
 import com.futsalground.portfolio.member.repository.MemberRepository;
@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,18 +24,19 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService, UserDetailsService {
+public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final HttpSession httpSession;
 
     @Override
-    public void save(MemberSaveDto memberSaveDto) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    public Long save(MemberSaveDto memberSaveDto) {
         Member member = Member.builder()
                 .email(memberSaveDto.getEmail())
-                .password(passwordEncoder.encode(memberSaveDto.getPassword()))
+                .password(memberSaveDto.getPassword())
                 .build();
         memberRepository.save(member);
+        return member.getId();
     }
 
     @Override
@@ -55,20 +57,9 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
         return findMember;
     }
 
-
     @Override
-    public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
-        Optional<Member> userEntityWrapper = memberRepository.findByEmail(userEmail);
-        Member member = userEntityWrapper.get();
-
-        List<GrantedAuthority> authorities = new ArrayList<>();
-
-        if ((userEmail).startsWith("admin")) {
-            authorities.add(new SimpleGrantedAuthority(MemberType.ADMIN.getValue()));
-        } else {
-            authorities.add(new SimpleGrantedAuthority(MemberType.MEMBER.getValue()));
-        }
-
-        return new User(member.getEmail(), member.getPassword(), authorities);
+    public Optional<Member> findByEmailAndPassword(String email, String password) {
+        Optional<Member> member = memberRepository.findByEmailAndPassword(email, password);
+        return member;
     }
 }

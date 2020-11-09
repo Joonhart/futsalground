@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum MemberType {
+public enum Role {
     ADMIN("ROLE_ADMIN"),
     MEMBER("ROLE_MEMBER");
 

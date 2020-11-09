@@ -30,7 +30,8 @@ public class BoardViewServiceImpl implements BoardViewService {
                         b.getId(),
                         b.getWriter(),
                         b.getTitle(),
-                        b.getContent()
+                        b.getContent(),
+                        b.getCreatedDate()
                 ));
     }
 
@@ -74,7 +75,8 @@ public class BoardViewServiceImpl implements BoardViewService {
                 board.getId(),
                 board.getWriter(),
                 board.getTitle(),
-                board.getContent()
+                board.getContent(),
+                board.getCreatedDate()
         )).collect(Collectors.toList());
         return collect;
     }

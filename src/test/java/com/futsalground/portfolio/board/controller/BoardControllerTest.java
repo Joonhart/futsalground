@@ -30,7 +30,7 @@ class BoardControllerTest {
     EntityManager em;
 
     @Test
-    @DisplayName("게시글 저장 테스트")
+    @DisplayName("게시글 저장")
     public void post() {
         BoardSaveDto boardSaveDto = new BoardSaveDto();
         boardSaveDto.setWriter("writer");
@@ -47,7 +47,7 @@ class BoardControllerTest {
     }
 
     @Test
-    @DisplayName("게시글 수정 테스트")
+    @DisplayName("게시글 수정")
     public void update() throws BoardNotFoundException {
         BoardSaveDto boardSaveDto = new BoardSaveDto();
         boardSaveDto.setWriter("writer");

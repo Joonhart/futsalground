@@ -18,6 +18,7 @@
                 <th>글번호</th>
                 <th>제목</th>
                 <th>작성자</th>
+                <th>작성일자</th>
             </tr>
             </thead>
             <tbody>
@@ -25,6 +26,9 @@
                 <td th:text="${boardViewDto.id}"></td>
                 <td><a th:text="${boardViewDto.title}" th:href="@{/board/{id} (id=${boardViewDto.id})}"></a></td>
                 <td th:text="${boardViewDto.writer}"></td>
+                <td>
+                    <span th:text="${#temporals.format(boardViewDto.createdDate, 'yyyy-MM-dd HH:mm')}"></span>
+                </td>
             </tr>
             </tbody>
         </table>

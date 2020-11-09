@@ -9,9 +9,11 @@ import java.util.Optional;
 
 public interface MemberService {
 
-    void save(MemberSaveDto memberSaveDto);
+    Long save(MemberSaveDto memberSaveDto);
 
     boolean checkDuplicateId(String email);
 
     Optional<MemberViewDto> findMember(Long id);
+
+    Optional<Member> findByEmailAndPassword(String email, String password);
 }

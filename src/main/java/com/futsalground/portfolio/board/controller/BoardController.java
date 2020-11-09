@@ -5,6 +5,8 @@ import com.futsalground.portfolio.board.model.BoardViewDto;
 import com.futsalground.portfolio.board.service.BoardSaveService;
 import com.futsalground.portfolio.board.service.BoardViewService;
 import com.futsalground.portfolio.exception.BoardNotFoundException;
+import com.futsalground.portfolio.member.domain.Member;
+import com.futsalground.portfolio.member.service.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -25,6 +28,8 @@ public class BoardController {
 
     private final BoardSaveService boardSaveService;
     private final BoardViewService boardViewService;
+    private final MemberServiceImpl memberService;
+    private final HttpSession httpSession;
 
     @GetMapping
     public String list(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 5)
@@ -62,7 +67,8 @@ public class BoardController {
 
     @PostMapping("/post")
     public String post(@Valid BoardSaveDto boardSaveDto, BindingResult result) {
-        System.out.println("boardSaveDto = " + boardSaveDto);
+        Member member = (Member) httpSession.getAttribute("member");
+        boardSaveDto.setWriter(member.getEmail());
         if (result.hasErrors()) {
             return "board/boardForm";
         }

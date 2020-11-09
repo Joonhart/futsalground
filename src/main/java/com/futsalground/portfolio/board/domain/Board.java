@@ -24,15 +24,15 @@ public class Board extends BaseEntity {
     private Long id;
 
     @NotEmpty
-    @Column(name = "writer")
+    @Column(name = "writer", length = 100, nullable = false)
     private String writer;
 
     @NotEmpty
-    @Column(name = "title")
+    @Column(name = "title", length = 100, nullable = false)
     private String title;
 
     @NotEmpty
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @Builder
@@ -46,7 +46,7 @@ public class Board extends BaseEntity {
 
 
     public void update(String title, String content) {
-        super.update("update", LocalDateTime.now());
+        super.update(LocalDateTime.now());
         this.title = title;
         this.content = content;
     }

@@ -3,16 +3,17 @@ package com.futsalground.portfolio.board.model;
 import com.futsalground.portfolio.common.domain.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Getter
 @Setter
+@ToString
 public class BoardSaveDto {
 
     private Long id;
-    @NotEmpty(message = "작성자 입력은 필수입니다.")
     private String writer;
 
     @NotEmpty(message = "제목을 입력해 주세요.")

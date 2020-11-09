@@ -4,9 +4,13 @@ import com.futsalground.portfolio.member.model.MemberSaveDto;
 import com.futsalground.portfolio.member.model.MemberViewDto;
 import com.futsalground.portfolio.member.service.MemberService;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -14,19 +18,23 @@ import static org.assertj.core.api.Assertions.*;
 @Transactional
 class MemberControllerTest {
 
-    private final MemberService memberService;
+    @Autowired
+    MemberService memberService;
+    @Autowired
+    EntityManager em;
 
-    public MemberControllerTest(MemberService memberService) {
-        this.memberService = memberService;
-    }
 
     @Test
+    @DisplayName("회원가입")
     public void memberJoin() {
         MemberSaveDto memberSaveDto = new MemberSaveDto(null, "joonhart@gmail.com", "1234");
-        memberService.save(memberSaveDto);
+        Long saveNum = memberService.save(memberSaveDto);
 
-        MemberViewDto member = memberService.findMember(1L).get();
-        assertThat(memberSaveDto.getId()).isEqualTo(member.getId());
+        em.flush();
+        em.clear();
+
+        MemberViewDto member = memberService.findMember(saveNum).get();
         assertThat(memberSaveDto.getEmail()).isEqualTo(member.getEmail());
+        System.out.println("member = " + member);
     }
 }

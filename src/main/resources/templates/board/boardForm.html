@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="fragments/header :: header" />
 
 <body>
@@ -8,10 +8,8 @@
     <form role="form" th:action="@{/board/post}" th:object="${boardSaveDto}" method="post">
         <input type="hidden" th:text="*{id}">
         <div class="form-group">
-            <label th:for="writer">작성자</label>
-            <input type="text" th:field="*{writer}" class="form-control"
-                   th:classappend="${#fields.hasErrors('writer')} ? 'is-invalid'"
-                   placeholder="이름을 입력하세요">
+            <label th:for="writer" >작성자</label>
+            <span class="form-control" th:text="${session.member.email}"></span>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('writer')}" th:errors="*{writer}">
                 Please provide a valid city.
             </div>

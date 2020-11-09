@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <div class="header" th:fragment="menu(menu)">
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -13,20 +13,17 @@
                         <a class="nav-link" href="/board">Board <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item" th:classappend="${menu} == 'player' ? 'active' : ''">
-                        <a class="nav-link" href="#">Player</a>
+                        <a class="nav-link" href="/player">Player</a>
                     </li>
-                    <li class="nav-item" th:classappend="${menu} == 'member' ? 'active' : ''">
-                        <a class="nav-link" href="#">JoinUs <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    <li class="nav-item" th:classappend="${menu} == 'ground' ? 'active' : ''">
+                        <a class="nav-link" href="/ground">Ground <span class="sr-only">(current)</span></a>
                     </li>
                 </ul>
-                    <a class="btn btn-outline-success my-2 mr-2 my-sm-0" sec:authorize="isAnonymous()" th:href="@{/member/join}">가입</a>
-                    <a class="btn btn-outline-success my-2 mr-2 my-sm-0" sec:authorize="isAnonymous()" th:href="@{/member/login}">로그인</a>
-                    <a class="btn btn-outline-success my-2 mr-2 my-sm-0" sec:authorize="isAuthenticated()" th:href="@{/member/logout}">로그아웃</a>
-                    <a class="btn btn-outline-success my-2 mr-2 my-sm-0" sec:authorize="hasRole('ROLE_MEMBER')" th:href="@{/member/mypage}">내정보</a>
-                    <a class="btn btn-outline-success my-2 mr-2 my-sm-0" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}">어드민</a>
+                    <a class="btn btn-outline-success my-2 mr-2 my-sm-0" th:classappend="${session.member} == null ? '' : 'd-none'" th:href="@{/member/join}">가입</a>
+                    <a class="btn btn-outline-success my-2 mr-2 my-sm-0" th:classappend="${session.member} == null ? '' : 'd-none'" th:href="@{/member/login}">로그인</a>
+                    <a class="btn btn-outline-success my-2 mr-2 my-sm-0" th:classappend="${session.member} == null ? 'd-none' : ''" th:href="@{/member/logout}">로그아웃</a>
+                    <a class="btn btn-outline-success my-2 mr-2 my-sm-0" th:if="${session.member} != null" th:classappend="${session.member.membertype.getValue()} == 'ROLE_MEMBER' ? '' : 'd-none'" th:href="@{/member/mypage}">내정보</a>
+                    <a class="btn btn-outline-success my-2 mr-2 my-sm-0" th:if="${session.member} != null" th:classappend="${session.member.membertype.getValue()} == 'ROLE_ADMIN' ? '' : 'd-none'" th:href="@{/admin}">어드민</a>
             </div>
         </nav>
     </header>
