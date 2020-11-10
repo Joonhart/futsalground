@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Controller
@@ -40,6 +41,7 @@ public class MemberController {
             throw new MemberNotFoundException();
         }
         session.setAttribute("member", member.get());
+        session.setAttribute("today", LocalDateTime.now());
         return "redirect:/";
     }
 
@@ -50,7 +52,8 @@ public class MemberController {
     }
 
     @GetMapping("/join")
-    public String join() {
+    public String join(Model model) {
+        model.addAttribute("memberSaveDto", new MemberSaveDto());
         return "member/join";
     }
 

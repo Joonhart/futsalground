@@ -27,7 +27,7 @@ class MemberControllerTest {
     @Test
     @DisplayName("회원가입")
     public void memberJoin() {
-        MemberSaveDto memberSaveDto = new MemberSaveDto(null, "joonhart@gmail.com", "1234");
+        MemberSaveDto memberSaveDto = new MemberSaveDto(null, "joonhart@gmail.com", "1234", "성남시", "분당구", "공격수");
         Long saveNum = memberService.save(memberSaveDto);
 
         em.flush();

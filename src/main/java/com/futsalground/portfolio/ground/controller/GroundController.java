@@ -24,7 +24,7 @@ public class GroundController {
 
     private final GroundService groundService;
 
-    @GetMapping("/list")
+    @GetMapping
     public String list(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 5)
                        Pageable pageable) {
         Page<GroundViewDto> groundViewDtos = groundService.findAllGround(pageable);

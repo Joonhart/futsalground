@@ -9,7 +9,7 @@
 <body>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: menu('board')" />
-    <div>
+    <div class="py-5">
         <h2>게시판</h2>
         <div>총 게시글 : <span th:text="${boardViewDtos.totalElements}"></span></div>
         <table class="table table-striped">

@@ -15,18 +15,29 @@ public class MemberSaveDto {
     private String email;
     private String password;
 
+    private String addr1;
+    private String addr2;
+
+    private String position;
+
     public Member toEntity(){
         return Member.builder()
                 .id(id)
                 .email(email)
                 .password(password)
+                .addr1(addr1)
+                .addr2(addr2)
+                .position(position)
                 .build();
     }
 
     @Builder
-    public MemberSaveDto(Long id, String email, String password) {
+    public MemberSaveDto(Long id, String email, String password, String addr1, String addr2, String position) {
         this.id = id;
         this.email = email;
         this.password = password;
+        this.addr1 = addr1;
+        this.addr2 = addr2;
+        this.position = position;
     }
 }
