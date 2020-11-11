@@ -16,14 +16,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/player")
+@RequestMapping("/recruit")
 @RequiredArgsConstructor
-public class PlayerController {
+public class RecruitController {
 
-    private final ApplyService applyService;
     private final RecruitService recruitService;
 
     @GetMapping
@@ -40,7 +41,7 @@ public class PlayerController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("recruitPageViewDtos", recruitPageViewDtos);
-        return "player/playerList";
+        return "player/recruitList";
     }
 
     @GetMapping("/createRecruit")
@@ -54,15 +55,27 @@ public class PlayerController {
         if (result.hasErrors()) {
             return "player/recruitForm";
         }
-        System.out.println("recruitDto = " + recruitDto);
+        String day = recruitDto.getDay();
+        String time = recruitDto.getTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        LocalDateTime dateTime = LocalDateTime.parse(day.substring(0, day.length() - 3) + " " + time + ":00.000", formatter);
+        recruitDto.setStarttime(dateTime);
         recruitService.create(recruitDto);
-        return "player/playerList";
+        return "redirect:/recruit";
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public String read(@PathVariable Long id, Model model) throws RecruitNotFoundException {
         Optional<RecruitDto> recruitDto = recruitService.findById(id);
         model.addAttribute("recruitDto", recruitDto.orElseThrow(RecruitNotFoundException::new));
+        System.out.println("recruitDto.get() = " + recruitDto.get());
         return "player/recruitView";
+    }
+
+    @PostMapping("/{id}/apply")
+    public String apply(@PathVariable Long id, @RequestParam("applyerEmail")String applyerEmail) {
+        Optional<RecruitDto> recruitDto = recruitService.findById(id);
+        recruitDto.get().addApply(applyerEmail);
+        return "member/mypage";
     }
 }

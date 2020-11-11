@@ -1,8 +1,11 @@
 package com.futsalground.portfolio.player.domain;
 
+import com.futsalground.portfolio.member.domain.Member;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -16,17 +19,20 @@ public class Recruit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recruit_seq_generator")
-    Long id;
+    private Long id;
 
     @Embedded
-    TeamInfo teamInfo;
+    private TeamInfo teamInfo;
     @Embedded
-    MatchInfo matchInfo;
+    private MatchInfo matchInfo;
 
-    int volume;
-    int apply;
+    private int volume;
+    private int apply;
 
-    String explanation;
+    private String explanation;
+
+    @OneToMany
+    private Set<Member> applicants = new HashSet<>();
 
     @Builder
     public Recruit(Long id, TeamInfo teamInfo, MatchInfo matchInfo, int volume, int apply, String explanation) {

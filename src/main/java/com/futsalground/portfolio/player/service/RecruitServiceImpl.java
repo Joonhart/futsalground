@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,8 +26,8 @@ public class RecruitServiceImpl implements RecruitService {
         return recruitRepository.findById(id).map(recruit -> new RecruitDto(
                 recruit.getId(),
                 recruit.getTeamInfo().getTeamname(),
-                recruit.getTeamInfo().getPosition(),
                 recruit.getTeamInfo().getAges(),
+                recruit.getTeamInfo().getPosition(),
                 recruit.getTeamInfo().getSkill(),
                 recruit.getTeamInfo().getContactway(),
                 recruit.getTeamInfo().getPhone(),
@@ -34,6 +35,8 @@ public class RecruitServiceImpl implements RecruitService {
                 recruit.getMatchInfo().getAddr1(),
                 recruit.getMatchInfo().getAddr2(),
                 recruit.getMatchInfo().getStarttime(),
+                recruit.getMatchInfo().getStarttime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd(E)")),
+                recruit.getMatchInfo().getStarttime().format(DateTimeFormatter.ofPattern("HH:mm")),
                 recruit.getMatchInfo().getCost(),
                 recruit.getVolume(),
                 recruit.getApply(),
@@ -43,8 +46,7 @@ public class RecruitServiceImpl implements RecruitService {
 
     @Override
     public void create(RecruitDto recruitDto) {
-        Recruit recruit = recruitDto.toEntity(recruitDto);
-        recruitRepository.save(recruit);
+        recruitRepository.save(recruitDto.toEntity(recruitDto));
     }
 
     @Override
@@ -72,6 +74,7 @@ public class RecruitServiceImpl implements RecruitService {
 
     private List<RecruitPageViewDto> pageToList(Page<Recruit> recruits) {
         List<RecruitPageViewDto> recruitPageViewDtos = recruits.stream().map(recruit -> new RecruitPageViewDto(
+                recruit.getId(),
                 recruit.getMatchInfo().getGroundname(),
                 recruit.getMatchInfo().getAddr1(),
                 recruit.getMatchInfo().getAddr2(),

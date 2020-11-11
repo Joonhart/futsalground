@@ -1,12 +1,8 @@
 package com.futsalground.portfolio.player.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,14 +17,27 @@ public class Apply {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "apply_seq_generator")
-    Long id;
+    private Long id;
 
-    String position;
-    String locate;
-    LocalDate wantdate;
-    String ages;
-    String skill;
-    String contactway;
-    String phone;
-    String explanation;
+    private String position;
+    private String locate;
+    private LocalDateTime wantdate;
+    private String ages;
+    private String skill;
+    private String contactway;
+    private String phone;
+    private String explanation;
+
+    @Builder
+    public Apply(Long id, String position, String locate, LocalDateTime wantdate, String ages, String skill, String contactway, String phone, String explanation) {
+        this.id = id;
+        this.position = position;
+        this.locate = locate;
+        this.wantdate = wantdate;
+        this.ages = ages;
+        this.skill = skill;
+        this.contactway = contactway;
+        this.phone = phone;
+        this.explanation = explanation;
+    }
 }

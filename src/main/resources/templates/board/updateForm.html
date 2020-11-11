@@ -3,7 +3,7 @@
 <head th:replace="fragments/header :: header" />
 
 <body>
-<div class="container">
+<div class="container py-5">
     <div th:replace="fragments/bodyHeader :: menu('board')"/>
     <form role="form" method="post" th:href="@{/board/{id}/edit (id=*{id})}" th:object="${boardViewDto}">
         <div class="form-group">

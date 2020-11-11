@@ -15,14 +15,16 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-class PlayerControllerTest {
+class RecruitControllerTest {
 
     @Autowired
     RecruitService recruitService;
@@ -32,23 +34,38 @@ class PlayerControllerTest {
     @Test
     @DisplayName("용병구하기 게시글 저장 Test")
     public void recruitPost() {
-        RecruitDto recruitDto = new RecruitDto(null, "깨비깨비", "골키퍼", "25~30", "중", "카카오톡",
-                "hihi", "보정동풋살장", "기흥구", "보정동", LocalDateTime.now(), 10000
-                , 2, 0, "와서 재밌게 재주껏 하시길");
-
-        recruitService.create(recruitDto);
+        RecruitDto recruitDto = recruitCreate();
 
         em.flush();
         em.clear();
 
         Page<RecruitPageViewDto> all = recruitService.findAll(Pageable.unpaged());
         Optional<RecruitDto> findById = recruitService.findById(1L);
-        for (RecruitPageViewDto recruitPageViewDto : all) {
-            System.out.println("recruitPageViewDto = " + recruitPageViewDto);
-        }
-        System.out.println("all.getTotalElements() = " + all.getTotalElements());
-
         assertThat(all.getContent().size()).isEqualTo(1);
-        System.out.println("findById = " + findById.get());
+    }
+
+    @Test
+    @DisplayName("용병 게시글에 지원하기 Test")
+    public void applyTest() {
+        RecruitDto recruitDto = recruitCreate();
+
+        String email = "memberEmail";
+        recruitDto.addApply(email);
+
+        assertThat(recruitDto.getApplicants().size()).isEqualTo(1);
+    }
+
+    private RecruitDto recruitCreate() {
+        RecruitDto recruitDto = new RecruitDto(null, "깨비깨비", "25~30", "g, d, m", "중", "카카오톡",
+                "hihi", "보정동풋살장", "기흥구", "보정동", null, "2020-11-11(수)", "14:00", 10000
+                , 2, 0, "와서 재밌게 재주껏 하시길");
+
+        String day = recruitDto.getDay();
+        String time = recruitDto.getTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        LocalDateTime dateTime = LocalDateTime.parse(day.substring(0, day.length() - 3) + " " + time + ":00.000", formatter);
+        recruitDto.setStarttime(dateTime);
+        recruitService.create(recruitDto);
+        return recruitDto;
     }
 }
