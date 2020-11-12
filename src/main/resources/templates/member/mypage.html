@@ -1,30 +1,131 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="fragments/header :: header">
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 
-    <link th:href="@{/css/signin.css}" rel="stylesheet">
+    <!-- Favicons -->
+    <meta name="msapplication-config" content="/docs/4.5/assets/img/favicons/browserconfig.xml">
+    <meta name="theme-color" content="#563d7c">
+    <link th:href="@{/css/dashboard.css}" rel="stylesheet">
     <title>Welcome to Futsal Ground</title>
 </head>
 <body class="text-center">
+<div th:replace="fragments/bodyHeader :: menu('')" />
 
-    email : <p th:text="${session.member.email}"></p>
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="sidebar-sticky pt-3 py-5">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/member/mypage}">
+                            <span data-feather="home"></span>
+                            정보 수정 <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/member/revInfo}">
+                            <span data-feather="file"></span>
+                            예약 현황
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/member/recruitInfo}">
+                            <span data-feather="shopping-cart"></span>
+                            용병 모집 현황
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/member/applyInfo}">
+                            <span data-feather="users"></span>
+                            용병 신청 현황
+                        </a>
+                    </li>
+                </ul>
 
-<!-- Optional JavaScript; choose one of the two! -->
+            </div>
+        </nav>
 
-<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+        <main role="main" class="ml-sm-auto col-lg-10 px-md-4 py-5">
+            <h2>정보수정</h2>
+            <div class="table-responsive py-3">
+                <form th:action="@{/member/update}" th:object="${memberViewDto}" method="post">
+                    <input type="hidden" th:field="*{spend}">
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>email</th>
+                        <td colspan="5" align="left"><input class="form-control-plaintext" type="text" readonly="readonly" th:field="*{email}"></td>
+                    </tr>
+                    <tr>
+                        <th>선호지역 1</th>
+                        <td colspan="2" align="left"><input class="form-control" type="text" th:field="*{addr1}"></td>
+                        <th>선호지역 2</th>
+                        <td colspan="2" align="left"><input class="form-control" type="text" th:field="*{addr2}"></td>
+                    </tr>
+                    <tr>
+                        <th>선호포지션</th>
+                        <td colspan="5" align="left">
+                            <div class="d-flex justify-content-around">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="keeper" value="g" name="position" th:checked="${memberViewDto.position.contains('g')}">
+                                    <label class="custom-control-label" for="keeper">골키퍼</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="defence" value="d" name="position" th:checked="${memberViewDto.position.contains('d')}">
+                                    <label class="custom-control-label" for="defence">수비수</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="mid" value="m" name="position" th:checked="${memberViewDto.position.contains('m')}">
+                                    <label class="custom-control-label" for="mid">미드필더</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="forward" value="f" name="position" th:checked="${memberViewDto.position.contains('f')}">
+                                    <label class="custom-control-label" for="forward">공격수</label>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>대관횟수</th>
+                        <td colspan="5" align="left"><input class="form-control-plaintext" type="text" th:field="${memberViewDto.recruitcnt}"></td>
+                    </tr>
+                    <tr>
+                        <th>용병모집</th>
+                        <td colspan="2" align="left"><input class="form-control-plaintext" type="text" th:field="${memberViewDto.recruitcnt}"></td>
+                        <th>용병신청</th>
+                        <td colspan="2" align="left"><input class="form-control-plaintext" type="text" th:field="${memberViewDto.applycnt}"></td>
+                    </tr>
+                    <tr>
+                        <th>게시글</th>
+                        <td colspan="2" align="left"><input class="form-control-plaintext" type="text" th:field="${memberViewDto.boardcnt}"></td>
+                        <th>댓글</th>
+                        <td colspan="2" align="left"><input class="form-control-plaintext" type="text" th:field="${memberViewDto.boardreplycnt}"></td>
+                    </tr>
+                </table>
+                <p>
+                    <button type="submit" class="btn btn-primary m-5">정보 수정</button>
+                    <a href="#" th:href="@{/member/changePW}" class="btn btn-danger m-5">비밀번호 변경</a>
+                </p>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="/docs/4.5/assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
+<script src="/docs/4.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script src="dashboard.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 
-<!-- Option 2: jQuery, Popper.js, and Bootstrap JS
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
--->
 </body>
 </html>

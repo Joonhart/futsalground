@@ -62,4 +62,18 @@ public class MemberServiceImpl implements MemberService {
         Optional<Member> member = memberRepository.findByEmailAndPassword(email, password);
         return member;
     }
+
+    @Override
+    public void update(String email, String addr1, String addr2, String position) {
+        Optional<Member> member = memberRepository.findByEmail(email);
+        member.get().update(addr1, addr2, position);
+        return;
+    }
+
+    @Override
+    public void changePW(String email, String newPW) {
+        Optional<Member> member = memberRepository.findByEmail(email);
+        member.get().changePW(newPW);
+        return;
+    }
 }

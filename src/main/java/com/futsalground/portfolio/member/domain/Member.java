@@ -57,4 +57,15 @@ public class Member extends BaseEntity {
         this.applycnt = 0;
         this.spend = 0;
     }
+
+    public void update(String addr1, String addr2, String position) {
+        super.update(LocalDateTime.now());
+        this.addr1 = addr1;
+        this.addr2 = addr2;
+        this.position = position;
+    }
+
+    public void changePW(String newPW) {
+        this.password = newPW;
+    }
 }

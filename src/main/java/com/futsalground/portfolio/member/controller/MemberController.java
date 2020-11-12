@@ -5,12 +5,14 @@ import com.futsalground.portfolio.exception.MemberNotFoundException;
 import com.futsalground.portfolio.exception.UserNameDuplicateException;
 import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.member.model.MemberSaveDto;
+import com.futsalground.portfolio.member.model.MemberViewDto;
 import com.futsalground.portfolio.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -71,10 +73,25 @@ public class MemberController {
     }
 
     @GetMapping("/mypage")
-    public String myPage() {
+    public String myPage(Model model) {
         if (session.getAttribute("member") == null) {
             return "member/login";
         }
+        Member member = (Member) session.getAttribute("member");
+        Optional<MemberViewDto> memberViewDto = memberService.findMember(member.getId());
+        model.addAttribute("memberViewDto", memberViewDto.get());
         return "member/mypage";
+    }
+
+    @PostMapping("/update")
+    public String update(@ModelAttribute MemberViewDto memberViewDto) {
+        memberService.update(memberViewDto.getEmail(), memberViewDto.getAddr1(), memberViewDto.getAddr2(), memberViewDto.getPosition());
+        return "redirect:/member/mypage";
+    }
+
+    @PostMapping("/changePW")
+    public String changePW(String email, String newPW) {
+        memberService.changePW(email, newPW);
+        return "redirect:/member/mypage";
     }
 }

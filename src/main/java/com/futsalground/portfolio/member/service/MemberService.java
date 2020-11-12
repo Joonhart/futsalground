@@ -15,4 +15,8 @@ public interface MemberService {
     Optional<MemberViewDto> findMember(Long id);
 
     Optional<Member> findByEmailAndPassword(String email, String password);
+
+    void update(String email, String addr1, String addr2, String position);
+
+    void changePW(String email, String newPW);
 }

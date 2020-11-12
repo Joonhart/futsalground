@@ -44,7 +44,6 @@ public class Board extends BaseEntity {
         this.content = content;
     }
 
-
     public void update(String title, String content) {
         super.update(LocalDateTime.now());
         this.title = title;
