@@ -6,6 +6,10 @@ import com.futsalground.portfolio.board.service.BoardSaveService;
 import com.futsalground.portfolio.board.service.BoardViewService;
 import com.futsalground.portfolio.common.domain.BaseEntity;
 import com.futsalground.portfolio.exception.BoardNotFoundException;
+import com.futsalground.portfolio.member.domain.Member;
+import com.futsalground.portfolio.member.model.MemberSaveDto;
+import com.futsalground.portfolio.member.model.MemberViewDto;
+import com.futsalground.portfolio.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,8 @@ class BoardControllerTest {
     BoardSaveService boardSaveService;
     @Autowired
     BoardViewService boardViewService;
+    @Autowired
+    MemberService memberService;
 
     @Autowired
     EntityManager em;
@@ -32,8 +38,11 @@ class BoardControllerTest {
     @Test
     @DisplayName("게시글 저장")
     public void post() {
+        MemberSaveDto memberSaveDto = new MemberSaveDto(null, "joonhart@gmail.com", "1234", "sdf", "asd", "sdf");
+        memberService.save(memberSaveDto);
+
         BoardSaveDto boardSaveDto = new BoardSaveDto();
-        boardSaveDto.setWriter("writer");
+        boardSaveDto.setWriter(memberSaveDto.getEmail());
         boardSaveDto.setTitle("title");
         boardSaveDto.setContent("content");
         Long boardId = boardSaveService.saveBoard(boardSaveDto);
@@ -41,9 +50,12 @@ class BoardControllerTest {
         Optional<BoardViewDto> find = boardViewService.findById(boardId);
         BoardViewDto boardViewDto = find.get();
 
+        MemberViewDto memberViewDto = memberService.findMember(1L).get();
+
         assertThat(boardViewDto.getWriter()).isEqualTo(boardSaveDto.getWriter());
         assertThat(boardViewDto.getTitle()).isEqualTo(boardSaveDto.getTitle());
         assertThat(boardViewDto.getContent()).isEqualTo(boardSaveDto.getContent());
+        assertThat(memberViewDto.getBoardcnt()).isEqualTo(1);
     }
 
     @Test

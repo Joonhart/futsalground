@@ -28,7 +28,6 @@ public class BoardController {
 
     private final BoardSaveService boardSaveService;
     private final BoardViewService boardViewService;
-    private final MemberServiceImpl memberService;
     private final HttpSession httpSession;
 
     @GetMapping

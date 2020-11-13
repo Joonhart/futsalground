@@ -4,9 +4,13 @@ import com.futsalground.portfolio.board.domain.Board;
 import com.futsalground.portfolio.board.model.BoardSaveDto;
 import com.futsalground.portfolio.board.repository.BoardRepository;
 import com.futsalground.portfolio.exception.BoardNotFoundException;
+import com.futsalground.portfolio.member.domain.Member;
+import com.futsalground.portfolio.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardSaveServiceImpl implements BoardSaveService {
 
     private final BoardRepository boardRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public Long saveBoard(BoardSaveDto boardSaveDto) {
@@ -23,6 +28,8 @@ public class BoardSaveServiceImpl implements BoardSaveService {
                 .content(boardSaveDto.getContent())
                 .build();
         boardRepository.save(board);
+        Member member = memberRepository.findByEmail(board.getWriter()).get();
+        member.PlusBoardCnt();
         return board.getId();
     }
 

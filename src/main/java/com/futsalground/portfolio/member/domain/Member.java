@@ -1,7 +1,10 @@
 package com.futsalground.portfolio.member.domain;
 
 import com.futsalground.portfolio.common.domain.BaseEntity;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,14 +15,15 @@ import java.time.LocalDateTime;
 @SequenceGenerator(
         name = "member_seq_generator",
         sequenceName = "member_seq", allocationSize = 1)
-@ToString
 @Table(name = "t_member")
 public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_seq_generator")
+    @Column(name = "MEMBER_ID")
     private Long id;
 
+    @Column(name = "MEMBER_EMAIL")
     private String email;
 
     @Column(length = 100, nullable = false)
@@ -43,6 +47,7 @@ public class Member extends BaseEntity {
 
     @Builder
     public Member(String createdBy, LocalDateTime createdDate, String lastModifiedBy, LocalDateTime lastModifiedDate, Long id, String email, String password, String addr1, String addr2, String position) {
+
         super(createdBy, createdDate, lastModifiedBy, lastModifiedDate);
         this.id = id;
         this.email = email;
@@ -67,5 +72,9 @@ public class Member extends BaseEntity {
 
     public void changePW(String newPW) {
         this.password = newPW;
+    }
+
+    public void PlusBoardCnt() {
+        this.boardcnt = this.boardcnt + 1;
     }
 }
