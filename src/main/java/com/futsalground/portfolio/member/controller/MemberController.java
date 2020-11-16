@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -27,7 +28,6 @@ import java.util.Optional;
 public class MemberController {
 
     private final MemberService memberService;
-    private final HttpSession session;
 
     @GetMapping("/login")
     public String loginForm(Model model) {
@@ -36,19 +36,21 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String login(MemberSaveDto memberSaveDto) throws MemberNotFoundException {
+    public String login(HttpServletRequest request, MemberSaveDto memberSaveDto) throws MemberNotFoundException {
         Optional<Member> member = memberService.findByEmailAndPassword(memberSaveDto.getEmail(), memberSaveDto.getPassword());
         System.out.println("member.get() = " + member.get());
         if (member.isEmpty()) {
             throw new MemberNotFoundException();
         }
+        HttpSession session = request.getSession();
         session.setAttribute("member", member.get());
         session.setAttribute("today", LocalDateTime.now());
         return "redirect:/";
     }
 
     @GetMapping("/logout")
-    public String logout() {
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession();
         session.invalidate();
         return "redirect:/";
     }
@@ -73,7 +75,8 @@ public class MemberController {
     }
 
     @GetMapping("/mypage")
-    public String myPage(Model model) {
+    public String myPage(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
         if (session.getAttribute("member") == null) {
             return "member/login";
         }

@@ -48,7 +48,7 @@ public class Member extends BaseEntity {
     @Builder
     public Member(String createdBy, LocalDateTime createdDate, String lastModifiedBy, LocalDateTime lastModifiedDate, Long id, String email, String password, String addr1, String addr2, String position) {
 
-        super(createdBy, createdDate, lastModifiedBy, lastModifiedDate);
+        super(email, createdDate, email, lastModifiedDate);
         this.id = id;
         this.email = email;
         this.password = password;

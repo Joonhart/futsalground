@@ -21,14 +21,12 @@ public class Ground extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,
             generator = "ground_seq_generator")
-    @Column(name = "id")
+    @Column(name = "ground_id")
     private Long id;
 
     @Column(name = "grd_name")
     private String grdName;
-    @Column(name = "name")
     private String name;
-    @Column(name = "phone")
     private String phone;
     @Column(name = "road_addr")
     private String roadAddr;
@@ -37,22 +35,20 @@ public class Ground extends BaseEntity {
     @Embedded
     private TimeAndCost timeAndCost;
     @Column(name = "match_type")
-    private char matchtype;
+    private String matchtype;
     @Embedded
     private Amenities amenities;
     @Embedded
     private Images images;
-    @Column(name = "size1")
     private int size1;
-    @Column(name = "size2")
     private int size2;
     @Embedded
     private GroundInfo groundInfo;
-    @Column(name = "isView")
+    @Column(name = "isview")
     private char isView;
 
     @Builder
-    public Ground(Long id, String grdName, String name, String phone, String roadAddr, String numAddr, TimeAndCost timeAndCost, char matchtype, Amenities amenities, Images images, int size1, int size2, GroundInfo groundInfo, char isView) {
+    public Ground(Long id, String grdName, String name, String phone, String roadAddr, String numAddr, TimeAndCost timeAndCost, String matchtype, Amenities amenities, Images images, int size1, int size2, GroundInfo groundInfo, char isView) {
         this.id = id;
         this.grdName = grdName;
         this.name = name;
@@ -66,6 +62,6 @@ public class Ground extends BaseEntity {
         this.size1 = size1;
         this.size2 = size2;
         this.groundInfo = groundInfo;
-        this.isView = isView;
+        this.isView = 'y';
     }
 }

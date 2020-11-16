@@ -15,20 +15,22 @@ import javax.persistence.Embedded;
 @ToString
 public class GroundViewDto {
 
+    private Long id;
     private String grdName;
     private String name;
     private String phone;
     private String roadAddr;
     private String numAddr;
     private TimeAndCost timeAndCost;
-    private char matchtype;
+    private String matchtype;
     private Amenities amenities;
     private Images images;
     private int size1;
     private int size2;
     private GroundInfo groundInfo;
 
-    public GroundViewDto(String grdName, String name, String phone, String roadAddr, String numAddr, TimeAndCost timeAndCost, char matchtype, Amenities amenities, Images images, int size1, int size2, GroundInfo groundInfo) {
+    public GroundViewDto(Long id, String grdName, String name, String phone, String roadAddr, String numAddr, TimeAndCost timeAndCost, String matchtype, Amenities amenities, Images images, int size1, int size2, GroundInfo groundInfo) {
+        this.id = id;
         this.grdName = grdName;
         this.name = name;
         this.phone = phone;

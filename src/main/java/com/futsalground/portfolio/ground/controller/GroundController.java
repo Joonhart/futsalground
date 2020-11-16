@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Controller
@@ -28,6 +29,7 @@ public class GroundController {
     public String list(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 5)
                        Pageable pageable) {
         Page<GroundViewDto> groundViewDtos = groundService.findAllGround(pageable);
+        model.addAttribute("now", LocalDateTime.now());
         model.addAttribute("groundViewDtos", groundViewDtos);
         return "ground/groundList";
     }

@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Optional;
@@ -28,7 +29,6 @@ public class BoardController {
 
     private final BoardSaveService boardSaveService;
     private final BoardViewService boardViewService;
-    private final HttpSession httpSession;
 
     @GetMapping
     public String list(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 5)
@@ -65,8 +65,9 @@ public class BoardController {
     }
 
     @PostMapping("/post")
-    public String post(@Valid BoardSaveDto boardSaveDto, BindingResult result) {
-        Member member = (Member) httpSession.getAttribute("member");
+    public String post(@Valid BoardSaveDto boardSaveDto, BindingResult result, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Member member = (Member) session.getAttribute("member");
         boardSaveDto.setWriter(member.getEmail());
         if (result.hasErrors()) {
             return "board/boardForm";

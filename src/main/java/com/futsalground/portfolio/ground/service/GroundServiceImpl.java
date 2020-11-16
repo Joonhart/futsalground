@@ -25,6 +25,7 @@ public class GroundServiceImpl implements GroundService {
     public Page<GroundViewDto> findAllGround(Pageable pageable) {
         Page<Ground> grounds = groundRepository.findAll(pageable);
         List<GroundViewDto> collect = grounds.stream().map(ground -> new GroundViewDto(
+                ground.getId(),
                 ground.getGrdName(),
                 ground.getName(),
                 ground.getPhone(),
@@ -45,6 +46,7 @@ public class GroundServiceImpl implements GroundService {
     @Override
     public Optional<GroundViewDto> findGround(Long id) {
         Optional<GroundViewDto> groundViewDto = groundRepository.findById(id).map(g -> new GroundViewDto(
+                g.getId(),
                 g.getGrdName(),
                 g.getName(),
                 g.getPhone(),
