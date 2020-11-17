@@ -43,6 +43,7 @@ public class Member extends BaseEntity {
 
     private int recruitcnt;
     private int applycnt;
+    private int revcnt;
     private int spend;
 
     @Builder
@@ -60,6 +61,7 @@ public class Member extends BaseEntity {
         this.boardreplycnt = 0;
         this.recruitcnt = 0;
         this.applycnt = 0;
+        this.revcnt = 0;
         this.spend = 0;
     }
 
@@ -76,5 +78,10 @@ public class Member extends BaseEntity {
 
     public void PlusBoardCnt() {
         this.boardcnt = this.boardcnt + 1;
+    }
+
+    public void PlusRev(int cost) {
+        this.spend += cost;
+        this.revcnt = this.revcnt + 1;
     }
 }

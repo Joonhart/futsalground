@@ -52,6 +52,7 @@ public class MemberServiceImpl implements MemberService {
                 member.getBoardreplycnt(),
                 member.getRecruitcnt(),
                 member.getApplycnt(),
+                member.getRevcnt(),
                 member.getSpend()
         ));
         return findMember;

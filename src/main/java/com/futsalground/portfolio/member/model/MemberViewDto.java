@@ -24,10 +24,11 @@ public class MemberViewDto {
 
     private int recruitcnt;
     private int applycnt;
+    private int revcnt;
     private int spend;
 
 
-    public MemberViewDto(Long id, String email, Role membertype, String addr1, String addr2, String position, int boardcnt, int boardreplycnt, int recruitcnt, int applycnt, int spend) {
+    public MemberViewDto(Long id, String email, Role membertype, String addr1, String addr2, String position, int boardcnt, int boardreplycnt, int recruitcnt, int applycnt, int revcnt, int spend) {
         this.id = id;
         this.email = email;
         this.membertype = membertype;
@@ -38,6 +39,7 @@ public class MemberViewDto {
         this.boardreplycnt = boardreplycnt;
         this.recruitcnt = recruitcnt;
         this.applycnt = applycnt;
+        this.revcnt = revcnt;
         this.spend = spend;
     }
 }

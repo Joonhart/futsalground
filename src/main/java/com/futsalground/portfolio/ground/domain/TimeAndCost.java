@@ -8,22 +8,16 @@ import javax.persistence.Embeddable;
 @Getter
 public class TimeAndCost {
 
-    private String wdslt;
-    private String weslt;
-    private String wdTime;
-    private String weTime;
-    private int wdCost;
-    private int weCost;
+    private String openday;
+    private String startTime;
+    private int cost;
 
     protected TimeAndCost() {
     }
 
-    public TimeAndCost(String wdslt, String weslt, String wdTime, String weTime, int wdCost, int weCost) {
-        this.wdslt = wdslt;
-        this.weslt = weslt;
-        this.wdTime = wdTime;
-        this.weTime = weTime;
-        this.wdCost = wdCost;
-        this.weCost = weCost;
+    public TimeAndCost(String openday, String startTime, int cost) {
+        this.openday = openday;
+        this.startTime = startTime;
+        this.cost = cost;
     }
 }

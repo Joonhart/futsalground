@@ -11,7 +11,31 @@
     <link href="/css/carousel.css" rel="stylesheet">
     <head>
         <meta charset="UTF-8">
-        <title>Title</title>
+        <title>Ground List</title>
+        <style>
+            .box {
+                width: 500px;
+                height: 300px;
+                border: 1px black solid;
+                display: inline-block;
+                text-align: left;
+                font-size: 1.2em;
+                potision:relative;
+            }
+            #timeWrap {
+                text-align: center;
+                padding-top:12px;
+                color: #171a1d;
+            }
+            .rev {
+                width:110px;
+                display: inline-block;
+                float: contour;
+                background-color: #adff2f;
+                margin: 0 auto 0 5px;
+                text-align: center;
+            }
+        </style>
     </head>
 <body>
 <header>
@@ -30,7 +54,7 @@
             <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                  preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
                 <rect width="100%" height="100%"/>
-                <image xlink:href="https://www.yeosu.go.kr/tour/ybscript.io/common/file_download/8521/30649/D71_1866.JPG"
+                <image xlink:href="https://www.playdoci.com/images/service/service_img_futsal_pic1.jpg"
                        height="100%" width="100%" x="0" y="0"/>
             </svg>
         </div>
@@ -62,24 +86,147 @@
 </div>
 
 <div class="container">
-    <h2 th:text="${groundViewDto.grdName}"></h2>
-    <h4 th:text="${groundViewDto.roadAddr}"></h4>
-<!--    <button class="btn-info rounded mx-2">지도보기</button>-->
+    <div class="py-2 mx-5 title">
+        <h2 th:text="${groundViewDto.grdName}"></h2>
+        <br />
+        <h4 th:text="${groundViewDto.roadAddr}"></h4>
+    </div>
+    <!--    <button class="btn-info rounded mx-2">지도보기</button>-->
 
     <div class="d-flex justify-content-around">
-    <!--시설정보-->
-        <div>
-            <h5>구장안내</h5>
-            구장크기 : <span th:text="${groundViewDto.size1} + ' X ' + ${groundViewDto.size2}"></span>
-            추천인원 : <span th:text="${groundViewDto.matchtype}"></span>
-            실내/실외 : <span th:text="${groundViewDto.groundInfo.floor}"></span>
+        <!--시설정보-->
+        <div class="box">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-diamond-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M6.95.435c.58-.58 1.52-.58 2.1 0l6.515 6.516c.58.58.58 1.519 0 2.098L9.05 15.565c-.58.58-1.519.58-2.098 0L.435 9.05a1.482 1.482 0 0 1 0-2.098L6.95.435z"/>
+            </svg><span class="h5">구장안내</span><br /><br />
+            구장크기 : <span th:text="${groundViewDto.size1} + 'm X ' + ${groundViewDto.size2} + 'm'"></span><br />
+            추천인원 : <span th:text="${groundViewDto.matchtype}"></span><br />
+            실내/실외 : <span th:text="${groundViewDto.groundInfo.indoor}"></span><br />
+            잔디유무 : <span th:text="${groundViewDto.groundInfo.floor}"></span><br />
+            음료 : <span th:text="${groundViewDto.groundInfo.water}"></span>
         </div>
 
-    <!--편의시설-->
-        <div>
-
+        <!--편의시설-->
+        <div class="box">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-diamond-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M6.95.435c.58-.58 1.52-.58 2.1 0l6.515 6.516c.58.58.58 1.519 0 2.098L9.05 15.565c-.58.58-1.519.58-2.098 0L.435 9.05a1.482 1.482 0 0 1 0-2.098L6.95.435z"/>
+            </svg><span class="h5">대여/사용 가능 여부</span><br /><br /><br />
+            <div><img src="" alt="공대여 여부" width="100" height="90"/></div>
+            <div><img src="" alt="조끼대여 여부" width="100" height="90"/></div>
+            <div><img src="" alt="풋살화대여 여부" width="100" height="90"/></div>
+            <div><img src="" alt="샤워가능 여부" width="100" height="90"/></div>
+            <div><img src="" alt="주차가능 여부" width="100" height="90"/></div>
+            <div><img src="" alt="냉난방 여부" width="100" height="90"/></div>
         </div>
     </div>
+
+    <!--시간예약-->
+    <div class="my-5 mx-3 border d-flex justify-content-around">
+        <div>
+            <span class="h3">날자 선택</span>
+        </div>
+        <div class="mx-5">
+            <select class="custom-select d-block w-100" id="day" name="day" onchange="cngFrame(this.value);">
+                <th:block th:each="num : ${#numbers.sequence(0, 30)}">
+                    <option><span th:text="${#temporals.format(now.plusDays(num), 'yyyy-MM-dd(E)')}"></span></option>
+                </th:block>
+            </select>
+        </div>
+        <div>
+            <button class="btn btn-primary" data-target="#myModal" onclick="goRev();">예약하기</button>
+        </div>
+    </div>
+    <div class="my-5 mx-3 border" th:classappend="${#strings.contains(groundViewDto.timeAndCost.openday, (#temporals.format(now, 'E')))} ? '' : 'd-none'">
+
+        <span class="h3">시간 선택</span>
+        <div class="my-3">
+            <div class="d-flex justify-content-around">
+                <table class="time-ex">
+                    <tr>
+                        <td width="30px" bgcolor="#adff2f"></td>
+                        <td width="20px"></td>
+                        <td>가능</td>
+                        <td width="30px"></td>
+                        <td width="30px" bgcolor="#a9a9a9"></td>
+                        <td width="20px"></td>
+                        <td>불가</td>
+                    </tr>
+                </table>
+                <div id="revTxt">
+                    <span id="msg">시간을 선택해 주세요</span>
+                </div>
+            </div>
+            <div class="d-flex justify-content-around" id="timeWrap">
+                <div class="06~08 rev" id="a" onclick="chkRev(this.id);">06~08</div>
+                <div class="08~10 rev" id="b" onclick="chkRev(this.id);">08~10</div>
+                <div class="10~12 rev" id="c" onclick="chkRev(this.id);">10~12</div>
+                <div class="12~14 rev" id="d" onclick="chkRev(this.id);">12~14</div>
+                <div class="14~16 rev" id="e" onclick="chkRev(this.id);">14~16</div>
+                <div class="16~18 rev" id="f" onclick="chkRev(this.id);">16~18</div>
+                <div class="18~20 rev" id="g" onclick="chkRev(this.id);">18~20</div>
+                <div class="20~22 rev" id="h" onclick="chkRev(this.id);">20~22</div>
+                <div class="22~24 rev" id="i" onclick="chkRev(this.id);">22~24</div>
+                <br />
+            </div>
+            <div class="d-none">
+                <input type="checkbox" value="a" name="slt" />
+                <input type="checkbox" value="b" name="slt" />
+                <input type="checkbox" value="c" name="slt" />
+                <input type="checkbox" value="d" name="slt" />
+                <input type="checkbox" value="e" name="slt" />
+                <input type="checkbox" value="f" name="slt" />
+                <input type="checkbox" value="g" name="slt" />
+                <input type="checkbox" value="h" name="slt" />
+                <input type="checkbox" value="i" name="slt" />
+            </div>
+        </div>
+    </div>
+    <div class="my-5 mx-3 border" th:classappend="${#strings.contains(groundViewDto.timeAndCost.openday, (#temporals.format(now, 'E')))} ? 'd-none' : ''">
+        <span class="h4" th:text="'해당 구장은 ' + ${groundViewDto.timeAndCost.openday} + ' 요일만 운영합니다'"></span>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" th:action="@{/ground/createReservation}" th:object="${reservationDto}" method="post">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">구장 예약</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <div>
+                            <div>예약자 : <span th:text="${session.member.email}"></span></div>
+                            <div>구장정보 : <span th:text="${groundViewDto.roadAddr}"></span></div>
+                            <div>예약일시 : <span id="when">시간을 선택해 주세요</span></div>
+                            <div>예약금액 : <span id="cost"></span></div>
+                            <div> 결제 방법을 선택하세요 </div>
+                            <div>
+                                <label for="card"><input type="radio" name="payMethod" checked="checked" id="card" value="c" /> 체크/신용카드</label>
+                                <label for="mobile"><input type="radio" name="payMethod" id="mobile" value="m" /> 휴대폰결제</label>
+                                <label for="trans"><input type="radio" name="payMethod" id="trans" value="t"> 계좌이체</label>
+                            </div>
+                        </div>
+                        <div class="d-none">
+                            <input type="text" name="grdName" th:value="${groundViewDto.grdName}">
+                            <input type="text" th:field="*{cost}" id="cost2">
+                            <input type="text" th:field="*{revDate}" id="when1">
+                            <input type="text" th:field="*{revTime}" id="when2">
+                        </div>
+                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                        <button type="submit" class="btn btn-primary">예약하기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -89,5 +236,125 @@
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
 
+<script type="text/javascript">
+    function open() {
+        var box = document.getElementById("a");     cngBox(box);
+        box = document.getElementById("b");			cngBox(box);
+        box = document.getElementById("c");			cngBox(box);
+        box = document.getElementById("d");			cngBox(box);
+        box = document.getElementById("e");			cngBox(box);
+        box = document.getElementById("f");			cngBox(box);
+        box = document.getElementById("g");			cngBox(box);
+        box = document.getElementById("h");			cngBox(box);
+        box = document.getElementById("i");			cngBox(box);
+    }
+
+    window.onload=open;
+</script>
+<script th:inline="javascript">
+    function chkRev(id) {
+        var id = id;
+        var box = document.getElementById(id);
+        var slt = document.getElementsByName("slt");
+        if (box.innerHTML == "예약 불가") {
+            alert("예약이 불가합니다.");
+        } else {
+            if (box.style.backgroundColor == "red") {
+                box.style.backgroundColor = "#adff2f";
+                box.innerHTML = box.className.substring(0, 6);
+                for (var i = 0; i < slt.length; i++) {
+                    if (slt[i].value == id) {
+                        slt[i].checked = false;
+                    }
+                }
+            } else {
+                box.style.backgroundColor = "red";
+                box.innerHTML = "선택";
+                for (var i = 0; i < slt.length; i++) {
+                    if (slt[i].value == id) {
+                        slt[i].checked = true;
+                    }
+                }
+            }
+            var num = 0;
+            for (var i = 0; i < slt.length; i++) {
+                if (slt[i].checked) num++;
+            }
+        }
+        cngMsg(num);
+    }
+    function cngBox(box) {
+        var time = [[${groundViewDto.timeAndCost.startTime}]];
+        if (time.indexOf(box.id) < 0) {
+            box.style.backgroundColor = "gray";
+            box.innerHTML = "예약 불가";
+        }
+    }
+
+    function cngDate(val) {
+        var date = val.value.substr(0, 10);
+        // var glcode = "<%=glcode %>";
+        var now = document.getElementById("now");
+        // location.href="time.groundReq?glcode=" + glcode + "&date=" + date;
+    }
+
+    function cngMsg(num) {
+        var msg = document.getElementById("msg");
+        if (num == 0) {
+            msg.innerHTML = "시간을 선택해 주세요.";
+        } else {
+            msg.innerHTML = num + " 개를 선택하셨습니다.";
+        }
+    }
+    function cngFrame(val) {
+        var changeBox = document.getElementById("when");
+        changeBox.innerHTML = val;
+    }
+
+    function goRev() {
+        if ([[${session.member}]] == null) {
+            alert("예약은 로그인 후 사용하실 수 있습니다.");
+            location.href = "/member/login";
+            return;
+        }
+        var slt = "";
+        var viewTime = " ";
+        var sltTime = document.getElementsByName("slt");
+        var sltNum = 0;
+        for (var i = 0; i < sltTime.length; i++) {
+            if (sltTime[i].checked) {
+                sltNum++;
+                slt += sltTime[i].value;
+                viewTime += document.getElementById(sltTime[i].value).className.substring(0, 6) + " ";
+            }
+        }
+        if (sltNum == 0) {
+            alert("시간을 선택하세요.");
+            return false;
+        }
+
+        var timeBox = document.getElementById("when");
+        var costBox = document.getElementById("cost");
+        var timeBox1 = document.getElementById("when1");
+        var timeBox2 = document.getElementById("when2");
+        var costBox2 = document.getElementById("cost2");
+
+        var sltDay = document.getElementById("day").value;
+        var totalCost = sltNum * [[${groundViewDto.timeAndCost.cost}]];
+
+
+        timeBox.innerText = sltDay + viewTime;
+        costBox.innerText = totalCost;
+        timeBox1.value = sltDay.substring(0, sltDay.length - 3);
+        timeBox2.value = slt;
+        costBox2.value = totalCost;
+
+        $('#exampleModal').modal('show')
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
 </body>
-</head></html>
+</html>

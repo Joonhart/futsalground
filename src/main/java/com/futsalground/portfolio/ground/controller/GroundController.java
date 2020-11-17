@@ -3,7 +3,9 @@ package com.futsalground.portfolio.ground.controller;
 import com.futsalground.portfolio.exception.BoardNotFoundException;
 import com.futsalground.portfolio.exception.GroundNotFoundException;
 import com.futsalground.portfolio.ground.model.GroundViewDto;
+import com.futsalground.portfolio.ground.model.ReservationDto;
 import com.futsalground.portfolio.ground.service.GroundService;
+import com.futsalground.portfolio.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,8 +15,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -37,7 +42,18 @@ public class GroundController {
     @GetMapping("{id}")
     private String groundView(@PathVariable Long id, Model model) throws GroundNotFoundException {
         Optional<GroundViewDto> groundViewDto = groundService.findGround(id);
+        model.addAttribute("now", LocalDateTime.now());
+        model.addAttribute("reservationDto", new ReservationDto());
         model.addAttribute("groundViewDto", groundViewDto.orElseThrow(GroundNotFoundException::new));
         return "ground/groundView";
+    }
+
+    @PostMapping("/createReservation")
+    public String reservation(ReservationDto reservationDto, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Member member = (Member) session.getAttribute("member");
+        reservationDto.setEmail(member.getEmail());
+        groundService.reservation(reservationDto);
+        return "redirect:/member/revInfo";
     }
 }

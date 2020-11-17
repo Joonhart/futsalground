@@ -1,8 +1,13 @@
 package com.futsalground.portfolio.ground.service;
 
 import com.futsalground.portfolio.ground.domain.Ground;
+import com.futsalground.portfolio.ground.domain.Reservation;
 import com.futsalground.portfolio.ground.model.GroundViewDto;
+import com.futsalground.portfolio.ground.model.ReservationDto;
 import com.futsalground.portfolio.ground.repository.GroundRepository;
+import com.futsalground.portfolio.ground.repository.GroundReservationRepository;
+import com.futsalground.portfolio.member.domain.Member;
+import com.futsalground.portfolio.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,11 +20,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class GroundServiceImpl implements GroundService {
 
     private final GroundRepository groundRepository;
+    private final GroundReservationRepository groundReservationRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public Page<GroundViewDto> findAllGround(Pageable pageable) {
@@ -60,5 +67,22 @@ public class GroundServiceImpl implements GroundService {
                 g.getSize2(),
                 g.getGroundInfo()));
         return groundViewDto;
+    }
+
+    @Override
+    public void reservation(ReservationDto reservationDto) {
+        groundReservationRepository.save(reservationDto.toEntity(reservationDto));
+        Member member = memberRepository.findByEmail(reservationDto.getEmail()).get();
+        member.PlusRev(reservationDto.getCost());
+    }
+
+    @Override
+    public Optional<Reservation> findReservationById(Long id) {
+        return groundReservationRepository.findById(id);
+    }
+
+    @Override
+    public Page<Reservation> findMyRev(String email, Pageable pageable) {
+        return groundReservationRepository.findByEmail(email, pageable);
     }
 }

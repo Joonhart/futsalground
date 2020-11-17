@@ -3,11 +3,18 @@ package com.futsalground.portfolio.member.controller;
 import com.futsalground.portfolio.board.model.BoardSaveDto;
 import com.futsalground.portfolio.exception.MemberNotFoundException;
 import com.futsalground.portfolio.exception.UserNameDuplicateException;
+import com.futsalground.portfolio.ground.domain.Reservation;
+import com.futsalground.portfolio.ground.model.GroundViewDto;
+import com.futsalground.portfolio.ground.service.GroundService;
 import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.member.model.MemberSaveDto;
 import com.futsalground.portfolio.member.model.MemberViewDto;
 import com.futsalground.portfolio.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,6 +35,7 @@ import java.util.Optional;
 public class MemberController {
 
     private final MemberService memberService;
+    private final GroundService groundService;
 
     @GetMapping("/login")
     public String loginForm(Model model) {
@@ -84,6 +92,26 @@ public class MemberController {
         Optional<MemberViewDto> memberViewDto = memberService.findMember(member.getId());
         model.addAttribute("memberViewDto", memberViewDto.get());
         return "member/mypage";
+    }
+
+    @GetMapping("/revInfo")
+    public String revInfo(HttpServletRequest request, Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 5)
+            Pageable pageable) {
+        HttpSession session = request.getSession();
+        Member member = (Member) session.getAttribute("member");
+        String email = member.getEmail();
+        Page<Reservation> reservations = groundService.findMyRev(email, pageable);
+        int startPage = Math.max(1, reservations.getPageable().getPageNumber() - 4);
+        int endPage = Math.min(reservations.getTotalPages(), reservations.getPageable().getPageNumber() + 4);
+        if (startPage > endPage)  endPage = startPage;
+        int curPage = reservations.getPageable().getPageNumber()+1;
+        int totalPage = reservations.getTotalPages() == 0 ? 1 : reservations.getTotalPages();
+        model.addAttribute("totalPage", totalPage);
+        model.addAttribute("curPage", curPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("reservations", reservations);
+        return "member/revInfo";
     }
 
     @PostMapping("/update")

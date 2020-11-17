@@ -1,5 +1,6 @@
 package com.futsalground.portfolio;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -32,5 +33,8 @@ public class Test {
         if (position.contains("d")) {
             System.out.print("수비수 ");
         }
+
+        LocalDate date = LocalDate.now();
+        System.out.println("date = " + date);
     }
 }
