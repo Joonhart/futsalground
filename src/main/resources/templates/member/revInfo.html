@@ -54,36 +54,67 @@
 
         <main role="main" class="ml-sm-auto col-lg-10 px-md-4 py-5">
             <h2>나의 예약 현황</h2>
-            <div>총 예약 : <span th:text="${reservations.totalElements}"></span></div>
+            <div>총 예약 : <span th:text="${reservationDtos.totalElements}"></span></div>
             <table class="table table-striped">
                 <thead>
                 <tr>
                     <th>구장이름</th>
                     <th>사용일</th>
                     <th>사용시간</th>
-                    <th>예약시간</th>
+                    <th>예약일시</th>
+                    <th>상태</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="reservation : ${reservations}">
-                    <td th:text="${reservation.grdName}"></td>
-                    <td th:text="${reservation.revDate}"></td>
-                    <td th:text="${reservation.revTime}"></td>
+                <tr th:each="reservationDto : ${reservationDtos}">
+                    <td th:text="${reservationDto.ground.grdName}"></td>
+                    <td th:text="${reservationDto.revDate}"></td>
+                    <td th:text="${reservationDto.revTime}"></td>
                     <td>
-                        <span th:text="${#temporals.format(reservation.createdDate, 'yyyy-MM-dd HH:mm')}"></span>
+                        <span th:text="${#temporals.format(reservationDto.createdDate, 'yyyy-MM-dd HH:mm')}"></span>
+                    </td>
+                    <td>
+                        <button class="btn btn-info" th:if="${reservationDto.isused} == false">사용전</button>
+                        <button class="btn btn-info" th:if="${reservationDto.isused} == true">사용완료</button>
+                        <button type="button" class="btn btn-primary" th:if="${reservationDto.isused} == false" data-toggle="modal" data-target="#exampleModal">
+                            취소하기
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">구장 예약 취소</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <span th:text="${reservationDto.id}"></span>정말 예약을 취소 하시겠습니까?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">아니요</button>
+                                        <div th:if="${session.member.email} == ${reservationDto.email}">
+                                            <a class="btn btn-danger" th:href="@{/ground/{id}/delete (id=${reservationDto.id})}">취소하기</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 </tbody>
             </table>
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
-                    <li class="page-item" th:classappend="${1 == reservations.pageable.pageNumber + 1} ? 'disabled'">
-                        <a class="page-link" href="#"  th:href="@{/board(page=${reservations.pageable.pageNumber}-1)}">Previous</a>
+                    <li class="page-item" th:classappend="${1 == reservationDtos.pageable.pageNumber + 1} ? 'disabled'">
+                        <a class="page-link" href="#"  th:href="@{/board(page=${reservationDtos.pageable.pageNumber}-1)}">Previous</a>
                     </li>
                     <li class="page-item" th:classappend="${curPage == i} ? 'disabled'" th:each="i : ${#numbers.sequence(startPage, endPage)}" >
                         <a class="page-link" href="#" th:href="@{/board(page=${i}-1)}" th:text="${i}" >1</a></li>
-                    <li class="page-item" th:classappend="${totalPage == reservations.pageable.pageNumber+1} ? 'disabled'">
-                        <a class="page-link" href="#" th:href="@{/board(page=${reservations.pageable.pageNumber}+1)}">Next</a>
+                    <li class="page-item" th:classappend="${totalPage == reservationDtos.pageable.pageNumber+1} ? 'disabled'">
+                        <a class="page-link" href="#" th:href="@{/board(page=${reservationDtos.pageable.pageNumber}+1)}">Next</a>
                     </li>
                 </ul>
             </nav>

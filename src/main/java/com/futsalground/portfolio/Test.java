@@ -36,5 +36,9 @@ public class Test {
 
         LocalDate date = LocalDate.now();
         System.out.println("date = " + date);
+        System.out.println("today = " + today.toLocalDate());
+        System.out.println(today.toLocalDate().isAfter(date));
+        System.out.println(today.toLocalDate().isBefore(date));
+        System.out.println(today.toLocalDate().isEqual(date));
     }
 }

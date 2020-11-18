@@ -7,9 +7,13 @@ import com.futsalground.portfolio.ground.model.ReservationDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface GroundService {
+
+    Optional<Ground> findById(Long id);
 
     Page<GroundViewDto> findAllGround(Pageable pageable);
 
@@ -19,5 +23,9 @@ public interface GroundService {
 
     Optional<Reservation> findReservationById(Long id);
 
-    Page<Reservation> findMyRev(String email, Pageable pageable);
+    Page<ReservationDto> findMyRev(String email, Pageable pageable);
+
+    void cancelReservation(Long id);
+
+    List<String> findRevs(Long id, LocalDate date);
 }

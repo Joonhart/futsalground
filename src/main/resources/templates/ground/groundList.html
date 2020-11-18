@@ -74,36 +74,40 @@
                             </select>
                         </div>
                     </div>
-                    <table class="time-color">
-                        <tr>
-                            <td class="available"></td>
-                            <td class="available"></td>
-                            <td class="reserved"></td>
-                            <td class="reserved"></td>
-                            <td class="available"></td>
-                            <td class="available"></td>
-                            <td class="reserved"></td>
-                            <td class="available"></td>
-                            <td class="available"></td>
-                        </tr>
-                    </table>
-                    <table class="time-text">
-                        <tr>
-                            <td>06</td>
-                            <td>08</td>
-                            <td>10</td>
-                            <td>12</td>
-                            <td>14</td>
-                            <td>16</td>
-                            <td>18</td>
-                            <td>20</td>
-                            <td>22</td>
-                            <td>24</td>
-                        </tr>
-                    </table>
+                    <div class="py-2" th:classappend="${#strings.contains(groundViewDto.timeAndCost.openday, (#temporals.format(now, 'E')))} ? 'd-none' : ''">
+                        <span class="h4" th:text="'해당 구장은 ' + ${groundViewDto.timeAndCost.openday} + ' 요일만 운영합니다'"></span>
+                    </div>
+                    <div class="open" th:classappend="${#strings.contains(groundViewDto.timeAndCost.openday, (#temporals.format(now, 'E')))} ? '' : 'd-none'">
+                        <table class="time-color">
+                            <tr>
+                                <td class="available"></td>
+                                <td class="available"></td>
+                                <td class="reserved"></td>
+                                <td class="reserved"></td>
+                                <td class="available"></td>
+                                <td class="available"></td>
+                                <td class="reserved"></td>
+                                <td class="available"></td>
+                                <td class="available"></td>
+                            </tr>
+                        </table>
+                        <table class="time-text">
+                            <tr>
+                                <td>06</td>
+                                <td>08</td>
+                                <td>10</td>
+                                <td>12</td>
+                                <td>14</td>
+                                <td>16</td>
+                                <td>18</td>
+                                <td>20</td>
+                                <td>22</td>
+                                <td>24</td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
                 <div class="d-flex justify-content-around">
-                    <div th:text="${groundViewDto.amenities.parking}"></div>
                     <div class="btn" th:classappend="${groundViewDto.amenities.parking} == 'y' ? 'btn-success' : 'btn-dark'">주차</div>
                     <div class="btn" th:classappend="${groundViewDto.amenities.hotcold} == 'y' ? 'btn-success' : 'btn-dark'">냉난방</div>
                     <div class="btn" th:classappend="${groundViewDto.amenities.ball} == 'y' ? 'btn-success' : 'btn-dark'">공</div>
@@ -116,6 +120,18 @@
                 </div>
             </div>
         </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${1 == groundViewDtos.pageable.pageNumber + 1} ? 'disabled'">
+                    <a class="page-link" href="#"  th:href="@{/board(page=${groundViewDtos.pageable.pageNumber}-1)}">Previous</a>
+                </li>
+                <li class="page-item" th:classappend="${curPage == i} ? 'disabled'" th:each="i : ${#numbers.sequence(startPage, endPage)}" >
+                    <a class="page-link" href="#" th:href="@{/board(page=${i}-1)}" th:text="${i}" >1</a></li>
+                <li class="page-item" th:classappend="${totalPage == groundViewDtos.pageable.pageNumber+1} ? 'disabled'">
+                    <a class="page-link" href="#" th:href="@{/board(page=${groundViewDtos.pageable.pageNumber}+1)}">Next</a>
+                </li>
+            </ul>
+        </nav>
 
 
 

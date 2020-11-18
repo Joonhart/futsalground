@@ -6,6 +6,7 @@ import com.futsalground.portfolio.ground.model.GroundViewDto;
 import com.futsalground.portfolio.ground.model.ReservationDto;
 import com.futsalground.portfolio.ground.repository.GroundRepository;
 import com.futsalground.portfolio.ground.repository.GroundReservationRepository;
+import com.futsalground.portfolio.ground.repository.GroundRevCustomRepository;
 import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,6 +29,12 @@ public class GroundServiceImpl implements GroundService {
     private final GroundRepository groundRepository;
     private final GroundReservationRepository groundReservationRepository;
     private final MemberRepository memberRepository;
+    private final GroundRevCustomRepository groundRevCustomRepository;
+
+    @Override
+    public Optional<Ground> findById(Long id) {
+        return groundRepository.findById(id);
+    }
 
     @Override
     public Page<GroundViewDto> findAllGround(Pageable pageable) {
@@ -82,7 +90,31 @@ public class GroundServiceImpl implements GroundService {
     }
 
     @Override
-    public Page<Reservation> findMyRev(String email, Pageable pageable) {
-        return groundReservationRepository.findByEmail(email, pageable);
+    public Page<ReservationDto> findMyRev(String email, Pageable pageable) {
+        Page<Reservation> reservationPage = groundReservationRepository.findByEmail(email, pageable);
+        List<ReservationDto> collect = reservationPage.stream().map(reservation -> new ReservationDto(
+                reservation.getId(),
+                reservation.getEmail(),
+                reservation.getCreatedDate(),
+                reservation.getMember(),
+                reservation.getGround(),
+                reservation.getRevDate(),
+                reservation.getRevTime(),
+                reservation.getCost(),
+                reservation.getPayMethod(),
+                reservation.getRevDate().isBefore(LocalDate.now())
+        )).collect(Collectors.toList());
+
+        return new PageImpl<>(collect, pageable, reservationPage.getTotalElements());
+    }
+
+    @Override
+    public void cancelReservation(Long id) {
+        groundReservationRepository.deleteById(id);
+    }
+
+    @Override
+    public List<String> findRevs(Long id, LocalDate date) {
+        return groundRevCustomRepository.findRevs(id, date);
     }
 }

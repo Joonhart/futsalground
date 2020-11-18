@@ -1,7 +1,8 @@
 package com.futsalground.portfolio.ground.controller;
 
-import com.futsalground.portfolio.exception.BoardNotFoundException;
 import com.futsalground.portfolio.exception.GroundNotFoundException;
+import com.futsalground.portfolio.ground.domain.Ground;
+import com.futsalground.portfolio.ground.domain.Reservation;
 import com.futsalground.portfolio.ground.model.GroundViewDto;
 import com.futsalground.portfolio.ground.model.ReservationDto;
 import com.futsalground.portfolio.ground.service.GroundService;
@@ -20,7 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -34,6 +38,15 @@ public class GroundController {
     public String list(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 5)
                        Pageable pageable) {
         Page<GroundViewDto> groundViewDtos = groundService.findAllGround(pageable);
+        int startPage = Math.max(1, groundViewDtos.getPageable().getPageNumber() - 4);
+        int endPage = Math.min(groundViewDtos.getTotalPages(), groundViewDtos.getPageable().getPageNumber() + 4);
+        if (startPage > endPage)  endPage = startPage;
+        int curPage = groundViewDtos.getPageable().getPageNumber()+1;
+        int totalPage = groundViewDtos.getTotalPages() == 0 ? 1 : groundViewDtos.getTotalPages();
+        model.addAttribute("totalPage", totalPage);
+        model.addAttribute("curPage", curPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         model.addAttribute("now", LocalDateTime.now());
         model.addAttribute("groundViewDtos", groundViewDtos);
         return "ground/groundList";
@@ -42,18 +55,31 @@ public class GroundController {
     @GetMapping("{id}")
     private String groundView(@PathVariable Long id, Model model) throws GroundNotFoundException {
         Optional<GroundViewDto> groundViewDto = groundService.findGround(id);
+        List<String> revs = groundService.findRevs(id, LocalDate.now());
         model.addAttribute("now", LocalDateTime.now());
         model.addAttribute("reservationDto", new ReservationDto());
         model.addAttribute("groundViewDto", groundViewDto.orElseThrow(GroundNotFoundException::new));
+        model.addAttribute("revs", revs);
         return "ground/groundView";
     }
 
     @PostMapping("/createReservation")
-    public String reservation(ReservationDto reservationDto, HttpServletRequest request) {
+    public String reservation(ReservationDto reservationDto, String reserveDate, Long grdId, HttpServletRequest request) {
+        LocalDate revDate = LocalDate.parse(reserveDate, DateTimeFormatter.ISO_DATE);
+        reservationDto.setRevDate(revDate);
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute("member");
+        reservationDto.setMember(member);
+        Ground ground = groundService.findById(grdId).get();
         reservationDto.setEmail(member.getEmail());
+        reservationDto.setGround(ground);
         groundService.reservation(reservationDto);
+        return "redirect:/member/revInfo";
+    }
+
+    @GetMapping("{id}/delete")
+    public String delete(@PathVariable Long id) {
+        groundService.cancelReservation(id);
         return "redirect:/member/revInfo";
     }
 }

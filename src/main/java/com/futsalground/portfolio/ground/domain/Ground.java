@@ -1,5 +1,6 @@
 package com.futsalground.portfolio.ground.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.futsalground.portfolio.common.domain.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter

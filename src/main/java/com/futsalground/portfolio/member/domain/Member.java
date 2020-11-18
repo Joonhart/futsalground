@@ -1,6 +1,8 @@
 package com.futsalground.portfolio.member.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.futsalground.portfolio.common.domain.BaseEntity;
+import com.futsalground.portfolio.ground.domain.Reservation;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,7 +24,7 @@ public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_seq_generator")
-    @Column(name = "MEMBER_ID")
+    @Column(name = "member_id")
     private Long id;
 
     @Column(name = "MEMBER_EMAIL")

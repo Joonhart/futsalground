@@ -1,10 +1,12 @@
 package com.futsalground.portfolio.ground.domain;
 
 import com.futsalground.portfolio.common.domain.BaseEntity;
+import com.futsalground.portfolio.member.domain.Member;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -25,28 +27,27 @@ public class Reservation extends BaseEntity {
     private String email;
 
     private String grdName;
-    private String revDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate revDate;
     private String revTime;
     private int cost;
 
     private char payMethod;
 
-    @Builder
-    public Reservation(Long id, String email, String grdName, String revDate, String revTime, int cost, char payMethod) {
-        this.id = id;
-        this.email = email;
-        this.grdName = grdName;
-        this.revDate = revDate;
-        this.revTime = revTime;
-        this.cost = cost;
-        this.payMethod = payMethod;
-    }
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ground_id")
+    private Ground ground;
 
-    public Reservation(String createdBy, LocalDateTime createdDate, String lastModifiedBy, LocalDateTime lastModifiedDate, Long id, String email, String grdName, String revDate, String revTime, int cost, char payMethod) {
-        super(email, createdDate, email, lastModifiedDate);
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @Builder
+    public Reservation(Long id, String email, Member member, Ground ground, LocalDate revDate, String revTime, int cost, char payMethod) {
         this.id = id;
         this.email = email;
-        this.grdName = grdName;
+        this.member = member;
+        this.ground = ground;
         this.revDate = revDate;
         this.revTime = revTime;
         this.cost = cost;

@@ -5,6 +5,7 @@ import com.futsalground.portfolio.exception.MemberNotFoundException;
 import com.futsalground.portfolio.exception.UserNameDuplicateException;
 import com.futsalground.portfolio.ground.domain.Reservation;
 import com.futsalground.portfolio.ground.model.GroundViewDto;
+import com.futsalground.portfolio.ground.model.ReservationDto;
 import com.futsalground.portfolio.ground.service.GroundService;
 import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.member.model.MemberSaveDto;
@@ -100,17 +101,17 @@ public class MemberController {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute("member");
         String email = member.getEmail();
-        Page<Reservation> reservations = groundService.findMyRev(email, pageable);
-        int startPage = Math.max(1, reservations.getPageable().getPageNumber() - 4);
-        int endPage = Math.min(reservations.getTotalPages(), reservations.getPageable().getPageNumber() + 4);
+        Page<ReservationDto> reservationDtos = groundService.findMyRev(email, pageable);
+        int startPage = Math.max(1, reservationDtos.getPageable().getPageNumber() - 4);
+        int endPage = Math.min(reservationDtos.getTotalPages(), reservationDtos.getPageable().getPageNumber() + 4);
         if (startPage > endPage)  endPage = startPage;
-        int curPage = reservations.getPageable().getPageNumber()+1;
-        int totalPage = reservations.getTotalPages() == 0 ? 1 : reservations.getTotalPages();
+        int curPage = reservationDtos.getPageable().getPageNumber()+1;
+        int totalPage = reservationDtos.getTotalPages() == 0 ? 1 : reservationDtos.getTotalPages();
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("curPage", curPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
-        model.addAttribute("reservations", reservations);
+        model.addAttribute("reservationDtos", reservationDtos);
         return "member/revInfo";
     }
 
