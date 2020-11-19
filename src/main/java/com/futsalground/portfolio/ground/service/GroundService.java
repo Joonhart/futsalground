@@ -25,7 +25,7 @@ public interface GroundService {
 
     Page<ReservationDto> findMyRev(String email, Pageable pageable);
 
-    void cancelReservation(Long id);
+    void cancelReservation(Long id, Long memid);
 
     List<String> findRevs(Long id, LocalDate date);
 }

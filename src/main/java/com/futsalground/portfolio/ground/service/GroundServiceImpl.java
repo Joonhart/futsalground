@@ -81,7 +81,7 @@ public class GroundServiceImpl implements GroundService {
     public void reservation(ReservationDto reservationDto) {
         groundReservationRepository.save(reservationDto.toEntity(reservationDto));
         Member member = memberRepository.findByEmail(reservationDto.getEmail()).get();
-        member.PlusRev(reservationDto.getCost());
+        member.plusRev(reservationDto.getCost());
     }
 
     @Override
@@ -109,8 +109,11 @@ public class GroundServiceImpl implements GroundService {
     }
 
     @Override
-    public void cancelReservation(Long id) {
+    public void cancelReservation(Long id, Long memid) {
+        Reservation reservation = groundReservationRepository.findById(id).get();
         groundReservationRepository.deleteById(id);
+        Member member = memberRepository.findById(memid).get();
+        member.cancelRev(reservation.getCost());
     }
 
     @Override

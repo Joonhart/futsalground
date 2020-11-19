@@ -120,7 +120,6 @@
                             </div>
                             <div class="modal-footer">
                                 <form th:action="@{/recruit/{id}/apply(id=${recruitDto.id})}" method="post">
-                                    <input type="hidden" name="applyerEmail" th:value="${session.member.email}">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">아니요</button>
                                     <button type="submit" class="btn btn-primary">네</button>
                                 </form>

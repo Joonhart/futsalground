@@ -1,6 +1,7 @@
 package com.futsalground.portfolio.player.controller;
 
 import com.futsalground.portfolio.exception.RecruitNotFoundException;
+import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.player.model.RecruitDto;
 import com.futsalground.portfolio.player.model.RecruitPageViewDto;
 import com.futsalground.portfolio.player.service.ApplyService;
@@ -15,7 +16,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.net.http.HttpRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -51,7 +55,7 @@ public class RecruitController {
     }
 
     @PostMapping("/createRecruit")
-    public String createR(@Valid RecruitDto recruitDto, BindingResult result) {
+    public String createR(@Valid RecruitDto recruitDto, BindingResult result, HttpServletRequest request) {
         if (result.hasErrors()) {
             return "player/recruitForm";
         }
@@ -60,6 +64,9 @@ public class RecruitController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
         LocalDateTime dateTime = LocalDateTime.parse(day.substring(0, day.length() - 3) + " " + time + ":00.000", formatter);
         recruitDto.setStarttime(dateTime);
+        HttpSession session = request.getSession();
+        Member member = (Member) session.getAttribute("member");
+        recruitDto.setRecruitMember(member);
         recruitService.create(recruitDto);
         return "redirect:/recruit";
     }
@@ -73,9 +80,10 @@ public class RecruitController {
     }
 
     @PostMapping("/{id}/apply")
-    public String apply(@PathVariable Long id, @RequestParam("applyerEmail")String applyerEmail) {
-        Optional<RecruitDto> recruitDto = recruitService.findById(id);
-        recruitDto.get().addApply(applyerEmail);
+    public String apply(@PathVariable Long id, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Member member = (Member) session.getAttribute("member");
+        recruitService.apply(id, member);
         return "member/mypage";
     }
 }

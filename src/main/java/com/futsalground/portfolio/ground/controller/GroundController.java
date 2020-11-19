@@ -5,6 +5,7 @@ import com.futsalground.portfolio.ground.domain.Ground;
 import com.futsalground.portfolio.ground.domain.Reservation;
 import com.futsalground.portfolio.ground.model.GroundViewDto;
 import com.futsalground.portfolio.ground.model.ReservationDto;
+import com.futsalground.portfolio.ground.model.ReservationShowDto;
 import com.futsalground.portfolio.ground.service.GroundService;
 import com.futsalground.portfolio.member.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +13,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -63,6 +62,13 @@ public class GroundController {
         return "ground/groundView";
     }
 
+    @PostMapping("/showReservation")
+    private String showReservation(ReservationShowDto reservationShowDto, Model model) {
+        List<String> revs = groundService.findRevs(reservationShowDto.getId(), LocalDate.parse(reservationShowDto.getDate().substring(0, 10), DateTimeFormatter.ISO_DATE));
+        model.addAttribute("revs", revs);
+        return "ground/groundView :: #timeWrap";
+    }
+
     @PostMapping("/createReservation")
     public String reservation(ReservationDto reservationDto, String reserveDate, Long grdId, HttpServletRequest request) {
         LocalDate revDate = LocalDate.parse(reserveDate, DateTimeFormatter.ISO_DATE);
@@ -78,8 +84,10 @@ public class GroundController {
     }
 
     @GetMapping("{id}/delete")
-    public String delete(@PathVariable Long id) {
-        groundService.cancelReservation(id);
+    public String delete(@PathVariable Long id, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Member member = (Member) session.getAttribute("member");
+        groundService.cancelReservation(id, member.getId());
         return "redirect:/member/revInfo";
     }
 }

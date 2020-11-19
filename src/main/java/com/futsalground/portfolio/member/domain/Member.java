@@ -3,6 +3,7 @@ package com.futsalground.portfolio.member.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.futsalground.portfolio.common.domain.BaseEntity;
 import com.futsalground.portfolio.ground.domain.Reservation;
+import com.futsalground.portfolio.player.domain.Recruit;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -80,12 +81,17 @@ public class Member extends BaseEntity {
         this.password = newPW;
     }
 
-    public void PlusBoardCnt() {
+    public void plusBoardCnt() {
         this.boardcnt = this.boardcnt + 1;
     }
 
-    public void PlusRev(int cost) {
+    public void plusRev(int cost) {
         this.spend += cost;
         this.revcnt = this.revcnt + 1;
+    }
+
+    public void cancelRev(int cost) {
+        this.spend -= cost;
+        this.revcnt = this.revcnt - 1;
     }
 }

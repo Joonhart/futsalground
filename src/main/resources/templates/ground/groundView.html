@@ -129,7 +129,7 @@
                 </tr>
                 <tr>
                     <th>음료</th>
-                    <td><span th:text="${groundViewDto.groundInfo.water} == 'n' ? '음료없음' : '음료판매'"></span></td>
+                    <td><span id="water" th:text="${groundViewDto.groundInfo.water} == 'n' ? '음료없음' : '음료판매'"></span></td>
                 </tr>
             </table>
         </div>
@@ -197,15 +197,16 @@
                 </div>
             </div>
             <div class="d-flex justify-content-around" id="timeWrap">
-                <div class="06~08 rev" id="a" onclick="chkRev(this.id);">06~08</div>
-                <div class="08~10 rev" id="b" onclick="chkRev(this.id);">08~10</div>
-                <div class="10~12 rev" id="c" onclick="chkRev(this.id);">10~12</div>
-                <div class="12~14 rev" id="d" onclick="chkRev(this.id);">12~14</div>
-                <div class="14~16 rev" id="e" onclick="chkRev(this.id);">14~16</div>
-                <div class="16~18 rev" id="f" onclick="chkRev(this.id);">16~18</div>
-                <div class="18~20 rev" id="g" onclick="chkRev(this.id);">18~20</div>
-                <div class="20~22 rev" id="h" onclick="chkRev(this.id);">20~22</div>
-                <div class="22~24 rev" id="i" onclick="chkRev(this.id);">22~24</div>
+                <input th:value="${revs}" class="d-none" id="cngtime" />
+                <div class="06~08 rev" id="a" th:classappend="${revs.contains('06~08  ')} ? 'reserved'" onclick="chkRev(this.id);">06~08</div>
+                <div class="08~10 rev" id="b" th:classappend="${revs.contains('08~10  ')} ? 'reserved'" onclick="chkRev(this.id);">08~10</div>
+                <div class="10~12 rev" id="c" th:classappend="${revs.contains('10~12  ')} ? 'reserved'" onclick="chkRev(this.id);">10~12</div>
+                <div class="12~14 rev" id="d" th:classappend="${revs.contains('12~14  ')} ? 'reserved'" onclick="chkRev(this.id);">12~14</div>
+                <div class="14~16 rev" id="e" th:classappend="${revs.contains('14~16  ')} ? 'reserved'" onclick="chkRev(this.id);">14~16</div>
+                <div class="16~18 rev" id="f" th:classappend="${revs.contains('16~18  ')} ? 'reserved'" onclick="chkRev(this.id);">16~18</div>
+                <div class="18~20 rev" id="g" th:classappend="${revs.contains('18~20  ')} ? 'reserved'" onclick="chkRev(this.id);">18~20</div>
+                <div class="20~22 rev" id="h" th:classappend="${revs.contains('20~22  ')} ? 'reserved'" onclick="chkRev(this.id);">20~22</div>
+                <div class="22~24 rev" id="i" th:classappend="${revs.contains('22~24  ')} ? 'reserved'" onclick="chkRev(this.id);">22~24</div>
                 <br />
             </div>
             <div class="d-none">
@@ -252,7 +253,7 @@
                             </div>
                         </div>
                         <div class="d-none">
-                            <input type="text" name="grdId" th:value="${groundViewDto.id}">
+                            <input type="text" name="grdId" id="grdId" th:value="${groundViewDto.id}">
                             <input type="text" th:field="*{cost}" id="cost2">
                             <input type="text" name="reserveDate" id="when1">
                             <input type="text" th:field="*{revTime}" id="when2">
@@ -277,7 +278,7 @@
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
 
-<script type="text/javascript">
+<script th:inline="javascript">
     function open() {
         var box = document.getElementById("a");     cngBox(box);
         box = document.getElementById("b");			cngBox(box);
@@ -293,6 +294,7 @@
     window.onload=open;
 </script>
 <script th:inline="javascript">
+    /*<![CDATA[*/
     function chkRev(id) {
         var id = id;
         var box = document.getElementById(id);
@@ -326,27 +328,11 @@
     }
     function cngBox(box) {
         var time = [[${groundViewDto.timeAndCost.startTime}]];
-        var reservationCheck = [[${revs}]];
-        var revtimes = ["06~08", "08~10", "10~12", "12~14", "14~16", "16~18", "18~20", "20~22", "22~24"];
-        var revtimenames = ["a", "b", "c", "d", "e", "f", "g", "h", "i"];
-        if (reservationCheck.length > 1) {
-            for (var i = 0; i < revtimes.length; i++) {
-                if (reservationCheck.indexOf(revtimes[i]) >= 0) {
-
-                }
-            }
-        }
-        if (time.indexOf(box.id) < 0) {
+        var reserve = box.className;
+        if (time.indexOf(box.id) < 0 || reserve.includes("reserve")) {
             box.style.backgroundColor = "gray";
             box.innerHTML = "예약 불가";
         }
-    }
-
-    function cngDate(val) {
-        var date = val.value.substr(0, 10);
-        // var glcode = "<%=glcode %>";
-        var now = document.getElementById("now");
-        // location.href="time.groundReq?glcode=" + glcode + "&date=" + date;
     }
 
     function cngMsg(num) {
@@ -360,6 +346,10 @@
     function cngFrame(val) {
         var changeBox = document.getElementById("when");
         changeBox.innerHTML = val;
+        inputData();
+        open();
+
+        alert($('#cngtime').val());
     }
 
     function goRev() {
@@ -402,10 +392,13 @@
 
         $('#exampleModal').modal('show')
     }
+    /*]]>*/
 </script>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-
+<!--<script src="https://code.jquery.com/jquery-3.4.1.js"></script>-->
+<script th:src="@{/js/showReservation.js}"></script>
 </body>
 </html>

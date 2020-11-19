@@ -1,5 +1,6 @@
 package com.futsalground.portfolio.player.service;
 
+import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.player.domain.Recruit;
 import com.futsalground.portfolio.player.model.RecruitDto;
 import com.futsalground.portfolio.player.model.RecruitPageViewDto;
@@ -25,6 +26,7 @@ public class RecruitServiceImpl implements RecruitService {
     public Optional<RecruitDto> findById(Long id) {
         return recruitRepository.findById(id).map(recruit -> new RecruitDto(
                 recruit.getId(),
+                recruit.getRecruitMember(),
                 recruit.getTeamInfo().getTeamname(),
                 recruit.getTeamInfo().getAges(),
                 recruit.getTeamInfo().getPosition(),
@@ -54,6 +56,12 @@ public class RecruitServiceImpl implements RecruitService {
         Page<Recruit> recruits = recruitRepository.findAll(pageable);
         List<RecruitPageViewDto> recruitPageViewDtos = pageToList(recruits);
         return new PageImpl<>(recruitPageViewDtos, pageable, recruits.getTotalElements());
+    }
+
+    @Override
+    public void apply(Long id, Member member) {
+        Recruit recruit = recruitRepository.findById(id).get();
+//        recruit.addApplyMember(member);
     }
 
 //    @Override

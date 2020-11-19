@@ -5,7 +5,9 @@ import lombok.*;
 import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,7 +21,7 @@ public class Recruit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recruit_seq_generator")
-    @Column(name = "RECRUIT_ID")
+    @Column(name = "recruit_id")
     private Long id;
 
     @Embedded
@@ -32,20 +34,29 @@ public class Recruit {
 
     private String explanation;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "member_id")
     private Member recruitMember;
 
-    @OneToMany
-    private Set<Member> applicants = new HashSet<>();
+    @OneToMany(mappedBy = "recruit")
+    private List<ApplyMember> applyMembers = new ArrayList<>();
+    @OneToMany(mappedBy = "selected")
+    private List<SelectMember> selectMembers = new ArrayList<>();
 
     @Builder
-    public Recruit(Long id, TeamInfo teamInfo, MatchInfo matchInfo, int volume, int apply, String explanation) {
+    public Recruit(Long id, Member recruitMember, TeamInfo teamInfo, MatchInfo matchInfo, int volume, int apply, String explanation, List<ApplyMember> applyMembers, List<SelectMember> selectMembers) {
         this.id = id;
+        this.recruitMember = recruitMember;
         this.teamInfo = teamInfo;
         this.matchInfo = matchInfo;
         this.volume = volume;
         this.apply = apply;
         this.explanation = explanation;
+        this.applyMembers = applyMembers;
+        this.selectMembers = selectMembers;
     }
+
+//    public void addApplyMember(Member member) {
+//        this.applyMembers.add(member);
+//    }
 }

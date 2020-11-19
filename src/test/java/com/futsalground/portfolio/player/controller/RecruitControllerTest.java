@@ -1,5 +1,6 @@
 package com.futsalground.portfolio.player.controller;
 
+import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.player.model.RecruitDto;
 import com.futsalground.portfolio.player.model.RecruitPageViewDto;
 import com.futsalground.portfolio.player.service.RecruitService;
@@ -56,7 +57,7 @@ class RecruitControllerTest {
     }
 
     private RecruitDto recruitCreate() {
-        RecruitDto recruitDto = new RecruitDto(null, "깨비깨비", "25~30", "g, d, m", "중", "카카오톡",
+        RecruitDto recruitDto = new RecruitDto(null, new Member(null, null, null, null, null, null, null, null, null, null), "깨비깨비", "25~30", "g, d, m", "중", "카카오톡",
                 "hihi", "보정동풋살장", "기흥구", "보정동", null, "2020-11-11(수)", "14:00", 10000
                 , 2, 0, "와서 재밌게 재주껏 하시길");
 

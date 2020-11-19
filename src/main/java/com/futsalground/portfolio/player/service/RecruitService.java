@@ -1,5 +1,6 @@
 package com.futsalground.portfolio.player.service;
 
+import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.player.model.RecruitDto;
 import com.futsalground.portfolio.player.model.RecruitPageViewDto;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,8 @@ public interface RecruitService {
     void create(RecruitDto recruitDto);
 
     Page<RecruitPageViewDto> findAll(Pageable pageable);
+
+    void apply(Long id, Member member);
 
 //    Page<RecruitPageViewDto> findByAddr1(String addr1, Pageable pageable);
 //

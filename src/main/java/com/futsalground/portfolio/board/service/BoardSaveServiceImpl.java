@@ -29,7 +29,7 @@ public class BoardSaveServiceImpl implements BoardSaveService {
                 .build();
         boardRepository.save(board);
         Member member = memberRepository.findByEmail(board.getWriter()).get();
-        member.PlusBoardCnt();
+        member.plusBoardCnt();
         return board.getId();
     }
 

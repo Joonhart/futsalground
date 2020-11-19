@@ -1,5 +1,6 @@
 package com.futsalground.portfolio.player.model;
 
+import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.player.domain.MatchInfo;
 import com.futsalground.portfolio.player.domain.Recruit;
 import com.futsalground.portfolio.player.domain.TeamInfo;
@@ -40,12 +41,15 @@ public class RecruitDto {
     private int apply;
     private String explanation;
 
-    private Set<String> applicants;
-    private Set<String> select;
+    private Member recruitMember;
+
+    private Set<Member> applicants;
+    private Set<Member> select;
 
     public Recruit toEntity(RecruitDto recruitDto) {
         return Recruit.builder()
                 .id(recruitDto.id)
+                .recruitMember(recruitDto.recruitMember)
                 .teamInfo(TeamInfo.builder()
                         .teamname(recruitDto.teamname)
                         .position(recruitDto.position)
@@ -68,8 +72,9 @@ public class RecruitDto {
     }
 
 
-    public RecruitDto(Long id, String teamname, String ages, String position, String skill, String contactway, String phone, String groundname, String addr1, String addr2, LocalDateTime starttime, String day, String time, int cost, int volume, int apply, String explanation) {
+    public RecruitDto(Long id, Member recruitMember, String teamname, String ages, String position, String skill, String contactway, String phone, String groundname, String addr1, String addr2, LocalDateTime starttime, String day, String time, int cost, int volume, int apply, String explanation) {
         this.id = id;
+        this.recruitMember = recruitMember;
         this.teamname = teamname;
         this.ages = ages;
         this.position = position;
@@ -86,9 +91,5 @@ public class RecruitDto {
         this.volume = volume;
         this.apply = apply;
         this.explanation = explanation;
-    }
-
-    public void addApply(String applyerEmail) {
-        this.applicants.add(applyerEmail);
     }
 }
