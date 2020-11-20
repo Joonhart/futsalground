@@ -1,0 +1,35 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="menu(menu)">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="sidebar-sticky pt-3 py-5">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/member/mypage}" th:classappend="${menu} == 'mypage' ? 'active' : ''">
+                        <span data-feather="home"></span>
+                        정보 수정 <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/member/revInfo}" th:classappend="${menu} == 'revInfo' ? 'active' : ''">
+                        <span data-feather="file"></span>
+                        구장 예약 현황
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/member/recruitInfo}" th:classappend="${menu} == 'recruitInfo' ? 'active' : ''">
+                        <span data-feather="shopping-cart"></span>
+                        용병 모집 현황
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/member/applyInfo}" th:classappend="${menu} == 'applyInfo' ? 'active' : ''">
+                        <span data-feather="users"></span>
+                        용병 신청 현황
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+</div>

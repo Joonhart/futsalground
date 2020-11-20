@@ -55,23 +55,24 @@
         <main role="main" class="ml-sm-auto col-lg-10 px-md-4 py-5">
             <h2>정보수정</h2>
             <div class="table-responsive py-3">
-                <form th:action="@{/member/changePW}" method="post">
+                <form th:action="@{/member/changePW}" method="post" onsubmit="return chkValue(this);">
                     <table class="table table-striped table-bordered">
+                        <input type="hidden" name="email" th:value="${session.member.email}">
                         <tr>
                             <th>현재비밀번호</th>
-                            <td colspan="5" align="left"><input class="form-control-plaintext" type="text"></td>
+                            <td colspan="5" align="left"><input class="form-control" name="curpwd" type="password"></td>
                         </tr>
                         <tr>
                             <th>새로운 비밀번호</th>
-                            <td colspan="5" align="left"><input class="form-control-plaintext" type="text"></td>
+                            <td colspan="5" align="left"><input class="form-control" name="newpwd1" type="password"></td>
                         </tr>
                         <tr>
                             <th>새로운 비밀번호</th>
-                            <td colspan="5" align="left"><input class="form-control-plaintext" type="text"></td>
+                            <td colspan="5" align="left"><input class="form-control" name="newpwd2" type="password"></td>
                         </tr>
                     </table>
                     <p>
-                        <button type="submit" class="btn btn-primary m-5" onclick="function();">비밀번호 변경</button>
+                        <button type="submit" class="btn btn-primary m-5">비밀번호 변경</button>
                     </p>
                 </form>
             </div>
@@ -88,5 +89,31 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 
+<script th:inline="javascript">
+    function chkValue(frm) {
+        var curPW = [[${session.member.password}]];
+        var curpwd1 = frm.curpwd.value;
+        var newpwd = frm.newpwd1.value;
+        var newpwd2 = frm.newpwd2.value;
+        // 비밀번호검사
+        if (curPW != curpwd1) {
+            alert("현재 비밀번호가 틀립니다.")
+            frm.curpwd.focus();
+            return false;
+        } else if (newpwd == "") {
+            alert("비밀번호를 입력하세요.");
+            frm.newpwd1.focus();
+            return false;
+
+        } else if (newpwd != newpwd2) {
+            alert("비밀번호와 비밀번호 확인이 서로 다릅니다.");
+            frm.newpwd.value = "";
+            frm.newpwd2.value = "";
+            frm.newpwd.focus();
+            return false;
+        }
+        return true;
+    }
+</script>
 </body>
 </html>

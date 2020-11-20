@@ -1,9 +1,13 @@
 package com.futsalground.portfolio.player.service;
 
 import com.futsalground.portfolio.member.domain.Member;
+import com.futsalground.portfolio.player.domain.ApplyMember;
 import com.futsalground.portfolio.player.domain.Recruit;
+import com.futsalground.portfolio.player.model.MyApplyShowDto;
 import com.futsalground.portfolio.player.model.RecruitDto;
 import com.futsalground.portfolio.player.model.RecruitPageViewDto;
+import com.futsalground.portfolio.player.repository.RecruitApplyCustomRepository;
+import com.futsalground.portfolio.player.repository.RecruitApplyRepository;
 import com.futsalground.portfolio.player.repository.RecruitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +25,8 @@ import java.util.stream.Collectors;
 public class RecruitServiceImpl implements RecruitService {
 
     private final RecruitRepository recruitRepository;
+    private final RecruitApplyRepository recruitApplyRepository;
+    private final RecruitApplyCustomRepository recruitApplyCustomRepository;
 
     @Override
     public Optional<RecruitDto> findById(Long id) {
@@ -61,7 +67,8 @@ public class RecruitServiceImpl implements RecruitService {
     @Override
     public void apply(Long id, Member member) {
         Recruit recruit = recruitRepository.findById(id).get();
-//        recruit.addApplyMember(member);
+        ApplyMember applyMember = new ApplyMember(recruit, member);
+        recruitApplyRepository.save(applyMember);
     }
 
 //    @Override
@@ -90,5 +97,10 @@ public class RecruitServiceImpl implements RecruitService {
                 recruit.getVolume()
         )).collect(Collectors.toList());
         return recruitPageViewDtos;
+    }
+
+    @Override
+    public List<MyApplyShowDto> findMyApplys(Member member) {
+        return recruitApplyCustomRepository.findRecruitOfApply(member);
     }
 }

@@ -51,6 +51,9 @@ public class Member extends BaseEntity {
     private int revcnt;
     private int spend;
 
+    @OneToMany(mappedBy = "recruitMember")
+    private List<Recruit> myApplys = new ArrayList<>();
+
     @Builder
     public Member(String createdBy, LocalDateTime createdDate, String lastModifiedBy, LocalDateTime lastModifiedDate, Long id, String email, String password, String addr1, String addr2, String position) {
 

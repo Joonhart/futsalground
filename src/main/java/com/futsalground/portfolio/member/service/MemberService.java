@@ -3,7 +3,9 @@ package com.futsalground.portfolio.member.service;
 import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.member.model.MemberSaveDto;
 import com.futsalground.portfolio.member.model.MemberViewDto;
+import com.futsalground.portfolio.player.domain.Recruit;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MemberService {

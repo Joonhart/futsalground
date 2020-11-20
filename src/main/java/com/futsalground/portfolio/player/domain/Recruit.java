@@ -40,11 +40,9 @@ public class Recruit {
 
     @OneToMany(mappedBy = "recruit")
     private List<ApplyMember> applyMembers = new ArrayList<>();
-    @OneToMany(mappedBy = "selected")
-    private List<SelectMember> selectMembers = new ArrayList<>();
 
     @Builder
-    public Recruit(Long id, Member recruitMember, TeamInfo teamInfo, MatchInfo matchInfo, int volume, int apply, String explanation, List<ApplyMember> applyMembers, List<SelectMember> selectMembers) {
+    public Recruit(Long id, Member recruitMember, TeamInfo teamInfo, MatchInfo matchInfo, int volume, int apply, String explanation, List<ApplyMember> applyMembers) {
         this.id = id;
         this.recruitMember = recruitMember;
         this.teamInfo = teamInfo;
@@ -53,10 +51,5 @@ public class Recruit {
         this.apply = apply;
         this.explanation = explanation;
         this.applyMembers = applyMembers;
-        this.selectMembers = selectMembers;
     }
-
-//    public void addApplyMember(Member member) {
-//        this.applyMembers.add(member);
-//    }
 }

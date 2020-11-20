@@ -29,4 +29,11 @@ public class ApplyMember {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member applicant;
+
+    private boolean isSelected;
+
+    public ApplyMember(Recruit recruit, Member applicant) {
+        this.recruit = recruit;
+        this.applicant = applicant;
+    }
 }

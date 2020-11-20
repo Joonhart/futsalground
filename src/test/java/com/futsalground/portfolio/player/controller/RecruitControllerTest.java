@@ -1,8 +1,14 @@
 package com.futsalground.portfolio.player.controller;
 
 import com.futsalground.portfolio.member.domain.Member;
+import com.futsalground.portfolio.player.domain.MatchInfo;
+import com.futsalground.portfolio.player.domain.Recruit;
+import com.futsalground.portfolio.player.domain.TeamInfo;
+import com.futsalground.portfolio.player.model.MyApplyShowDto;
 import com.futsalground.portfolio.player.model.RecruitDto;
 import com.futsalground.portfolio.player.model.RecruitPageViewDto;
+import com.futsalground.portfolio.player.repository.RecruitApplyCustomRepository;
+import com.futsalground.portfolio.player.repository.RecruitApplyRepository;
 import com.futsalground.portfolio.player.service.RecruitService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +23,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -29,6 +36,10 @@ class RecruitControllerTest {
 
     @Autowired
     RecruitService recruitService;
+    @Autowired
+    RecruitApplyRepository recruitApplyRepository;
+    @Autowired
+    RecruitApplyCustomRepository recruitApplyCustomRepository;
     @PersistenceContext
     EntityManager em;
 
@@ -50,9 +61,6 @@ class RecruitControllerTest {
     public void applyTest() {
         RecruitDto recruitDto = recruitCreate();
 
-        String email = "memberEmail";
-        recruitDto.addApply(email);
-
         assertThat(recruitDto.getApplicants().size()).isEqualTo(1);
     }
 
@@ -68,5 +76,25 @@ class RecruitControllerTest {
         recruitDto.setStarttime(dateTime);
         recruitService.create(recruitDto);
         return recruitDto;
+    }
+
+    @Test
+    @DisplayName("용병 게시판에 예약하고 대기중인 상태 표시")
+    public void recruitApplyTest() {
+        Member member1 = new Member(null, null, null, null, 1L, "joonhart1@gmail.com", "1234", "addr1", "addr2", "gd");
+        Member member2 = new Member(null, null, null, null, 1L, "joonhart2@gmail.com", "1234", "addr1", "addr2", "gd");
+
+        new Recruit(1L, member1,
+                new TeamInfo("abc", "a", "20", "skill", "kakao", "1234"),
+                new MatchInfo("groundName", "addr1", "addr2", LocalDateTime.now(), 1000),
+                3, 3, "하이루", null, null);
+
+        recruitService.apply(1L, member2);
+
+        List<MyApplyShowDto> myApplys = recruitService.findMyApplys(member2);
+        System.out.println("myApplys.size() = " + myApplys.size());
+        for (MyApplyShowDto myApply : myApplys) {
+            System.out.println("myApply = " + myApply);
+        }
     }
 }

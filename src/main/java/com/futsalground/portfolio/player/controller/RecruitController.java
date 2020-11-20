@@ -84,6 +84,6 @@ public class RecruitController {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute("member");
         recruitService.apply(id, member);
-        return "member/mypage";
+        return "redirect:/member/myApply";
     }
 }

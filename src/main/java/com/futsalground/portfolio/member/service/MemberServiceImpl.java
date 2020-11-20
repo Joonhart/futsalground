@@ -4,10 +4,12 @@ import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.member.model.MemberSaveDto;
 import com.futsalground.portfolio.member.model.MemberViewDto;
 import com.futsalground.portfolio.member.repository.MemberRepository;
+import com.futsalground.portfolio.player.domain.Recruit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service

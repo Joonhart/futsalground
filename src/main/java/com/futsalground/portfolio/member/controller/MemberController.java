@@ -11,6 +11,9 @@ import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.member.model.MemberSaveDto;
 import com.futsalground.portfolio.member.model.MemberViewDto;
 import com.futsalground.portfolio.member.service.MemberService;
+import com.futsalground.portfolio.player.model.MyApplyShowDto;
+import com.futsalground.portfolio.player.repository.RecruitRepository;
+import com.futsalground.portfolio.player.service.RecruitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -37,6 +41,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final GroundService groundService;
+    private final RecruitService recruitService;
 
     @GetMapping("/login")
     public String loginForm(Model model) {
@@ -104,8 +109,8 @@ public class MemberController {
         Page<ReservationDto> reservationDtos = groundService.findMyRev(email, pageable);
         int startPage = Math.max(1, reservationDtos.getPageable().getPageNumber() - 4);
         int endPage = Math.min(reservationDtos.getTotalPages(), reservationDtos.getPageable().getPageNumber() + 4);
-        if (startPage > endPage)  endPage = startPage;
-        int curPage = reservationDtos.getPageable().getPageNumber()+1;
+        if (startPage > endPage) endPage = startPage;
+        int curPage = reservationDtos.getPageable().getPageNumber() + 1;
         int totalPage = reservationDtos.getTotalPages() == 0 ? 1 : reservationDtos.getTotalPages();
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("curPage", curPage);
@@ -121,9 +126,32 @@ public class MemberController {
         return "redirect:/member/mypage";
     }
 
+    @GetMapping("/changePW")
+    public String changePWpage() {
+        return "member/changePW";
+    }
+
     @PostMapping("/changePW")
-    public String changePW(String email, String newPW) {
-        memberService.changePW(email, newPW);
+    public String changePW(String email, String newpwd1) {
+        memberService.changePW(email, newpwd1);
         return "redirect:/member/mypage";
+    }
+
+    @GetMapping("myRecruit")
+    public String myRecruitInfo() {
+        return "member/myRecruit";
+    }
+
+    @GetMapping("myApply")
+    public String myApplyInfo(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+        Member member = (Member) session.getAttribute("member");
+        List<MyApplyShowDto> myApplys = recruitService.findMyApplys(member);
+        System.out.println("myApplys.size() = " + myApplys.size());
+        for (MyApplyShowDto myApply : myApplys) {
+            System.out.println("myApply = " + myApply);
+        }
+        model.addAttribute("myApplys", myApplys);
+        return "member/myApply";
     }
 }
