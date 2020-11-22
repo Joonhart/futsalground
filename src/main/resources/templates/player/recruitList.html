@@ -3,19 +3,15 @@
 <head th:replace="fragments/header :: header" />
 
 <body>
-<div class="container">
+<div class="container py-5">
     <div th:replace="fragments/bodyHeader :: menu('player')"/>
 
     <main role="main">
 
         <section class="py-3 text-center">
             <div class="container">
-                <p>
-                    <a href="#" th:href="@{/recruit}" class="btn btn-primary m-5">용병 구함</a>
-                    <a href="#" th:href="@{/apply}" class="btn btn-secondary m-5">용병 지원</a>
-                </p>
-                <h1>용병모집하기</h1>
-                <p class="lead text-muted">팀원이 모자라도 풋살을 즐기세요!</p>
+                <h1>용병모집/지원하기</h1>
+                <p class="lead text-muted">팀원이 모자라도, 팀이 없어도 풋살을 즐기세요!</p>
             </div>
         </section>
 

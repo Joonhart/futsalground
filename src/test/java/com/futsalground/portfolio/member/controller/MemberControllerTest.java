@@ -1,7 +1,9 @@
 package com.futsalground.portfolio.member.controller;
 
+import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.member.model.MemberSaveDto;
 import com.futsalground.portfolio.member.model.MemberViewDto;
+import com.futsalground.portfolio.member.repository.MemberRepository;
 import com.futsalground.portfolio.member.service.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +27,8 @@ class MemberControllerTest {
     @Autowired
     MemberService memberService;
     @Autowired
+    MemberRepository memberRepository;
+    @Autowired
     EntityManager em;
 
     @Test
@@ -45,7 +49,7 @@ class MemberControllerTest {
     @DisplayName("회원 정보 업데이트")
     public void memberUpdate() {
         // given
-        MemberSaveDto memberSaveDto = new MemberSaveDto(null, "joonhart@gmail.com", "1234", "성남시", "분당구", "공격수");
+        MemberSaveDto memberSaveDto = new MemberSaveDto(null, "joonhart2@gmail.com", "1234", "성남시", "분당구", "공격수");
         Long saveNum = memberService.save(memberSaveDto);
 
         em.flush();
@@ -66,5 +70,26 @@ class MemberControllerTest {
         assertThat(changeMember.getAddr1()).isEqualTo(updateAddr1);
         assertThat(changeMember.getAddr2()).isEqualTo(updateAddr2);
         assertThat(changeMember.getPosition()).isEqualTo(position);
+    }
+
+    @Test
+    @DisplayName("회원 비밀번호 변경")
+    public void changePwd() {
+        // given
+        String email = "joonhart3@gmail.com";
+        String pwd = "1234";
+        MemberSaveDto memberSaveDto = new MemberSaveDto(null, email, pwd, "성남시", "분당구", "공격수");
+        Long saveNum = memberService.save(memberSaveDto);
+
+        em.flush();
+        em.clear();
+
+        // when
+        String newPwd = "5678";
+
+        // then
+        memberService.changePW(email, newPwd);
+        Member member = memberRepository.findById(saveNum).get();
+        assertThat(member.getPassword()).isEqualTo(newPwd);
     }
 }

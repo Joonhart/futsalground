@@ -3,6 +3,7 @@ package com.futsalground.portfolio.player.service;
 import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.player.domain.Recruit;
 import com.futsalground.portfolio.player.model.MyApplyShowDto;
+import com.futsalground.portfolio.player.model.MyRecruitDto;
 import com.futsalground.portfolio.player.model.RecruitDto;
 import com.futsalground.portfolio.player.model.RecruitPageViewDto;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,10 @@ public interface RecruitService {
     void apply(Long id, Member member);
 
     List<MyApplyShowDto> findMyApplys(Member member);
+
+    List<MyRecruitDto> findMyRecruit(Member member);
+
+    void removeApply(Long id);
 
 //    Page<RecruitPageViewDto> findByAddr1(String addr1, Pageable pageable);
 //

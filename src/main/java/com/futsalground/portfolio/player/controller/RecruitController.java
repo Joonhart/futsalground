@@ -4,7 +4,6 @@ import com.futsalground.portfolio.exception.RecruitNotFoundException;
 import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.player.model.RecruitDto;
 import com.futsalground.portfolio.player.model.RecruitPageViewDto;
-import com.futsalground.portfolio.player.service.ApplyService;
 import com.futsalground.portfolio.player.service.RecruitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,12 +13,14 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.net.http.HttpRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -75,7 +76,6 @@ public class RecruitController {
     public String read(@PathVariable Long id, Model model) throws RecruitNotFoundException {
         Optional<RecruitDto> recruitDto = recruitService.findById(id);
         model.addAttribute("recruitDto", recruitDto.orElseThrow(RecruitNotFoundException::new));
-        System.out.println("recruitDto.get() = " + recruitDto.get());
         return "player/recruitView";
     }
 
@@ -84,6 +84,12 @@ public class RecruitController {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute("member");
         recruitService.apply(id, member);
+        return "redirect:/member/myApply";
+    }
+
+    @PostMapping("applyCancel/{id}")
+    public String cancelApply(@PathVariable Long id) {
+        recruitService.removeApply(id);
         return "redirect:/member/myApply";
     }
 }

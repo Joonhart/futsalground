@@ -25,12 +25,12 @@
                 <h4 class="mb-3">팀 정보</h4>
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="teamname">팀명</label>
+                        <label for="teamname" class="font-weight-bold">팀명</label>
                         <input type="text" class="form-control" id="teamname" th:field="${recruitDto.teamname}" readonly="readonly">
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label>영입 희망 포지션</label>
+                    <label class="font-weight-bold">영입 희망 포지션</label>
                     <div class="d-flex justify-content-around">
                         <div class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="keeper" disabled="disabled" th:checked="${recruitDto.position.contains('g')}">
@@ -51,18 +51,18 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="ages">연령대</label>
+                    <label for="ages" class="font-weight-bold">연령대</label>
                     <input type="text" class="form-control" id="ages" th:field="${recruitDto.ages}" readonly="readonly">
                 </div>
                 <div class="mb-3">
-                    <label for="skill">실력대</label>
+                    <label for="skill" class="font-weight-bold">실력대</label>
                     <input type="text" class="form-control" id="skill" th:field="${recruitDto.skill}" readonly="readonly">
                 </div>
                 <div class="mb-3">
                     <div class="d-flex justify-content-around">
-                        <label for="contactway" class="col-md-2">연락방법</label>
+                        <label for="contactway" class="col-md-2 font-weight-bold">연락방법</label>
                         <input type="text" class="form-control" id="contactway" name="contactway" th:field="${recruitDto.contactway}" readonly="readonly">
-                        <label for="phone" class="col-md-2">연락처</label>
+                        <label for="phone" class="col-md-2" font-weight-bold>연락처</label>
                         <input type="text" class="form-control" id="phone" name="phone" th:field="${recruitDto.phone}" readonly="readonly">
                     </div>
                 </div>
@@ -71,31 +71,31 @@
                 <hr class="mb-4">
                 <h4 class="mb-3">구장 정보</h4>
                 <div class="mb-3">
-                    <label for="groundname">구장명</label>
+                    <label for="groundname" class="font-weight-bold">구장명</label>
                     <input type="text" class="form-control" id="groundname" name="groundname" th:field="${recruitDto.groundname}" readonly="readonly">
                 </div>
 
                 <div class="mb-3">
-                    <label for="addr1">구장 주소</label>
+                    <label for="addr1" class="font-weight-bold">구장 주소</label>
                     <input type="text" class="form-control" id="addr1" name="addr1" th:field="${recruitDto.addr1}" readonly="readonly">
                 </div>
 
                 <div class="mb-3">
-                    <label for="day">경기 일시</label>
+                    <label for="day" class="font-weight-bold">경기 일시</label>
                     <input type="text" class="form-control" id="day" name="day" th:field="${recruitDto.starttime}" readonly="readonly"/>
 <!--                            <input type="text" class="form-control" id="day" name="day" th:field="${#temporals.format(recruitDto.starttime, 'yyyy-MM-dd')}" readonly="readonly">-->
                 </div>
                 <br/>
                 <div class="mb-3">
                     <div class="d-flex justify-content-around">
-                        <label for="cost" class="col-md-2">참가비</label>
+                        <label for="cost" class="col-md-2 font-weight-bold">참가비</label>
                         <input type="text" class="form-control" id="cost" name="cost" th:field="${recruitDto.cost}" readonly="readonly">원
-                        <label for="volume" class="col-md-2">인원</label>
+                        <label for="volume" class="col-md-2 font-weight-bold">모집인원</label>
                         <input type="text" class="form-control" id="volume" name="cost" th:field="${recruitDto.volume}" readonly="readonly">명
                     </div>
                 </div>
                 <div class="form-group">
-                    <label th:for="explanation">내용</label>
+                    <label th:for="explanation" class=" font-weight-bold">내용</label>
                     <textarea class="form-control" id="explanation" rows="3" name="explanation"
                               th:field="${recruitDto.explanation}" readonly="readonly"></textarea>
                 </div>

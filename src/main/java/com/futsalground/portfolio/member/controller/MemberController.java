@@ -12,6 +12,7 @@ import com.futsalground.portfolio.member.model.MemberSaveDto;
 import com.futsalground.portfolio.member.model.MemberViewDto;
 import com.futsalground.portfolio.member.service.MemberService;
 import com.futsalground.portfolio.player.model.MyApplyShowDto;
+import com.futsalground.portfolio.player.model.MyRecruitDto;
 import com.futsalground.portfolio.player.repository.RecruitRepository;
 import com.futsalground.portfolio.player.service.RecruitService;
 import lombok.RequiredArgsConstructor;
@@ -132,13 +133,21 @@ public class MemberController {
     }
 
     @PostMapping("/changePW")
-    public String changePW(String email, String newpwd1) {
+    public String changePW(String email, String newpwd1, HttpServletRequest request) {
         memberService.changePW(email, newpwd1);
+        Member member = memberService.findByEmailAndPassword(email, newpwd1).get();
+        request.setAttribute("member", member);
         return "redirect:/member/mypage";
     }
 
     @GetMapping("myRecruit")
-    public String myRecruitInfo() {
+    public String myRecruitInfo(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+        Member member = (Member) session.getAttribute("member");
+        List<MyRecruitDto> myRecruits = recruitService.findMyRecruit(member);
+        int size = myRecruits.size();
+        model.addAttribute("myRecruits", myRecruits);
+        model.addAttribute("size", size);
         return "member/myRecruit";
     }
 

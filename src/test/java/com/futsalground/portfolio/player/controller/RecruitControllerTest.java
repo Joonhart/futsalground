@@ -7,10 +7,9 @@ import com.futsalground.portfolio.player.domain.TeamInfo;
 import com.futsalground.portfolio.player.model.MyApplyShowDto;
 import com.futsalground.portfolio.player.model.RecruitDto;
 import com.futsalground.portfolio.player.model.RecruitPageViewDto;
-import com.futsalground.portfolio.player.repository.RecruitApplyCustomRepository;
+import com.futsalground.portfolio.player.repository.RecruitCustomRepository;
 import com.futsalground.portfolio.player.repository.RecruitApplyRepository;
 import com.futsalground.portfolio.player.service.RecruitService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +24,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -39,7 +36,7 @@ class RecruitControllerTest {
     @Autowired
     RecruitApplyRepository recruitApplyRepository;
     @Autowired
-    RecruitApplyCustomRepository recruitApplyCustomRepository;
+    RecruitCustomRepository recruitCustomRepository;
     @PersistenceContext
     EntityManager em;
 
@@ -87,7 +84,7 @@ class RecruitControllerTest {
         new Recruit(1L, member1,
                 new TeamInfo("abc", "a", "20", "skill", "kakao", "1234"),
                 new MatchInfo("groundName", "addr1", "addr2", LocalDateTime.now(), 1000),
-                3, 3, "하이루", null, null);
+                3, 3, "하이루", null);
 
         recruitService.apply(1L, member2);
 

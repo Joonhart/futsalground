@@ -4,9 +4,10 @@ import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.player.domain.ApplyMember;
 import com.futsalground.portfolio.player.domain.Recruit;
 import com.futsalground.portfolio.player.model.MyApplyShowDto;
+import com.futsalground.portfolio.player.model.MyRecruitDto;
 import com.futsalground.portfolio.player.model.RecruitDto;
 import com.futsalground.portfolio.player.model.RecruitPageViewDto;
-import com.futsalground.portfolio.player.repository.RecruitApplyCustomRepository;
+import com.futsalground.portfolio.player.repository.RecruitCustomRepository;
 import com.futsalground.portfolio.player.repository.RecruitApplyRepository;
 import com.futsalground.portfolio.player.repository.RecruitRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class RecruitServiceImpl implements RecruitService {
 
     private final RecruitRepository recruitRepository;
     private final RecruitApplyRepository recruitApplyRepository;
-    private final RecruitApplyCustomRepository recruitApplyCustomRepository;
+    private final RecruitCustomRepository recruitCustomRepository;
 
     @Override
     public Optional<RecruitDto> findById(Long id) {
@@ -101,6 +102,16 @@ public class RecruitServiceImpl implements RecruitService {
 
     @Override
     public List<MyApplyShowDto> findMyApplys(Member member) {
-        return recruitApplyCustomRepository.findRecruitOfApply(member);
+        return recruitCustomRepository.findRecruitOfApply(member);
+    }
+
+    @Override
+    public List<MyRecruitDto> findMyRecruit(Member member) {
+        return recruitCustomRepository.findMyRecruits(member);
+    }
+
+    @Override
+    public void removeApply(Long id) {
+        recruitApplyRepository.deleteById(id);
     }
 }
