@@ -51,6 +51,7 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository {
         List<MyRecruitDto> result = new ArrayList<>();
         for (Recruit recruit : recruits) {
             result.add(new MyRecruitDto(
+                    recruit.getId(),
                     recruit.getMatchInfo().getGroundname(),
                     recruit.getMatchInfo().getStarttime(),
                     recruit.getVolume(),
@@ -58,5 +59,15 @@ public class RecruitCustomRepositoryImpl implements RecruitCustomRepository {
                     recruit.getApplyMembers()));
         }
         return result;
+    }
+
+    @Override
+    public List<ApplyMember> findApplyMembers(Long id) {
+        Recruit recruit = em.createQuery("select r" +
+                " from Recruit r" +
+                " where r.id = :id", Recruit.class)
+                .setParameter("id", id)
+                .getSingleResult();
+        return recruit.getApplyMembers();
     }
 }

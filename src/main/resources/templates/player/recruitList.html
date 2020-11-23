@@ -21,7 +21,7 @@
                 <th>구장명</th>
                 <th>지역</th>
                 <th>매치일/시</th>
-                <th>필요인원</th>
+                <th>선택인원 / 모집인원</th>
                 <th>더보기</th>
             </tr>
             </thead>
@@ -30,7 +30,13 @@
                 <td th:text="${recruitPageViewDto.groundname}"></td>
                 <td th:text="${recruitPageViewDto.addr1}"></td>
                 <td th:text="${#temporals.format(recruitPageViewDto.starttime, 'yyyy-MM-dd(E) HH:mm')}"></td>
-                <td th:text="${recruitPageViewDto.volume}"></td>
+                <td>
+                    <span th:text="${recruitPageViewDto.seledtedMembers}"></span>
+                    /
+                    <span th:text="${recruitPageViewDto.volume}"></span>
+                    <span class="mx-5 text-primary" th:if="${recruitPageViewDto.seledtedMembers} < ${recruitPageViewDto.volume}">모집중</span>
+                    <span class="my-5 text-danger" th:if="${recruitPageViewDto.seledtedMembers} >= ${recruitPageViewDto.volume}">모집마감</span>
+                </td>
                 <td><a type="button" class="btn btn-primary" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">더보기</a></td>
             </tr>
             </tbody>

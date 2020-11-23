@@ -71,7 +71,7 @@
                     </td>
                     <td th:if="${myApply.selected} == true">
                         <span class="btn btn-info">모집완료</span>
-                        <span class="btn btn-primary"><a th:href="@{/recruit/{id} (id=${myApply.recruitId})}" href="#">모집정보보기</a></span>
+                        <a class="btn btn-primary" th:href="@{/recruit/{id} (id=${myApply.recruitId})}" href="#">모집정보보기</a>
                     </td>
                     <td th:if="${myApply.selected} == false">
                         <span class="btn btn-info">대기중</span>

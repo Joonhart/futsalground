@@ -46,6 +46,8 @@ public class RecruitDto {
     private Set<Member> applicants;
     private Set<Member> select;
 
+    private int selectCount;
+
     public Recruit toEntity(RecruitDto recruitDto) {
         return Recruit.builder()
                 .id(recruitDto.id)
@@ -72,7 +74,7 @@ public class RecruitDto {
     }
 
 
-    public RecruitDto(Long id, Member recruitMember, String teamname, String ages, String position, String skill, String contactway, String phone, String groundname, String addr1, String addr2, LocalDateTime starttime, String day, String time, int cost, int volume, int apply, String explanation) {
+    public RecruitDto(Long id, Member recruitMember, String teamname, String ages, String position, String skill, String contactway, String phone, String groundname, String addr1, String addr2, LocalDateTime starttime, String day, String time, int cost, int volume, int apply, String explanation, int selectCount) {
         this.id = id;
         this.recruitMember = recruitMember;
         this.teamname = teamname;
@@ -91,5 +93,6 @@ public class RecruitDto {
         this.volume = volume;
         this.apply = apply;
         this.explanation = explanation;
+        this.selectCount = selectCount;
     }
 }

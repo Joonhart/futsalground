@@ -64,7 +64,7 @@ class RecruitControllerTest {
     private RecruitDto recruitCreate() {
         RecruitDto recruitDto = new RecruitDto(null, new Member(null, null, null, null, null, null, null, null, null, null), "깨비깨비", "25~30", "g, d, m", "중", "카카오톡",
                 "hihi", "보정동풋살장", "기흥구", "보정동", null, "2020-11-11(수)", "14:00", 10000
-                , 2, 0, "와서 재밌게 재주껏 하시길");
+                , 2, 0, "와서 재밌게 재주껏 하시길", 0);
 
         String day = recruitDto.getDay();
         String time = recruitDto.getTime();

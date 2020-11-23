@@ -13,13 +13,15 @@ import java.util.List;
 @ToString
 public class MyRecruitDto {
 
+    private Long id;
     private String grdName;
     private LocalDateTime gameTime;
     private int volume;
     private int applyCnt;
     private List<ApplyMember> applyMembers;
 
-    public MyRecruitDto(String grdName, LocalDateTime gameTime, int volume, int applyCnt, List<ApplyMember> applyMembers) {
+    public MyRecruitDto(Long id, String grdName, LocalDateTime gameTime, int volume, int applyCnt, List<ApplyMember> applyMembers) {
+        this.id = id;
         this.grdName = grdName;
         this.gameTime = gameTime;
         this.volume = volume;

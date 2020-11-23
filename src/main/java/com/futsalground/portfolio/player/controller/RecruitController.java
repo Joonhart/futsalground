@@ -2,6 +2,9 @@ package com.futsalground.portfolio.player.controller;
 
 import com.futsalground.portfolio.exception.RecruitNotFoundException;
 import com.futsalground.portfolio.member.domain.Member;
+import com.futsalground.portfolio.player.domain.ApplyMember;
+import com.futsalground.portfolio.player.model.IdDto;
+import com.futsalground.portfolio.player.model.MyRecruitDto;
 import com.futsalground.portfolio.player.model.RecruitDto;
 import com.futsalground.portfolio.player.model.RecruitPageViewDto;
 import com.futsalground.portfolio.player.service.RecruitService;
@@ -23,6 +26,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -91,5 +95,22 @@ public class RecruitController {
     public String cancelApply(@PathVariable Long id) {
         recruitService.removeApply(id);
         return "redirect:/member/myApply";
+    }
+
+    @GetMapping("select/{id}")
+    public String recruitSelect(@PathVariable Long id, Model model) {
+        List<ApplyMember> applyMembers = recruitService.getApplyMemeber(id);
+        model.addAttribute("applyMembers", applyMembers);
+        model.addAttribute("recruitId", id);
+        return "member/recruitSelect";
+    }
+
+    @PostMapping("/choice")
+    public String choiceMember(String applyId, String recruitId, Model model) {
+        recruitService.recruitSelect(Long.parseLong(applyId));
+        List<ApplyMember> applyMembers = recruitService.getApplyMemeber(Long.parseLong(recruitId));
+        model.addAttribute("applyMembers", applyMembers);
+        model.addAttribute("recruitId", recruitId);
+        return "member/recruitSelect";
     }
 }

@@ -22,11 +22,11 @@ public class ApplyMember {
     @Column(name = "apply_member_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recruit_id")
     private Recruit recruit;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member applicant;
 
@@ -35,5 +35,9 @@ public class ApplyMember {
     public ApplyMember(Recruit recruit, Member applicant) {
         this.recruit = recruit;
         this.applicant = applicant;
+    }
+
+    public void changeSelected() {
+        this.isSelected = !this.isSelected;
     }
 }

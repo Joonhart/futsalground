@@ -16,14 +16,16 @@ public class RecruitPageViewDto {
     private String addr1;
     private String addr2;
     private LocalDateTime starttime;
+    int seledtedMembers;
     int volume;
 
-    public RecruitPageViewDto(Long id, String groundname, String addr1, String addr2, LocalDateTime starttime, int volume) {
+    public RecruitPageViewDto(Long id, String groundname, String addr1, String addr2, LocalDateTime starttime, int seledtedMembers, int volume) {
         this.id = id;
         this.groundname = groundname;
         this.addr1 = addr1;
         this.addr2 = addr2;
         this.starttime = starttime;
+        this.seledtedMembers = seledtedMembers;
         this.volume = volume;
     }
 }
