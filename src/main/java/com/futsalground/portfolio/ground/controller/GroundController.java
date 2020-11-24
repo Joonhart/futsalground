@@ -22,7 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,12 +44,14 @@ public class GroundController {
         if (startPage > endPage)  endPage = startPage;
         int curPage = groundViewDtos.getPageable().getPageNumber()+1;
         int totalPage = groundViewDtos.getTotalPages() == 0 ? 1 : groundViewDtos.getTotalPages();
+        List<String> revs = new ArrayList<>();
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("curPage", curPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("now", LocalDateTime.now());
         model.addAttribute("groundViewDtos", groundViewDtos);
+        model.addAttribute("revs", revs);
         return "ground/groundList";
     }
 
@@ -64,9 +68,26 @@ public class GroundController {
 
     @PostMapping("/showReservation")
     private String showReservation(ReservationShowDto reservationShowDto, Model model) {
+        GroundViewDto groundViewDto = groundService.findGround(reservationShowDto.getId()).get();
         List<String> revs = groundService.findRevs(reservationShowDto.getId(), LocalDate.parse(reservationShowDto.getDate().substring(0, 10), DateTimeFormatter.ISO_DATE));
+        LocalDate localDate = LocalDate.parse(reservationShowDto.getDate().substring(0, reservationShowDto.getDate().length()-3));
+        LocalDateTime now = LocalDateTime.of(localDate, LocalTime.now());
+        model.addAttribute("groundViewDto", groundViewDto);
+        model.addAttribute("now", now);
         model.addAttribute("revs", revs);
         return "ground/groundView :: #timeWrap";
+    }
+
+    @PostMapping("/showReservationList")
+    private String showReservationList(ReservationShowDto reservationShowDto, Model model) {
+        GroundViewDto groundViewDto = groundService.findGround(reservationShowDto.getId()).get();
+        List<String> revs = groundService.findRevs(reservationShowDto.getId(), LocalDate.parse(reservationShowDto.getDate().substring(0, 10), DateTimeFormatter.ISO_DATE));
+        groundViewDto.setRevs(revs);
+        LocalDate localDate = LocalDate.parse(reservationShowDto.getDate().substring(0, reservationShowDto.getDate().length()-3));
+        LocalDateTime now = LocalDateTime.of(localDate, LocalTime.now());
+        model.addAttribute("groundViewDto", groundViewDto);
+        model.addAttribute("now", now);
+        return "ground/groundList :: #timeWrap";
     }
 
     @PostMapping("/createReservation")

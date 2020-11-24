@@ -34,7 +34,7 @@ public class Recruit {
 
     private String explanation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member recruitMember;
 

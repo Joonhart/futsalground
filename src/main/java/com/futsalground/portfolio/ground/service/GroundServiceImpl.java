@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,7 +53,8 @@ public class GroundServiceImpl implements GroundService {
                 ground.getImages(),
                 ground.getSize1(),
                 ground.getSize2(),
-                ground.getGroundInfo()
+                ground.getGroundInfo(),
+                groundRevCustomRepository.findRevs(ground.getId(), LocalDate.now())
         )).collect(Collectors.toList());
 
         return new PageImpl<>(collect, pageable, grounds.getTotalElements());
@@ -73,7 +75,8 @@ public class GroundServiceImpl implements GroundService {
                 g.getImages(),
                 g.getSize1(),
                 g.getSize2(),
-                g.getGroundInfo()));
+                g.getGroundInfo(),
+                null));
         return groundViewDto;
     }
 

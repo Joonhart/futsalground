@@ -67,44 +67,46 @@
                             </tr>
                         </table>
                         <div class="mx-5">
-                            <select class="custom-select d-block w-100" name="day" onchange="">
+                            <select class="custom-select d-block w-100" th:id="day + ${groundViewDto.id}" th:name="${groundViewDto.id}" onchange="changeTimeInList(this)">
                                 <th:block th:each="num : ${#numbers.sequence(0, 30)}">
                                     <option><span th:text="${#temporals.format(now.plusDays(num), 'yyyy-MM-dd(E)')}"></span></option>
                                 </th:block>
                             </select>
                         </div>
                     </div>
-                    <div class="py-2" th:classappend="${#strings.contains(groundViewDto.timeAndCost.openday, (#temporals.format(now, 'E')))} ? 'd-none' : ''">
-                        <span class="h4" th:text="'해당 구장은 ' + ${groundViewDto.timeAndCost.openday} + ' 요일만 운영합니다'"></span>
-                    </div>
-                    <div class="open" th:classappend="${#strings.contains(groundViewDto.timeAndCost.openday, (#temporals.format(now, 'E')))} ? '' : 'd-none'">
-                        <table class="time-color">
-                            <tr>
-                                <td class="available"></td>
-                                <td class="available"></td>
-                                <td class="reserved"></td>
-                                <td class="reserved"></td>
-                                <td class="available"></td>
-                                <td class="available"></td>
-                                <td class="reserved"></td>
-                                <td class="available"></td>
-                                <td class="available"></td>
-                            </tr>
-                        </table>
-                        <table class="time-text">
-                            <tr>
-                                <td>06</td>
-                                <td>08</td>
-                                <td>10</td>
-                                <td>12</td>
-                                <td>14</td>
-                                <td>16</td>
-                                <td>18</td>
-                                <td>20</td>
-                                <td>22</td>
-                                <td>24</td>
-                            </tr>
-                        </table>
+                    <div id="timeWrap" th:class="timeWrap + ${groundViewDto.id}">
+                        <div class="py-2" th:classappend="${#strings.contains(groundViewDto.timeAndCost.openday, (#temporals.format(now, 'E')))} ? 'd-none' : ''">
+                            <span class="h4" th:text="'해당 구장은 ' + ${groundViewDto.timeAndCost.openday} + ' 요일만 운영합니다'"></span>
+                        </div>
+                        <div class="open" th:classappend="${#strings.contains(groundViewDto.timeAndCost.openday, (#temporals.format(now, 'E')))} ? '' : 'd-none'">
+                            <table class="time-color">
+                                <tr>
+                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('a') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('06~08') ? 'reserved' : 'available'}|" id="a" ></td>
+                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('b') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('08~10') ? 'reserved' : 'available'}|" id="b" ></td>
+                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('c') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('10~12') ? 'reserved' : 'available'}|" id="c" ></td>
+                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('d') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('12~14') ? 'reserved' : 'available'}|" id="d" ></td>
+                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('e') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('14~16') ? 'reserved' : 'available'}|" id="e" ></td>
+                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('f') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('16~18') ? 'reserved' : 'available'}|" id="f" ></td>
+                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('g') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('18~20') ? 'reserved' : 'available'}|" id="g" ></td>
+                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('h') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('20~22') ? 'reserved' : 'available'}|" id="h" ></td>
+                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('i') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('22~24') ? 'reserved' : 'available'}|" id="i" ></td>
+                                </tr>
+                            </table>
+                            <table class="time-text">
+                                <tr>
+                                    <td>06</td>
+                                    <td>08</td>
+                                    <td>10</td>
+                                    <td>12</td>
+                                    <td>14</td>
+                                    <td>16</td>
+                                    <td>18</td>
+                                    <td>20</td>
+                                    <td>22</td>
+                                    <td>24</td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <div class="d-flex justify-content-around">
@@ -147,8 +149,9 @@
     </footer>
 </main>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-
+<script th:src="@{/js/showReservation.js}"></script>
 </body>
 </html>

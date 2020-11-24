@@ -76,12 +76,12 @@
                     <td>
                         <button class="btn btn-info" th:if="${reservationDto.isused} == false">사용전</button>
                         <button class="btn btn-info" th:if="${reservationDto.isused} == true">사용완료</button>
-                        <button type="button" class="btn btn-primary" th:if="${reservationDto.isused} == false" data-toggle="modal" data-target="#exampleModal">
+                        <button type="button" class="btn btn-primary" th:if="${reservationDto.isused} == false" data-toggle="modal" th:data-target="'#rev' + ${reservationDto.id}">
                             취소하기
                         </button>
 
                         <!-- Modal -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" th:id="'rev' + ${reservationDto.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -91,7 +91,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <span th:text="${reservationDto.id}"></span>정말 예약을 취소 하시겠습니까?
+                                        정말 예약을 취소 하시겠습니까?
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">아니요</button>
@@ -109,12 +109,12 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
                     <li class="page-item" th:classappend="${1 == reservationDtos.pageable.pageNumber + 1} ? 'disabled'">
-                        <a class="page-link" href="#"  th:href="@{/board(page=${reservationDtos.pageable.pageNumber}-1)}">Previous</a>
+                        <a class="page-link" href="#"  th:href="@{/member/revInfo(page=${reservationDtos.pageable.pageNumber}-1)}">Previous</a>
                     </li>
                     <li class="page-item" th:classappend="${curPage == i} ? 'disabled'" th:each="i : ${#numbers.sequence(startPage, endPage)}" >
-                        <a class="page-link" href="#" th:href="@{/board(page=${i}-1)}" th:text="${i}" >1</a></li>
+                        <a class="page-link" href="#" th:href="@{/member/revInfo(page=${i}-1)}" th:text="${i}" >1</a></li>
                     <li class="page-item" th:classappend="${totalPage == reservationDtos.pageable.pageNumber+1} ? 'disabled'">
-                        <a class="page-link" href="#" th:href="@{/board(page=${reservationDtos.pageable.pageNumber}+1)}">Next</a>
+                        <a class="page-link" href="#" th:href="@{/member/revInfo(page=${reservationDtos.pageable.pageNumber}+1)}">Next</a>
                     </li>
                 </ul>
             </nav>
@@ -124,11 +124,6 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script>window.jQuery || document.write('<script src="/docs/4.5/assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
-<script src="/docs/4.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-<script src="dashboard.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 
 </body>

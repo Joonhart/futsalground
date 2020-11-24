@@ -22,7 +22,7 @@
                 font-size: 1.2em;
                 potision:relative;
             }
-            #timeWrap {
+            #timeColor {
                 text-align: center;
                 padding-top:12px;
                 color: #171a1d;
@@ -176,54 +176,56 @@
             <button class="btn btn-primary" data-target="#myModal" onclick="goRev();">예약하기</button>
         </div>
     </div>
-    <div class="my-5 mx-3 border" th:classappend="${#strings.contains(groundViewDto.timeAndCost.openday, (#temporals.format(now, 'E')))} ? '' : 'd-none'">
+    <div id="timeWrap">
+        <div class="my-5 mx-3 border" th:classappend="${#strings.contains(groundViewDto.timeAndCost.openday, (#temporals.format(now, 'E')))} ? '' : 'd-none'">
 
-        <span class="h3">시간 선택</span>
-        <div class="my-3">
-            <div class="d-flex justify-content-around">
-                <table class="time-ex">
-                    <tr>
-                        <td width="30px" bgcolor="#adff2f"></td>
-                        <td width="20px"></td>
-                        <td>가능</td>
-                        <td width="30px"></td>
-                        <td width="30px" bgcolor="#a9a9a9"></td>
-                        <td width="20px"></td>
-                        <td>불가</td>
-                    </tr>
-                </table>
-                <div id="revTxt">
-                    <span id="msg">시간을 선택해 주세요</span>
+            <span class="h3">시간 선택</span>
+            <div class="my-3">
+                <div class="d-flex justify-content-around">
+                    <table class="time-ex">
+                        <tr>
+                            <td width="30px" bgcolor="#adff2f"></td>
+                            <td width="20px"></td>
+                            <td>가능</td>
+                            <td width="30px"></td>
+                            <td width="30px" bgcolor="#a9a9a9"></td>
+                            <td width="20px"></td>
+                            <td>불가</td>
+                        </tr>
+                    </table>
+                    <div id="revTxt">
+                        <span id="msg">시간을 선택해 주세요</span>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-around" id="timeColor">
+                    <input th:value="${revs}" class="d-none" id="cngtime" />
+                    <div class="06~08 rev" id="a" th:classappend="${revs.contains('06~08')} ? 'reserved'" onclick="chkRev(this.id);">06~08</div>
+                    <div class="08~10 rev" id="b" th:classappend="${revs.contains('08~10')} ? 'reserved'" onclick="chkRev(this.id);">08~10</div>
+                    <div class="10~12 rev" id="c" th:classappend="${revs.contains('10~12')} ? 'reserved'" onclick="chkRev(this.id);">10~12</div>
+                    <div class="12~14 rev" id="d" th:classappend="${revs.contains('12~14')} ? 'reserved'" onclick="chkRev(this.id);">12~14</div>
+                    <div class="14~16 rev" id="e" th:classappend="${revs.contains('14~16')} ? 'reserved'" onclick="chkRev(this.id);">14~16</div>
+                    <div class="16~18 rev" id="f" th:classappend="${revs.contains('16~18')} ? 'reserved'" onclick="chkRev(this.id);">16~18</div>
+                    <div class="18~20 rev" id="g" th:classappend="${revs.contains('18~20')} ? 'reserved'" onclick="chkRev(this.id);">18~20</div>
+                    <div class="20~22 rev" id="h" th:classappend="${revs.contains('20~22')} ? 'reserved'" onclick="chkRev(this.id);">20~22</div>
+                    <div class="22~24 rev" id="i" th:classappend="${revs.contains('22~24')} ? 'reserved'" onclick="chkRev(this.id);">22~24</div>
+                    <br />
+                </div>
+                <div class="d-none">
+                    <input type="checkbox" value="a" name="slt" />
+                    <input type="checkbox" value="b" name="slt" />
+                    <input type="checkbox" value="c" name="slt" />
+                    <input type="checkbox" value="d" name="slt" />
+                    <input type="checkbox" value="e" name="slt" />
+                    <input type="checkbox" value="f" name="slt" />
+                    <input type="checkbox" value="g" name="slt" />
+                    <input type="checkbox" value="h" name="slt" />
+                    <input type="checkbox" value="i" name="slt" />
                 </div>
             </div>
-            <div class="d-flex justify-content-around" id="timeWrap">
-                <input th:value="${revs}" class="d-none" id="cngtime" />
-                <div class="06~08 rev" id="a" th:classappend="${revs.contains('06~08  ')} ? 'reserved'" onclick="chkRev(this.id);">06~08</div>
-                <div class="08~10 rev" id="b" th:classappend="${revs.contains('08~10  ')} ? 'reserved'" onclick="chkRev(this.id);">08~10</div>
-                <div class="10~12 rev" id="c" th:classappend="${revs.contains('10~12  ')} ? 'reserved'" onclick="chkRev(this.id);">10~12</div>
-                <div class="12~14 rev" id="d" th:classappend="${revs.contains('12~14  ')} ? 'reserved'" onclick="chkRev(this.id);">12~14</div>
-                <div class="14~16 rev" id="e" th:classappend="${revs.contains('14~16  ')} ? 'reserved'" onclick="chkRev(this.id);">14~16</div>
-                <div class="16~18 rev" id="f" th:classappend="${revs.contains('16~18  ')} ? 'reserved'" onclick="chkRev(this.id);">16~18</div>
-                <div class="18~20 rev" id="g" th:classappend="${revs.contains('18~20  ')} ? 'reserved'" onclick="chkRev(this.id);">18~20</div>
-                <div class="20~22 rev" id="h" th:classappend="${revs.contains('20~22  ')} ? 'reserved'" onclick="chkRev(this.id);">20~22</div>
-                <div class="22~24 rev" id="i" th:classappend="${revs.contains('22~24  ')} ? 'reserved'" onclick="chkRev(this.id);">22~24</div>
-                <br />
-            </div>
-            <div class="d-none">
-                <input type="checkbox" value="a" name="slt" />
-                <input type="checkbox" value="b" name="slt" />
-                <input type="checkbox" value="c" name="slt" />
-                <input type="checkbox" value="d" name="slt" />
-                <input type="checkbox" value="e" name="slt" />
-                <input type="checkbox" value="f" name="slt" />
-                <input type="checkbox" value="g" name="slt" />
-                <input type="checkbox" value="h" name="slt" />
-                <input type="checkbox" value="i" name="slt" />
-            </div>
         </div>
-    </div>
-    <div class="my-5 mx-3 border" th:classappend="${#strings.contains(groundViewDto.timeAndCost.openday, (#temporals.format(now, 'E')))} ? 'd-none' : ''">
-        <span class="h4" th:text="'해당 구장은 ' + ${groundViewDto.timeAndCost.openday} + ' 요일만 운영합니다'"></span>
+        <div class="border text-center text-danger py-3" th:classappend="${#strings.contains(groundViewDto.timeAndCost.openday, (#temporals.format(now, 'E')))} ? 'd-none' : ''">
+            <span class="h4" th:text="'해당 구장은 ' + ${groundViewDto.timeAndCost.openday} + ' 요일만 운영합니다'"></span>
+        </div>
     </div>
 
     <!-- Modal -->
@@ -267,17 +269,7 @@
             </div>
         </div>
     </div>
-
-
 </div>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
-        crossorigin="anonymous"></script>
-
 <script th:inline="javascript">
     function open() {
         var box = document.getElementById("a");     cngBox(box);
@@ -294,7 +286,6 @@
     window.onload=open;
 </script>
 <script th:inline="javascript">
-    /*<![CDATA[*/
     function chkRev(id) {
         var id = id;
         var box = document.getElementById(id);
@@ -326,6 +317,8 @@
         }
         cngMsg(num);
     }
+</script>
+<script th:inline="javascript">
     function cngBox(box) {
         var time = [[${groundViewDto.timeAndCost.startTime}]];
         var reserve = box.className;
@@ -334,6 +327,8 @@
             box.innerHTML = "예약 불가";
         }
     }
+</script>
+<script th:inline="javascript">
 
     function cngMsg(num) {
         var msg = document.getElementById("msg");
@@ -343,21 +338,23 @@
             msg.innerHTML = num + " 개를 선택하셨습니다.";
         }
     }
+</script>
+
+<script th:inline="javascript">
     function cngFrame(val) {
         var changeBox = document.getElementById("when");
-        changeBox.innerHTML = val;
-        inputData();
-        open();
-
-        alert($('#cngtime').val());
-    }
-
-    function goRev() {
-        if ([[${session.member}]] == null) {
-            alert("예약은 로그인 후 사용하실 수 있습니다.");
-            location.href = "/member/login";
-            return;
+        var slt = document.getElementsByName("slt");
+        for (var i = 0; i < slt.length; i++) {
+            slt[i].checked = false;
         }
+        changeBox.innerHTML = val;
+        changeTimeInView();
+
+    }
+</script>
+
+<script th:inline="javascript">
+    function goRev() {
         var slt = "";
         var viewTime = " ";
         var sltTime = document.getElementsByName("slt");
@@ -392,13 +389,12 @@
 
         $('#exampleModal').modal('show')
     }
-    /*]]>*/
 </script>
-
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <!--<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 <!--<script src="https://code.jquery.com/jquery-3.4.1.js"></script>-->
 <script th:src="@{/js/showReservation.js}"></script>
+
 </body>
 </html>
