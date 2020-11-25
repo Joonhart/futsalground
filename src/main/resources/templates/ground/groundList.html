@@ -41,16 +41,45 @@
     <div class="container marketing py-5">
 
         <!-- START THE FEATURETTES -->
+        <h2>구장리스트</h2>
+        <div class="py-3">
+            <form class="d-flex justify-content-around" th:action="@{/ground}" th:object="${groundSearch}" method="get">
+                <div class="d-flex justify-content-around">
+                    <div class="form-group mb-2">
+                        구
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="addr1" class="sr-only"></label>
+                        <input type="text" class="form-control" id="addr1" th:field="*{addr1}" placeholder="ex)성남시">
+                    </div>
+                    <div class="form-group mb-2">
+                        동
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="addr2" class="sr-only"></label>
+                        <input type="text" class="form-control" id="addr2" th:field="*{addr2}" placeholder="ex)분당구">
+                    </div>
+                    <div class="form-group mb-2">
+                        구장명
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="grdName" class="sr-only"></label>
+                        <input type="text" class="form-control" id="grdName" th:field="*{grdName}" placeholder="ex)왕풋살">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">검색</button>
+            </form>
+        </div>
         <div class="row py-3" th:each="groundViewDto : ${groundViewDtos}">
             <div class="col-md-5 order-md-1 text-center">
                 <a th:href="@{/ground/{id} (id=${groundViewDto.id})}">
                     <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" src="https://www.playdoci.com/images/service/service_img_futsal_pic1.jpg" alt="이미지">
-                    <span class="py-2" width="500" th:text="${groundViewDto.grdName}">구장이름</span>
+                    <span class="py-2" width="500" th:text="${groundViewDto.grdName}"></span>
                 </a>
             </div>
             <div class="col-md-7 order-md-2">
                 <div>
-                    <span class="lead" th:text="${groundViewDto.roadAddr}">경기도 성남시 분당구 두밀로 </span>
+                    <span class="lead" th:text="${groundViewDto.roadAddr}"></span>
                     <button class="btn-info rounded mx-2">지도보기</button>
                 </div>
                 <div class="my-3">
@@ -125,12 +154,12 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${1 == groundViewDtos.pageable.pageNumber + 1} ? 'disabled'">
-                    <a class="page-link" href="#"  th:href="@{/board(page=${groundViewDtos.pageable.pageNumber}-1)}">Previous</a>
+                    <a class="page-link" href="#"  th:href="@{/ground(page=${groundViewDtos.pageable.pageNumber}-1)}">Previous</a>
                 </li>
                 <li class="page-item" th:classappend="${curPage == i} ? 'disabled'" th:each="i : ${#numbers.sequence(startPage, endPage)}" >
-                    <a class="page-link" href="#" th:href="@{/board(page=${i}-1)}" th:text="${i}" >1</a></li>
+                    <a class="page-link" href="#" th:href="@{/ground(page=${i}-1)}" th:text="${i}" >1</a></li>
                 <li class="page-item" th:classappend="${totalPage == groundViewDtos.pageable.pageNumber+1} ? 'disabled'">
-                    <a class="page-link" href="#" th:href="@{/board(page=${groundViewDtos.pageable.pageNumber}+1)}">Next</a>
+                    <a class="page-link" href="#" th:href="@{/ground(page=${groundViewDtos.pageable.pageNumber}+1)}">Next</a>
                 </li>
             </ul>
         </nav>

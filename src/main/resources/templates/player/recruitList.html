@@ -22,6 +22,7 @@
                 <th>지역</th>
                 <th>매치일/시</th>
                 <th>선택인원 / 모집인원</th>
+                <th>모집상태</th>
                 <th>더보기</th>
             </tr>
             </thead>
@@ -34,10 +35,21 @@
                     <span th:text="${recruitPageViewDto.seledtedMembers}"></span>
                     /
                     <span th:text="${recruitPageViewDto.volume}"></span>
-                    <span class="mx-5 text-primary" th:if="${recruitPageViewDto.seledtedMembers} < ${recruitPageViewDto.volume}">모집중</span>
-                    <span class="my-5 text-danger" th:if="${recruitPageViewDto.seledtedMembers} >= ${recruitPageViewDto.volume}">모집마감</span>
                 </td>
-                <td><a type="button" class="btn btn-primary" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">더보기</a></td>
+                <td>
+                    <span th:if="${recruitPageViewDto.isOpen() == true}">
+                        <span class="text-primary" th:if="${recruitPageViewDto.seledtedMembers} < ${recruitPageViewDto.volume}">모집중</span>
+                        <span class="text-danger" th:if="${recruitPageViewDto.seledtedMembers} >= ${recruitPageViewDto.volume}">모집마감</span>
+                    </span>
+                    <span th:if="${recruitPageViewDto.isOpen() == false}">
+                        <span>모집기간종료</span>
+                    </span>
+                    </td>
+                <td><a type="button" class="btn btn-danger" th:if="${recruitPageViewDto.recruitMember.email} == ${session.member.email}" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">수정/삭제</a></td>
+                <span th:if="${recruitPageViewDto.recruitMember.email} != ${session.member.email}">
+                    <td><a type="button" class="btn btn-primary" th:if="${recruitPageViewDto.seledtedMembers} < ${recruitPageViewDto.volume}" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">지원하기</a></td>
+                    <td><a type="button" class="btn btn-info" th:if="${recruitPageViewDto.seledtedMembers} >= ${recruitPageViewDto.volume}" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">내용보기(모집마감)</a></td>
+                </span>
             </tr>
             </tbody>
         </table>

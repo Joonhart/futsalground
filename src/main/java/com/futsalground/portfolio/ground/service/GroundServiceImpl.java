@@ -2,8 +2,10 @@ package com.futsalground.portfolio.ground.service;
 
 import com.futsalground.portfolio.ground.domain.Ground;
 import com.futsalground.portfolio.ground.domain.Reservation;
+import com.futsalground.portfolio.ground.model.GroundSearch;
 import com.futsalground.portfolio.ground.model.GroundViewDto;
 import com.futsalground.portfolio.ground.model.ReservationDto;
+import com.futsalground.portfolio.ground.repository.GroundCustomRepository;
 import com.futsalground.portfolio.ground.repository.GroundRepository;
 import com.futsalground.portfolio.ground.repository.GroundReservationRepository;
 import com.futsalground.portfolio.ground.repository.GroundRevCustomRepository;
@@ -31,6 +33,7 @@ public class GroundServiceImpl implements GroundService {
     private final GroundReservationRepository groundReservationRepository;
     private final MemberRepository memberRepository;
     private final GroundRevCustomRepository groundRevCustomRepository;
+    private final GroundCustomRepository groundCustomRepository;
 
     @Override
     public Optional<Ground> findById(Long id) {
@@ -38,8 +41,18 @@ public class GroundServiceImpl implements GroundService {
     }
 
     @Override
-    public Page<GroundViewDto> findAllGround(Pageable pageable) {
-        Page<Ground> grounds = groundRepository.findAll(pageable);
+    public Page<GroundViewDto> findAllGround(Pageable pageable, GroundSearch groundSearch) {
+        Page<Ground> grounds = groundCustomRepository.findAllSearch(pageable, groundSearch);
+        return entityToDto(pageable, grounds);
+    }
+
+//    @Override
+//    public Page<GroundViewDto> findAllGroundforMember(Pageable pageable, GroundSearch groundSearch) {
+//        Page<Ground> grounds = groundCustomRepository.findAllGroundforMember(pageable, groundSearch);
+//        return entityToDto(pageable, grounds);
+//    }
+
+    private Page<GroundViewDto> entityToDto(Pageable pageable, Page<Ground> grounds) {
         List<GroundViewDto> collect = grounds.stream().map(ground -> new GroundViewDto(
                 ground.getId(),
                 ground.getGrdName(),

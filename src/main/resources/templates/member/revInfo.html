@@ -67,7 +67,11 @@
                 </thead>
                 <tbody>
                 <tr th:each="reservationDto : ${reservationDtos}">
-                    <td th:text="${reservationDto.ground.grdName}"></td>
+                    <td>
+                        <a th:href="@{/ground/{id} (id=${reservationDto.ground.id})}">
+                            <span th:text="${reservationDto.ground.grdName}"></span>
+                        </a>
+                    </td>
                     <td th:text="${reservationDto.revDate}"></td>
                     <td th:text="${reservationDto.revTime}"></td>
                     <td>

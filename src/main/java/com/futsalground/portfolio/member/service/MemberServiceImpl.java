@@ -79,4 +79,9 @@ public class MemberServiceImpl implements MemberService {
         member.get().changePW(newPW);
         return;
     }
+
+    @Override
+    public Optional<Member> findById(Long id) {
+        return memberRepository.findById(id);
+    }
 }

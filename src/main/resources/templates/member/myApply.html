@@ -59,7 +59,8 @@
                 <tr>
                     <th>구장이름</th>
                     <th>게임일시</th>
-                    <th>용병여부</th>
+                    <th>상태</th>
+                    <th>모집정보</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -69,20 +70,20 @@
                         <span th:text="${#temporals.format(myApply.starttime, 'yyyy-MM-dd')}"></span>
                         <span th:text="${#temporals.format(myApply.starttime, 'HH:mm')}"></span>
                     </td>
-                    <td th:if="${myApply.selected} == true">
-                        <span class="btn btn-info">모집완료</span>
-                        <a class="btn btn-primary" th:href="@{/recruit/{id} (id=${myApply.recruitId})}" href="#">모집정보보기</a>
-                    </td>
-                    <td th:if="${myApply.selected} == false">
-                        <span class="btn btn-info">대기중</span>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    <span th:if="${myApply.selected} == true">
+                        <td><span class="btn btn-info">모집완료</span></td>
+                        <td><a class="btn btn-primary" th:href="@{/recruit/{id} (id=${myApply.recruitId})}" href="#">모집정보보기</a></td>
+                    </span>
+                    <span th:if="${myApply.selected} == false">
+                        <td><span class="btn btn-info">대기중</span></td>
+                        <td><button type="button" class="btn btn-danger" data-toggle="modal" th:data-target="'#apply' + ${myApply.recruitMemberId}">
                             취소하기
-                        </button>
-                    </td>
+                        </button></td>
+                    </span>
                     <td>
 
                         <!-- Modal -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" th:id="'apply' + ${myApply.recruitMemberId}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">

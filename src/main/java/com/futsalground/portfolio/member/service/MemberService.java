@@ -21,4 +21,6 @@ public interface MemberService {
     void update(String email, String addr1, String addr2, String position);
 
     void changePW(String email, String newPW);
+
+    Optional<Member> findById(Long id);
 }

@@ -52,4 +52,11 @@ public class Recruit {
         this.explanation = explanation;
         this.applyMembers = applyMembers;
     }
+
+    public void update(TeamInfo teamInfo, MatchInfo matchInfo, int volume, String explanation) {
+        this.teamInfo = teamInfo;
+        this.matchInfo = matchInfo;
+        this.volume = volume;
+        this.explanation = explanation;
+    }
 }

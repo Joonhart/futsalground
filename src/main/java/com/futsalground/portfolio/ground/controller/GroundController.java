@@ -3,6 +3,7 @@ package com.futsalground.portfolio.ground.controller;
 import com.futsalground.portfolio.exception.GroundNotFoundException;
 import com.futsalground.portfolio.ground.domain.Ground;
 import com.futsalground.portfolio.ground.domain.Reservation;
+import com.futsalground.portfolio.ground.model.GroundSearch;
 import com.futsalground.portfolio.ground.model.GroundViewDto;
 import com.futsalground.portfolio.ground.model.ReservationDto;
 import com.futsalground.portfolio.ground.model.ReservationShowDto;
@@ -36,9 +37,24 @@ public class GroundController {
     private final GroundService groundService;
 
     @GetMapping
-    public String list(Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 5)
-                       Pageable pageable) {
-        Page<GroundViewDto> groundViewDtos = groundService.findAllGround(pageable);
+    public String list(@ModelAttribute GroundSearch groundSearch, Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 5)
+                       Pageable pageable, HttpServletRequest request) {
+        Page<GroundViewDto> groundViewDtos = null;
+        if (groundSearch.getAddr1() == null)    groundSearch.setAddr1("");
+        if (groundSearch.getAddr2() == null)    groundSearch.setAddr2("");
+        if (groundSearch.getGrdName() == null)    groundSearch.setGrdName("");
+        if (request.isRequestedSessionIdValid()) {
+            groundViewDtos = groundService.findAllGround(pageable, groundSearch);
+//            HttpSession session = request.getSession();
+//            Member member = (Member) session.getAttribute("member");
+//            if (groundSearch.getAddr1().equals(""))    groundSearch.setAddr1(member.getAddr1());
+//            if (groundSearch.getAddr2().equals(""))    groundSearch.setAddr2(member.getAddr2());
+//            groundViewDtos = groundService.findAllGroundforMember(pageable, groundSearch);
+//            groundSearch.setAddr1("");
+//            groundSearch.setAddr2("");
+        } else {
+            groundViewDtos = groundService.findAllGround(pageable, groundSearch);
+        }
         int startPage = Math.max(1, groundViewDtos.getPageable().getPageNumber() - 4);
         int endPage = Math.min(groundViewDtos.getTotalPages(), groundViewDtos.getPageable().getPageNumber() + 4);
         if (startPage > endPage)  endPage = startPage;

@@ -1,5 +1,7 @@
 package com.futsalground.portfolio.player.controller;
 
+import com.futsalground.portfolio.board.model.BoardViewDto;
+import com.futsalground.portfolio.exception.BoardNotFoundException;
 import com.futsalground.portfolio.exception.RecruitNotFoundException;
 import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.player.domain.ApplyMember;
@@ -16,10 +18,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -83,6 +82,24 @@ public class RecruitController {
         return "player/recruitView";
     }
 
+    @GetMapping("{id}/update")
+    public String updateRecruit(@PathVariable Long id, Model model) throws RecruitNotFoundException {
+        Optional<RecruitDto> recruitDto = recruitService.findById(id);
+        model.addAttribute("recruitDto", recruitDto.orElseThrow(RecruitNotFoundException::new));
+        return "player/recruitUpdate";
+    }
+
+    @PostMapping("{id}/update")
+    public String updateRecruit(@PathVariable Long id, @ModelAttribute RecruitDto recruitDto) throws RecruitNotFoundException {
+        String day = recruitDto.getDay();
+        String time = recruitDto.getTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        LocalDateTime dateTime = LocalDateTime.parse(day.substring(0, day.length() - 3) + " " + time + ":00.000", formatter);
+        recruitDto.setStarttime(dateTime);
+        recruitService.updateRecruit(id, recruitDto);
+        return "redirect:/recruit/" + id;
+    }
+
     @PostMapping("/{id}/apply")
     public String apply(@PathVariable Long id, HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -112,5 +129,11 @@ public class RecruitController {
         model.addAttribute("applyMembers", applyMembers);
         model.addAttribute("recruitId", recruitId);
         return "member/recruitSelect";
+    }
+
+    @GetMapping("{id}/delete")
+    public String recruitDelete(@PathVariable Long id) {
+        recruitService.delete(id);
+        return "redirect:/recruit";
     }
 }

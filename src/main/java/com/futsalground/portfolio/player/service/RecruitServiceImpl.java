@@ -1,8 +1,11 @@
 package com.futsalground.portfolio.player.service;
 
+import com.futsalground.portfolio.exception.RecruitNotFoundException;
 import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.player.domain.ApplyMember;
+import com.futsalground.portfolio.player.domain.MatchInfo;
 import com.futsalground.portfolio.player.domain.Recruit;
+import com.futsalground.portfolio.player.domain.TeamInfo;
 import com.futsalground.portfolio.player.model.MyApplyShowDto;
 import com.futsalground.portfolio.player.model.MyRecruitDto;
 import com.futsalground.portfolio.player.model.RecruitDto;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -94,14 +98,17 @@ public class RecruitServiceImpl implements RecruitService {
     // 날짜로 검색 추가
 
     private List<RecruitPageViewDto> pageToList(Page<Recruit> recruits) {
+        LocalDateTime now = LocalDateTime.now();
         List<RecruitPageViewDto> recruitPageViewDtos = recruits.stream().map(recruit -> new RecruitPageViewDto(
                 recruit.getId(),
                 recruit.getMatchInfo().getGroundname(),
                 recruit.getMatchInfo().getAddr1(),
                 recruit.getMatchInfo().getAddr2(),
                 recruit.getMatchInfo().getStarttime(),
-                (int)recruit.getApplyMembers().stream().filter(ApplyMember::isSelected).count(),
-                recruit.getVolume()
+                recruit.getRecruitMember(),
+                (int) recruit.getApplyMembers().stream().filter(ApplyMember::isSelected).count(),
+                recruit.getVolume(),
+                recruit.getMatchInfo().getStarttime().isAfter(now)
         )).collect(Collectors.toList());
         return recruitPageViewDtos;
     }
@@ -129,7 +136,35 @@ public class RecruitServiceImpl implements RecruitService {
     }
 
     @Override
+    public void updateRecruit(Long id, RecruitDto recruitDto) throws RecruitNotFoundException {
+        Recruit recruit = recruitRepository.findById(id).orElseThrow(RecruitNotFoundException::new);
+        recruit.update(TeamInfo.builder()
+                        .skill(recruitDto.getSkill())
+                        .phone(recruitDto.getPhone())
+                        .contactway(recruitDto.getContactway())
+                        .ages(recruitDto.getAges())
+                        .position(recruitDto.getPosition())
+                        .teamname(recruitDto.getTeamname())
+                        .build(),
+                MatchInfo.builder()
+                        .addr1(recruitDto.getAddr1())
+                        .addr2(recruitDto.getAddr2())
+                        .groundname(recruitDto.getGroundname())
+                        .starttime(recruitDto.getStarttime())
+                        .cost(recruitDto.getCost())
+                        .build(),
+                recruitDto.getVolume(),
+                recruitDto.getExplanation()
+        );
+    }
+
+    @Override
     public List<ApplyMember> getApplyMemeber(Long id) {
         return recruitCustomRepository.findApplyMembers(id);
+    }
+
+    @Override
+    public void delete(Long id) {
+        recruitRepository.deleteById(id);
     }
 }

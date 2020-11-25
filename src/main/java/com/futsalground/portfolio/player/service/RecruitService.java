@@ -1,5 +1,6 @@
 package com.futsalground.portfolio.player.service;
 
+import com.futsalground.portfolio.exception.RecruitNotFoundException;
 import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.player.domain.ApplyMember;
 import com.futsalground.portfolio.player.domain.Recruit;
@@ -31,7 +32,11 @@ public interface RecruitService {
 
     void recruitSelect(Long id);
 
+    void updateRecruit(Long id, RecruitDto recruitDto) throws RecruitNotFoundException;
+
     List<ApplyMember> getApplyMemeber(Long id);
+
+    void delete(Long id);
 
 //    Page<RecruitPageViewDto> findByAddr1(String addr1, Pageable pageable);
 //

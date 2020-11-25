@@ -109,15 +109,25 @@
                 </div>
                 <hr class="mb-4">
                 <!-- Button trigger modal -->
-                <button th:if="${recruitDto.selectCount} >= ${recruitDto.volume}" type="button" class="btn btn-primary btn-lg btn-block">
-                    모집이 완료되었습니다.
-                </button>
-                <button th:if="${recruitDto.selectCount} < ${recruitDto.volume}" type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
-                    지원하기
-                </button>
+                <span th:if="${recruitDto.recruitMember.email} != ${session.member.email}">
+                    <button th:if="${recruitDto.selectCount} >= ${recruitDto.volume}" type="button" class="btn btn-primary btn-lg btn-block">
+                        모집이 완료되었습니다.
+                    </button>
+                    <button th:if="${recruitDto.selectCount} < ${recruitDto.volume}" type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#apply">
+                        지원하기
+                    </button>
+                </span>
+                <div class="d-flex justify-content-around">
+                    <a class="btn btn-primary" th:if="${recruitDto.recruitMember.email} == ${session.member.email}" th:href="@{/recruit/{id}/update (id=${recruitDto.id})}">
+                        수정하기
+                    </a>
+                    <button th:if="${recruitDto.recruitMember.email} == ${session.member.email}" type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete">
+                        삭제하기
+                    </button>
+                </div>
 
-                <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <!-- applyModal -->
+                <div class="modal fade" id="apply" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -131,6 +141,29 @@
                             </div>
                             <div class="modal-footer">
                                 <form th:action="@{/recruit/{id}/apply(id=${recruitDto.id})}" method="post">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">아니요</button>
+                                    <button type="submit" class="btn btn-primary">네</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- deleteModal -->
+                <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteLabel">용병모집</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                삭제하시겠습니까?
+                            </div>
+                            <div class="modal-footer">
+                                <form th:action="@{/recruit/{id}/delete (id=${recruitDto.id})}" method="get">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">아니요</button>
                                     <button type="submit" class="btn btn-primary">네</button>
                                 </form>

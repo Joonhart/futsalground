@@ -122,8 +122,11 @@ public class MemberController {
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute MemberViewDto memberViewDto) {
+    public String update(@ModelAttribute MemberViewDto memberViewDto, HttpServletRequest request) {
         memberService.update(memberViewDto.getEmail(), memberViewDto.getAddr1(), memberViewDto.getAddr2(), memberViewDto.getPosition());
+        HttpSession session = request.getSession();
+        Member member = memberService.findById(memberViewDto.getId()).get();
+        request.setAttribute("member", member);
         return "redirect:/member/mypage";
     }
 
