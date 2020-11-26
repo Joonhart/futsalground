@@ -67,7 +67,7 @@
                             <td colspan="5" align="left"><input class="form-control" name="newpwd1" type="password"></td>
                         </tr>
                         <tr>
-                            <th>새로운 비밀번호</th>
+                            <th>새로운 비밀번호 확인</th>
                             <td colspan="5" align="left"><input class="form-control" name="newpwd2" type="password"></td>
                         </tr>
                     </table>
@@ -107,12 +107,14 @@
 
         } else if (newpwd != newpwd2) {
             alert("비밀번호와 비밀번호 확인이 서로 다릅니다.");
-            frm.newpwd.value = "";
+            frm.newpwd1.value = "";
             frm.newpwd2.value = "";
-            frm.newpwd.focus();
+            frm.newpwd2.focus();
             return false;
         }
         return true;
+
+        confirm("비밀번호를 변경 하시겠습니까?");
     }
 </script>
 </body>

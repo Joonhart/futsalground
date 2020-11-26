@@ -77,5 +77,11 @@ public class Test {
         LocalDate localDate = LocalDate.parse(day2.substring(0, day2.length()-3));
         LocalDateTime localDateTime = LocalDateTime.of(localDate, LocalTime.now());
         System.out.println("localDate = " + localDateTime);
+
+        String startTime = "12~14";
+        LocalTime localTime = LocalTime.now();
+        int i = Integer.parseInt(startTime.substring(0, 2));
+        System.out.println("i = " + i);
+        System.out.println("localTime = " + localTime.getHour());
     }
 }

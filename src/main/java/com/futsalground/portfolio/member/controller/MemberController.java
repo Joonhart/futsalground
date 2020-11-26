@@ -77,9 +77,11 @@ public class MemberController {
         if (result.hasErrors()) {
             return "member/join";
         }
-        System.out.println("memberSaveDto = " + memberSaveDto);
         if (!memberService.checkDuplicateId(memberSaveDto.getEmail())) {
             throw new UserNameDuplicateException();
+        }
+        if (memberSaveDto.getPosition() == null) {
+            memberSaveDto.setPosition("n");
         }
         memberService.save(memberSaveDto);
         return "redirect:/member/login";
@@ -119,10 +121,13 @@ public class MemberController {
 
     @PostMapping("/update")
     public String update(@ModelAttribute MemberViewDto memberViewDto, HttpServletRequest request) throws MemberNotFoundException {
+        if (memberViewDto.getPosition() == null) {
+            memberViewDto.setPosition("n");
+        }
         memberService.update(memberViewDto.getEmail(), memberViewDto.getAddr1(), memberViewDto.getAddr2(), memberViewDto.getPosition());
-        HttpSession session = request.getSession();
         Member member = memberService.findById(memberViewDto.getId()).orElseThrow(MemberNotFoundException::new);
-        request.setAttribute("member", member);
+        HttpSession session = request.getSession();
+        session.setAttribute("member", member);
         return "redirect:/member/mypage";
     }
 

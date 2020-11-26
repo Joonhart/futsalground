@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -108,6 +109,8 @@ public class GroundServiceImpl implements GroundService {
 
     @Override
     public Page<ReservationDto> findMyRev(String email, Pageable pageable) {
+        LocalDate nowDate = LocalDate.now();
+        int hour = LocalTime.now().getHour();
         Page<Reservation> reservationPage = groundReservationRepository.findByEmail(email, pageable);
         List<ReservationDto> collect = reservationPage.stream().map(reservation -> new ReservationDto(
                 reservation.getId(),
@@ -119,7 +122,7 @@ public class GroundServiceImpl implements GroundService {
                 reservation.getRevTime(),
                 reservation.getCost(),
                 reservation.getPayMethod(),
-                reservation.getRevDate().isBefore(LocalDate.now())
+                !reservation.getRevDate().isBefore(nowDate) && (reservation.getRevDate().isEqual(nowDate) == (Integer.parseInt(reservation.getRevTime().substring(0, 2)) <= hour))
         )).collect(Collectors.toList());
 
         return new PageImpl<>(collect, pageable, reservationPage.getTotalElements());
