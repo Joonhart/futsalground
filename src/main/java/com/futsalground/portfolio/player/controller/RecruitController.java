@@ -1,6 +1,7 @@
 package com.futsalground.portfolio.player.controller;
 
 import com.futsalground.portfolio.board.model.BoardViewDto;
+import com.futsalground.portfolio.exception.ApplyMemberNotFoundException;
 import com.futsalground.portfolio.exception.BoardNotFoundException;
 import com.futsalground.portfolio.exception.RecruitNotFoundException;
 import com.futsalground.portfolio.member.domain.Member;
@@ -101,7 +102,7 @@ public class RecruitController {
     }
 
     @PostMapping("/{id}/apply")
-    public String apply(@PathVariable Long id, HttpServletRequest request) {
+    public String apply(@PathVariable Long id, HttpServletRequest request) throws RecruitNotFoundException {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute("member");
         recruitService.apply(id, member);
@@ -123,7 +124,7 @@ public class RecruitController {
     }
 
     @PostMapping("/choice")
-    public String choiceMember(String applyId, String recruitId, Model model) {
+    public String choiceMember(String applyId, String recruitId, Model model) throws ApplyMemberNotFoundException {
         recruitService.recruitSelect(Long.parseLong(applyId));
         List<ApplyMember> applyMembers = recruitService.getApplyMemeber(Long.parseLong(recruitId));
         model.addAttribute("applyMembers", applyMembers);

@@ -4,6 +4,7 @@ import com.futsalground.portfolio.board.domain.Board;
 import com.futsalground.portfolio.board.model.BoardSaveDto;
 import com.futsalground.portfolio.board.repository.BoardRepository;
 import com.futsalground.portfolio.exception.BoardNotFoundException;
+import com.futsalground.portfolio.exception.MemberNotFoundException;
 import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +22,14 @@ public class BoardSaveServiceImpl implements BoardSaveService {
     private final MemberRepository memberRepository;
 
     @Override
-    public Long saveBoard(BoardSaveDto boardSaveDto) {
+    public Long saveBoard(BoardSaveDto boardSaveDto) throws MemberNotFoundException {
         Board board = Board.builder()
                 .writer(boardSaveDto.getWriter())
                 .title(boardSaveDto.getTitle())
                 .content(boardSaveDto.getContent())
                 .build();
         boardRepository.save(board);
-        Member member = memberRepository.findByEmail(board.getWriter()).get();
+        Member member = memberRepository.findByEmail(board.getWriter()).orElseThrow(MemberNotFoundException::new);
         member.plusBoardCnt();
         return board.getId();
     }

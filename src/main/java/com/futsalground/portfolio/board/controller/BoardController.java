@@ -5,6 +5,7 @@ import com.futsalground.portfolio.board.model.BoardViewDto;
 import com.futsalground.portfolio.board.service.BoardSaveService;
 import com.futsalground.portfolio.board.service.BoardViewService;
 import com.futsalground.portfolio.exception.BoardNotFoundException;
+import com.futsalground.portfolio.exception.MemberNotFoundException;
 import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.member.service.MemberServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +66,7 @@ public class BoardController {
     }
 
     @PostMapping("/post")
-    public String post(@Valid BoardSaveDto boardSaveDto, BindingResult result, HttpServletRequest request) {
+    public String post(@Valid BoardSaveDto boardSaveDto, BindingResult result, HttpServletRequest request) throws MemberNotFoundException {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute("member");
         boardSaveDto.setWriter(member.getEmail());

@@ -1,5 +1,6 @@
 package com.futsalground.portfolio.player.service;
 
+import com.futsalground.portfolio.exception.ApplyMemberNotFoundException;
 import com.futsalground.portfolio.exception.RecruitNotFoundException;
 import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.player.domain.ApplyMember;
@@ -75,8 +76,8 @@ public class RecruitServiceImpl implements RecruitService {
     }
 
     @Override
-    public void apply(Long id, Member member) {
-        Recruit recruit = recruitRepository.findById(id).get();
+    public void apply(Long id, Member member) throws RecruitNotFoundException {
+        Recruit recruit = recruitRepository.findById(id).orElseThrow(RecruitNotFoundException::new);
         ApplyMember applyMember = new ApplyMember(recruit, member);
         recruitApplyRepository.save(applyMember);
     }
@@ -129,8 +130,8 @@ public class RecruitServiceImpl implements RecruitService {
     }
 
     @Override
-    public void recruitSelect(Long id) {
-        ApplyMember applyMember = recruitApplyRepository.findById(id).get();
+    public void recruitSelect(Long id) throws ApplyMemberNotFoundException {
+        ApplyMember applyMember = recruitApplyRepository.findById(id).orElseThrow(ApplyMemberNotFoundException::new);
         applyMember.changeSelected();
         System.out.println("applyMember.isSelected() = " + applyMember.isSelected());
     }

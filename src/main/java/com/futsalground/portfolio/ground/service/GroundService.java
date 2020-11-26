@@ -1,5 +1,6 @@
 package com.futsalground.portfolio.ground.service;
 
+import com.futsalground.portfolio.exception.MemberNotFoundException;
 import com.futsalground.portfolio.ground.domain.Ground;
 import com.futsalground.portfolio.ground.domain.Reservation;
 import com.futsalground.portfolio.ground.model.GroundSearch;
@@ -22,13 +23,13 @@ public interface GroundService {
 
     Optional<GroundViewDto> findGround(Long id);
 
-    void reservation(ReservationDto reservationDto);
+    void reservation(ReservationDto reservationDto) throws MemberNotFoundException;
 
     Optional<Reservation> findReservationById(Long id);
 
     Page<ReservationDto> findMyRev(String email, Pageable pageable);
 
-    void cancelReservation(Long id, Long memid);
+    void cancelReservation(Long id, Long memid) throws MemberNotFoundException;
 
     List<String> findRevs(Long id, LocalDate date);
 }

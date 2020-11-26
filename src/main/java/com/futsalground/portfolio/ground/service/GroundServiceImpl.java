@@ -1,5 +1,6 @@
 package com.futsalground.portfolio.ground.service;
 
+import com.futsalground.portfolio.exception.MemberNotFoundException;
 import com.futsalground.portfolio.ground.domain.Ground;
 import com.futsalground.portfolio.ground.domain.Reservation;
 import com.futsalground.portfolio.ground.model.GroundSearch;
@@ -94,9 +95,9 @@ public class GroundServiceImpl implements GroundService {
     }
 
     @Override
-    public void reservation(ReservationDto reservationDto) {
+    public void reservation(ReservationDto reservationDto) throws MemberNotFoundException {
         groundReservationRepository.save(reservationDto.toEntity(reservationDto));
-        Member member = memberRepository.findByEmail(reservationDto.getEmail()).get();
+        Member member = memberRepository.findByEmail(reservationDto.getEmail()).orElseThrow(MemberNotFoundException::new);
         member.plusRev(reservationDto.getCost());
     }
 
@@ -125,10 +126,10 @@ public class GroundServiceImpl implements GroundService {
     }
 
     @Override
-    public void cancelReservation(Long id, Long memid) {
+    public void cancelReservation(Long id, Long memid) throws MemberNotFoundException {
         Reservation reservation = groundReservationRepository.findById(id).get();
         groundReservationRepository.deleteById(id);
-        Member member = memberRepository.findById(memid).get();
+        Member member = memberRepository.findById(memid).orElseThrow(MemberNotFoundException::new);
         member.cancelRev(reservation.getCost());
     }
 

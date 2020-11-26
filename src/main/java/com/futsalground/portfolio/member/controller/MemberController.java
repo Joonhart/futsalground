@@ -52,13 +52,9 @@ public class MemberController {
 
     @PostMapping("/login")
     public String login(HttpServletRequest request, MemberSaveDto memberSaveDto) throws MemberNotFoundException {
-        Optional<Member> member = memberService.findByEmailAndPassword(memberSaveDto.getEmail(), memberSaveDto.getPassword());
-        System.out.println("member.get() = " + member.get());
-        if (member.isEmpty()) {
-            throw new MemberNotFoundException();
-        }
+        Member member = memberService.findByEmailAndPassword(memberSaveDto.getEmail(), memberSaveDto.getPassword()).orElseThrow(MemberNotFoundException::new);
         HttpSession session = request.getSession();
-        session.setAttribute("member", member.get());
+        session.setAttribute("member", member);
         session.setAttribute("today", LocalDateTime.now());
         return "redirect:/";
     }
@@ -122,10 +118,10 @@ public class MemberController {
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute MemberViewDto memberViewDto, HttpServletRequest request) {
+    public String update(@ModelAttribute MemberViewDto memberViewDto, HttpServletRequest request) throws MemberNotFoundException {
         memberService.update(memberViewDto.getEmail(), memberViewDto.getAddr1(), memberViewDto.getAddr2(), memberViewDto.getPosition());
         HttpSession session = request.getSession();
-        Member member = memberService.findById(memberViewDto.getId()).get();
+        Member member = memberService.findById(memberViewDto.getId()).orElseThrow(MemberNotFoundException::new);
         request.setAttribute("member", member);
         return "redirect:/member/mypage";
     }
@@ -136,9 +132,9 @@ public class MemberController {
     }
 
     @PostMapping("/changePW")
-    public String changePW(String email, String newpwd1, HttpServletRequest request) {
+    public String changePW(String email, String newpwd1, HttpServletRequest request) throws MemberNotFoundException {
         memberService.changePW(email, newpwd1);
-        Member member = memberService.findByEmailAndPassword(email, newpwd1).get();
+        Member member = memberService.findByEmailAndPassword(email, newpwd1).orElseThrow(MemberNotFoundException::new);
         request.setAttribute("member", member);
         return "redirect:/member/mypage";
     }

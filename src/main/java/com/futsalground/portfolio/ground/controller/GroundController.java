@@ -1,6 +1,7 @@
 package com.futsalground.portfolio.ground.controller;
 
 import com.futsalground.portfolio.exception.GroundNotFoundException;
+import com.futsalground.portfolio.exception.MemberNotFoundException;
 import com.futsalground.portfolio.ground.domain.Ground;
 import com.futsalground.portfolio.ground.domain.Reservation;
 import com.futsalground.portfolio.ground.model.GroundSearch;
@@ -107,13 +108,13 @@ public class GroundController {
     }
 
     @PostMapping("/createReservation")
-    public String reservation(ReservationDto reservationDto, String reserveDate, Long grdId, HttpServletRequest request) {
+    public String reservation(ReservationDto reservationDto, String reserveDate, Long grdId, HttpServletRequest request) throws MemberNotFoundException, GroundNotFoundException {
         LocalDate revDate = LocalDate.parse(reserveDate, DateTimeFormatter.ISO_DATE);
         reservationDto.setRevDate(revDate);
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute("member");
         reservationDto.setMember(member);
-        Ground ground = groundService.findById(grdId).get();
+        Ground ground = groundService.findById(grdId).orElseThrow(GroundNotFoundException::new);
         reservationDto.setEmail(member.getEmail());
         reservationDto.setGround(ground);
         groundService.reservation(reservationDto);
@@ -121,7 +122,7 @@ public class GroundController {
     }
 
     @GetMapping("{id}/delete")
-    public String delete(@PathVariable Long id, HttpServletRequest request) {
+    public String delete(@PathVariable Long id, HttpServletRequest request) throws MemberNotFoundException {
         HttpSession session = request.getSession();
         Member member = (Member) session.getAttribute("member");
         groundService.cancelReservation(id, member.getId());
