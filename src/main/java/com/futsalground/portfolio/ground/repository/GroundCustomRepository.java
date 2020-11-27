@@ -8,4 +8,6 @@ import org.springframework.data.domain.Pageable;
 public interface GroundCustomRepository {
 
     Page<Ground> findAllSearch(Pageable pageable, GroundSearch groundSearch);
+
+    Page<Ground> findAllGroundforMember(Pageable pageable, GroundSearch groundSearch);
 }

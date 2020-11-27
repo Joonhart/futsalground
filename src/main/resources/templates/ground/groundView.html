@@ -62,7 +62,7 @@
             <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                  preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
                 <rect width="100%" height="100%"/>
-                <image xlink:href="https://www.playdoci.com/images/service/service_img_futsal_pic1.jpg"
+                <image th:href="'/img/ground/' + ${groundViewDto.id} + '_1.jpg'"
                        height="100%" width="100%" x="0" y="0"/>
             </svg>
         </div>
@@ -70,7 +70,7 @@
             <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                  preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
                 <rect width="100%" height="100%"/>
-                <image xlink:href="https://lh3.googleusercontent.com/proxy/wMbtSP8YCtxODCi8iwtQ_SGz67uEmsUIXRXEfucaaj2-1eKsXZ9rI8lnHLNFxLUcMcsYhkURszLHG-u0bDZS2L-sV54P-JAt53vs1OoI5u7djbzj10Ox9KJCEdOJPSFBc6985PVk8XvnQ9G7fy4CH3wfMUQ4HQ4tNoKtytn9h0HGyRElv3PXC8BOf8l48V-z8S_rIelHQpxfnXf7u79kZXAsM35xg_g_UdNGMRneLRHyQRwMw59CLHwPyTGd7csiom33otdENEalzgEDDmmkR865bj9DOegQQ57XnGl1RP2Tn-PQAjgXEQ"
+                <image th:href="'/img/ground/' + ${groundViewDto.id} + '_2.jpg'"
                        height="100%" width="100%" x="0" y="0"/>
             </svg>
         </div>
@@ -78,7 +78,7 @@
             <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
                  preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
                 <rect width="100%" height="100%"/>
-                <image xlink:href="https://t1.daumcdn.net/cfile/blog/2246464657FB33BE1F" height="100%" width="100%"
+                <image th:href="'/img/ground/' + ${groundViewDto.id} + '_3.jpg'" height="100%" width="100%"
                        x="0" y="0"></image>
             </svg>
         </div>
@@ -161,7 +161,7 @@
     </div>
 
     <!--시간예약-->
-    <div class="my-5 mx-3 border d-flex justify-content-around">
+    <div class="my-5 mx-3 d-flex justify-content-between">
         <div>
             <span class="h3">날자 선택</span>
         </div>
@@ -177,7 +177,7 @@
         </div>
     </div>
     <div id="timeWrap">
-        <div class="my-5 mx-3 border" th:classappend="${#strings.contains(groundViewDto.timeAndCost.openday, (#temporals.format(now, 'E')))} ? '' : 'd-none'">
+        <div class="my-5 mx-3" th:classappend="${#strings.contains(groundViewDto.timeAndCost.openday, (#temporals.format(now, 'E')))} ? '' : 'd-none'">
 
             <span class="h3">시간 선택</span>
             <div class="my-3">
@@ -193,8 +193,11 @@
                             <td>불가</td>
                         </tr>
                     </table>
-                    <div id="revTxt">
+                    <div>
                         <span id="msg">시간을 선택해 주세요</span>
+                    </div>
+                    <div>
+                        <span id="money">총 금액 : 0원</span>
                     </div>
                 </div>
                 <div class="d-flex justify-content-around" id="timeColor">
@@ -226,6 +229,13 @@
         <div class="border text-center text-danger py-3" th:classappend="${#strings.contains(groundViewDto.timeAndCost.openday, (#temporals.format(now, 'E')))} ? 'd-none' : ''">
             <span class="h4" th:text="'해당 구장은 ' + ${groundViewDto.timeAndCost.openday} + ' 요일만 운영합니다'"></span>
         </div>
+    </div>
+
+    <div>
+        <p class="h3">구장 이용 정보</p>
+        <p>
+            <textarea cols="150" rows="17" readonly="readonly" th:text="${groundViewDto.groundInfo.rule}"></textarea>
+        </p>
     </div>
 
     <!-- Modal -->
@@ -292,6 +302,7 @@
         var slt = document.getElementsByName("slt");
         if (box.innerHTML == "예약 불가") {
             alert("예약이 불가합니다.");
+            return;
         } else {
             if (box.style.backgroundColor == "red") {
                 box.style.backgroundColor = "#adff2f";
@@ -321,8 +332,15 @@
 <script th:inline="javascript">
     function cngBox(box) {
         var time = [[${groundViewDto.timeAndCost.startTime}]];
+        var nowDate = [[${groundViewDto.nowDate}]];
+        var nowTime = [[${groundViewDto.nowTime}]];
+        var sltDate = document.getElementById("day").value.substring(0, 10);
         var reserve = box.className;
         if (time.indexOf(box.id) < 0 || reserve.includes("reserve")) {
+            box.style.backgroundColor = "gray";
+            box.innerHTML = "예약 불가";
+        }
+        if (nowDate == sltDate && nowTime >= box.className.substring(0, 2)) {
             box.style.backgroundColor = "gray";
             box.innerHTML = "예약 불가";
         }
@@ -332,10 +350,14 @@
 
     function cngMsg(num) {
         var msg = document.getElementById("msg");
+        var cost = [[${groundViewDto.timeAndCost.cost}]];
+        var money = document.getElementById("money");
         if (num == 0) {
             msg.innerHTML = "시간을 선택해 주세요.";
+            money.innerHTML = "총 금액 : 0원";
         } else {
             msg.innerHTML = num + " 개를 선택하셨습니다.";
+            money.innerHTML = "총 금액 : " + (cost * num) + " 원";
         }
     }
 </script>
@@ -358,6 +380,7 @@
         var isLogin = [[${session.member} == null ? 'no' : 'yes']];
         if (isLogin == 'no') {
             alert("로그인 후 예약할 수 있습니다.");
+            location.href = "/member/login";
             return;
         }
         var slt = "";

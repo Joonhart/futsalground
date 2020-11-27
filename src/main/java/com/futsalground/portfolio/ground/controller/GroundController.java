@@ -46,13 +46,13 @@ public class GroundController {
         if (groundSearch.getGrdName() == null)    groundSearch.setGrdName("");
         if (request.isRequestedSessionIdValid()) {
             groundViewDtos = groundService.findAllGround(pageable, groundSearch);
-//            HttpSession session = request.getSession();
-//            Member member = (Member) session.getAttribute("member");
-//            if (groundSearch.getAddr1().equals(""))    groundSearch.setAddr1(member.getAddr1());
-//            if (groundSearch.getAddr2().equals(""))    groundSearch.setAddr2(member.getAddr2());
-//            groundViewDtos = groundService.findAllGroundforMember(pageable, groundSearch);
-//            groundSearch.setAddr1("");
-//            groundSearch.setAddr2("");
+            HttpSession session = request.getSession();
+            Member member = (Member) session.getAttribute("member");
+            if (groundSearch.getAddr1().equals(""))    groundSearch.setAddr1(member.getAddr1());
+            if (groundSearch.getAddr2().equals(""))    groundSearch.setAddr2(member.getAddr2());
+            groundViewDtos = groundService.findAllGroundforMember(pageable, groundSearch);
+            groundSearch.setAddr1("");
+            groundSearch.setAddr2("");
         } else {
             groundViewDtos = groundService.findAllGround(pageable, groundSearch);
         }

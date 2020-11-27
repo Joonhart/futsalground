@@ -65,7 +65,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="myApply : ${myApplys}">
-                    <td th:text="${myApply.grdName}"></td>
+                    <td><a th:href="@{/recruit/{id} (id=${myApply.recruitId})}"><span th:text="${myApply.grdName}"></span></a></td>
                     <td>
                         <span th:text="${#temporals.format(myApply.starttime, 'yyyy-MM-dd')}"></span>
                         <span th:text="${#temporals.format(myApply.starttime, 'HH:mm')}"></span>

@@ -9,6 +9,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Embedded;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +32,11 @@ public class GroundViewDto {
     private int size1;
     private int size2;
     private GroundInfo groundInfo;
+    private LocalDate nowDate;
+    private int nowTime;
     private List<String> revs = new ArrayList<>();
 
-    public GroundViewDto(Long id, String grdName, String name, String phone, String roadAddr, String numAddr, TimeAndCost timeAndCost, String matchtype, Amenities amenities, Images images, int size1, int size2, GroundInfo groundInfo, List<String> revs) {
+    public GroundViewDto(Long id, String grdName, String name, String phone, String roadAddr, String numAddr, TimeAndCost timeAndCost, String matchtype, Amenities amenities, Images images, int size1, int size2, GroundInfo groundInfo, LocalDate nowDate, int nowTime, List<String> revs) {
         this.id = id;
         this.grdName = grdName;
         this.name = name;
@@ -46,6 +50,8 @@ public class GroundViewDto {
         this.size1 = size1;
         this.size2 = size2;
         this.groundInfo = groundInfo;
+        this.nowDate = nowDate;
+        this.nowTime = nowTime;
         this.revs = revs;
     }
 }

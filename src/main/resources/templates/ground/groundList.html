@@ -73,14 +73,14 @@
         <div class="row py-3" th:each="groundViewDto : ${groundViewDtos}">
             <div class="col-md-5 order-md-1 text-center">
                 <a th:href="@{/ground/{id} (id=${groundViewDto.id})}">
-                    <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" src="https://www.playdoci.com/images/service/service_img_futsal_pic1.jpg" alt="이미지">
+                    <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" th:src="'/img/ground/' + ${groundViewDto.id} + '_1.jpg'" alt="이미지">
                     <span class="py-2" width="500" th:text="${groundViewDto.grdName}"></span>
                 </a>
             </div>
             <div class="col-md-7 order-md-2">
                 <div>
                     <span class="lead" th:text="${groundViewDto.roadAddr}"></span>
-                    <button class="btn-info rounded mx-2">지도보기</button>
+                    <button class="btn-info rounded mx-2" onclick="goMap()">지도보기</button>
                 </div>
                 <div class="my-3">
                     <div class="d-flex justify-content-around">
@@ -110,15 +110,15 @@
                         <div class="open" th:classappend="${#strings.contains(groundViewDto.timeAndCost.openday, (#temporals.format(now, 'E')))} ? '' : 'd-none'">
                             <table class="time-color">
                                 <tr>
-                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('a') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('06~08') ? 'reserved' : 'available'}|" id="a" ></td>
-                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('b') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('08~10') ? 'reserved' : 'available'}|" id="b" ></td>
-                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('c') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('10~12') ? 'reserved' : 'available'}|" id="c" ></td>
-                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('d') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('12~14') ? 'reserved' : 'available'}|" id="d" ></td>
-                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('e') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('14~16') ? 'reserved' : 'available'}|" id="e" ></td>
-                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('f') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('16~18') ? 'reserved' : 'available'}|" id="f" ></td>
-                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('g') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('18~20') ? 'reserved' : 'available'}|" id="g" ></td>
-                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('h') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('20~22') ? 'reserved' : 'available'}|" id="h" ></td>
-                                    <td th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('i') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('22~24') ? 'reserved' : 'available'}|" id="i" ></td>
+                                    <td id="a" th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('a') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('06~08') ? 'reserved' : 'available'}|"></td>
+                                    <td id="b" th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('b') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('08~10') ? 'reserved' : 'available'}|"></td>
+                                    <td id="c" th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('c') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('10~12') ? 'reserved' : 'available'}|"></td>
+                                    <td id="d" th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('d') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('12~14') ? 'reserved' : 'available'}|"></td>
+                                    <td id="e" th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('e') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('14~16') ? 'reserved' : 'available'}|"></td>
+                                    <td id="f" th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('f') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('16~18') ? 'reserved' : 'available'}|"></td>
+                                    <td id="g" th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('g') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('18~20') ? 'reserved' : 'available'}|"></td>
+                                    <td id="h" th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('h') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('20~22') ? 'reserved' : 'available'}|"></td>
+                                    <td id="i" th:classappend="|${groundViewDto.timeAndCost.startTime.indexOf('i') >= 0 ? 'available' : 'reserved'} ${groundViewDto.revs.contains('22~24') ? 'reserved' : 'available'}|"></td>
                                 </tr>
                             </table>
                             <table class="time-text">
@@ -177,7 +177,6 @@
         <p>&copy; 2017-2020 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
     </footer>
 </main>
-
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 
 
@@ -25,6 +26,19 @@ public class GroundCustomRepositoryImpl implements GroundCustomRepository {
                 .setParameter("addr2", '%'+groundSearch.getAddr2()+'%')
                 .setParameter("grdName", '%'+groundSearch.getGrdName()+'%')
                 .getResultList();
+
+        int start = (int)pageable.getOffset();
+        int end = (start + pageable.getPageSize()) > grounds.size() ? grounds.size() : (start + pageable.getPageSize());
+        return new PageImpl<>(grounds.subList(start, end), pageable, grounds.size());
+    }
+
+    @Override
+    public Page<Ground> findAllGroundforMember(Pageable pageable, GroundSearch groundSearch) {
+        String sql = "select * " +
+                "from t_ground t " +
+                "order by field(t.road_addr, t.road_addr like '%" + groundSearch.getAddr1() + "%' or t.road_addr like '%" + groundSearch.getAddr2() + "%') ASC, ground_id ASC;";
+        Query nativeQuery = em.createNativeQuery(sql, Ground.class);
+        List<Ground> grounds = nativeQuery.getResultList();
 
         int start = (int)pageable.getOffset();
         int end = (start + pageable.getPageSize()) > grounds.size() ? grounds.size() : (start + pageable.getPageSize());

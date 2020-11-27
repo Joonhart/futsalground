@@ -19,7 +19,7 @@ public interface GroundService {
 
     Page<GroundViewDto> findAllGround(Pageable pageable, GroundSearch groundSearch);
 
-//    Page<GroundViewDto> findAllGroundforMember(Pageable pageable, GroundSearch groundSearch);
+    Page<GroundViewDto> findAllGroundforMember(Pageable pageable, GroundSearch groundSearch);
 
     Optional<GroundViewDto> findGround(Long id);
 

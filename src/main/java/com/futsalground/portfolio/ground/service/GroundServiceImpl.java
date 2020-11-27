@@ -48,11 +48,11 @@ public class GroundServiceImpl implements GroundService {
         return entityToDto(pageable, grounds);
     }
 
-//    @Override
-//    public Page<GroundViewDto> findAllGroundforMember(Pageable pageable, GroundSearch groundSearch) {
-//        Page<Ground> grounds = groundCustomRepository.findAllGroundforMember(pageable, groundSearch);
-//        return entityToDto(pageable, grounds);
-//    }
+    @Override
+    public Page<GroundViewDto> findAllGroundforMember(Pageable pageable, GroundSearch groundSearch) {
+        Page<Ground> grounds = groundCustomRepository.findAllGroundforMember(pageable, groundSearch);
+        return entityToDto(pageable, grounds);
+    }
 
     private Page<GroundViewDto> entityToDto(Pageable pageable, Page<Ground> grounds) {
         List<GroundViewDto> collect = grounds.stream().map(ground -> new GroundViewDto(
@@ -69,6 +69,8 @@ public class GroundServiceImpl implements GroundService {
                 ground.getSize1(),
                 ground.getSize2(),
                 ground.getGroundInfo(),
+                LocalDate.now(),
+                LocalTime.now().getHour(),
                 groundRevCustomRepository.findRevs(ground.getId(), LocalDate.now())
         )).collect(Collectors.toList());
 
@@ -91,6 +93,8 @@ public class GroundServiceImpl implements GroundService {
                 g.getSize1(),
                 g.getSize2(),
                 g.getGroundInfo(),
+                LocalDate.now(),
+                LocalTime.now().getHour(),
                 null));
         return groundViewDto;
     }
