@@ -6,6 +6,7 @@ import com.futsalground.portfolio.board.service.BoardSaveService;
 import com.futsalground.portfolio.board.service.BoardViewService;
 import com.futsalground.portfolio.common.domain.BaseEntity;
 import com.futsalground.portfolio.exception.BoardNotFoundException;
+import com.futsalground.portfolio.exception.MemberNotFoundException;
 import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.member.model.MemberSaveDto;
 import com.futsalground.portfolio.member.model.MemberViewDto;
@@ -37,7 +38,7 @@ class BoardControllerTest {
 
     @Test
     @DisplayName("게시글 저장")
-    public void post() {
+    public void post() throws MemberNotFoundException {
         MemberSaveDto memberSaveDto = new MemberSaveDto(null, "joonhart@gmail.com", "1234", "sdf", "asd", "sdf");
         memberService.save(memberSaveDto);
 
@@ -60,7 +61,7 @@ class BoardControllerTest {
 
     @Test
     @DisplayName("게시글 수정")
-    public void update() throws BoardNotFoundException {
+    public void update() throws BoardNotFoundException, MemberNotFoundException {
         BoardSaveDto boardSaveDto = new BoardSaveDto();
         boardSaveDto.setWriter("writer");
         boardSaveDto.setTitle("title");

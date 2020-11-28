@@ -1,5 +1,6 @@
 package com.futsalground.portfolio.player.controller;
 
+import com.futsalground.portfolio.exception.RecruitNotFoundException;
 import com.futsalground.portfolio.member.domain.Member;
 import com.futsalground.portfolio.player.domain.MatchInfo;
 import com.futsalground.portfolio.player.domain.Recruit;
@@ -77,7 +78,7 @@ class RecruitControllerTest {
 
     @Test
     @DisplayName("용병 게시판에 예약하고 대기중인 상태 표시")
-    public void recruitApplyTest() {
+    public void recruitApplyTest() throws RecruitNotFoundException {
         Member member1 = new Member(null, null, null, null, 1L, "joonhart1@gmail.com", "1234", "addr1", "addr2", "gd");
         Member member2 = new Member(null, null, null, null, 1L, "joonhart2@gmail.com", "1234", "addr1", "addr2", "gd");
 
