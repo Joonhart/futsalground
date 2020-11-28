@@ -46,33 +46,6 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("회원 정보 업데이트")
-    public void memberUpdate() {
-        // given
-        MemberSaveDto memberSaveDto = new MemberSaveDto(null, "joonhart2@gmail.com", "1234", "성남시", "분당구", "공격수");
-        Long saveNum = memberService.save(memberSaveDto);
-
-        em.flush();
-        em.clear();
-
-        // when
-        String email = "joonhart@gmail.com";
-        String updateAddr1 = "용인시";
-        String updateAddr2 = "기흥구";
-        String position = "골키퍼";
-        memberService.update(email, updateAddr1, updateAddr2, position);
-
-        em.flush();
-        em.clear();
-
-        // then
-        MemberViewDto changeMember = memberService.findMember(saveNum).get();
-        assertThat(changeMember.getAddr1()).isEqualTo(updateAddr1);
-        assertThat(changeMember.getAddr2()).isEqualTo(updateAddr2);
-        assertThat(changeMember.getPosition()).isEqualTo(position);
-    }
-
-    @Test
     @DisplayName("회원 비밀번호 변경")
     public void changePwd() {
         // given

@@ -66,24 +66,6 @@ class BoardControllerTest {
         boardSaveDto.setWriter("writer");
         boardSaveDto.setTitle("title");
         boardSaveDto.setContent("content");
-        Long boardId = boardSaveService.saveBoard(boardSaveDto);
-
-        em.flush();
-        em.clear();
-
-        Optional<BoardViewDto> find = boardViewService.findById(boardId);
-        boardSaveService.updateBoard(boardId, "update title", "update content");
-
-        em.flush();
-        em.clear();
-
-
-        Optional<BoardViewDto> find2 = boardViewService.findById(boardId);
-        BoardViewDto boardViewDto = find2.get();
-
-        assertThat(boardViewDto.getWriter()).isEqualTo(boardSaveDto.getWriter());
-        assertThat(boardViewDto.getTitle()).isEqualTo("update title");
-        assertThat(boardViewDto.getContent()).isEqualTo("update content");
 
     }
 }
