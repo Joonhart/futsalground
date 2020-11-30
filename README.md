@@ -1,6 +1,7 @@
 ## futsalground   
-### 프로젝트 사이트 주소
+### 프로젝트 사이트 링크
 [futsalground](http://ec2-3-35-65-254.ap-northeast-2.compute.amazonaws.com:8080/)
+- 회원 아이디 : test1@test.com ~ test10@test.com 10개, 비밀번호는 1234 입니다.
 ### 프로젝트 개요
 - 풋살장 대관 사이트
 - 풋살장 대관과 용병 모집 & 지원 기능 제공           
