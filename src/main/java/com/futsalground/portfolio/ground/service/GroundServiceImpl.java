@@ -54,6 +54,12 @@ public class GroundServiceImpl implements GroundService {
         return entityToDto(pageable, grounds);
     }
 
+    @Override
+    public Page<GroundViewDto> findAllSearch(Pageable pageable, GroundSearch groundSearch) {
+        Page<Ground> grounds = groundCustomRepository.findAllSearch(pageable, groundSearch);
+        return entityToDto(pageable, grounds);
+    }
+
     private Page<GroundViewDto> entityToDto(Pageable pageable, Page<Ground> grounds) {
         List<GroundViewDto> collect = grounds.stream().map(ground -> new GroundViewDto(
                 ground.getId(),

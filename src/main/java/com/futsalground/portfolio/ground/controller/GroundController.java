@@ -3,7 +3,6 @@ package com.futsalground.portfolio.ground.controller;
 import com.futsalground.portfolio.exception.GroundNotFoundException;
 import com.futsalground.portfolio.exception.MemberNotFoundException;
 import com.futsalground.portfolio.ground.domain.Ground;
-import com.futsalground.portfolio.ground.domain.Reservation;
 import com.futsalground.portfolio.ground.model.GroundSearch;
 import com.futsalground.portfolio.ground.model.GroundViewDto;
 import com.futsalground.portfolio.ground.model.ReservationDto;
@@ -15,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,20 +39,21 @@ public class GroundController {
     public String list(@ModelAttribute GroundSearch groundSearch, Model model, @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 5)
                        Pageable pageable, HttpServletRequest request) {
         Page<GroundViewDto> groundViewDtos = null;
-        if (groundSearch.getAddr1() == null)    groundSearch.setAddr1("");
-        if (groundSearch.getAddr2() == null)    groundSearch.setAddr2("");
-        if (groundSearch.getGrdName() == null)    groundSearch.setGrdName("");
-        if (request.isRequestedSessionIdValid()) {
-            groundViewDtos = groundService.findAllGround(pageable, groundSearch);
-            HttpSession session = request.getSession();
-            Member member = (Member) session.getAttribute("member");
-            if (groundSearch.getAddr1().equals(""))    groundSearch.setAddr1(member.getAddr1());
-            if (groundSearch.getAddr2().equals(""))    groundSearch.setAddr2(member.getAddr2());
-            groundViewDtos = groundService.findAllGroundforMember(pageable, groundSearch);
-            groundSearch.setAddr1("");
-            groundSearch.setAddr2("");
+        if ((groundSearch.getAddr1() == null || groundSearch.getAddr1().equals("")) && (groundSearch.getAddr2() == null || groundSearch.getAddr2().equals("")) && (groundSearch.getGrdName() == null || groundSearch.getGrdName().equals(""))) {
+            groundSearch.setAddr1("");           groundSearch.setAddr2("");           groundSearch.setGrdName("");
+            if (request.isRequestedSessionIdValid()) {
+                HttpSession session = request.getSession();
+                Member member = (Member) session.getAttribute("member");
+                if (groundSearch.getAddr1().equals(""))    groundSearch.setAddr1(member.getAddr1());
+                if (groundSearch.getAddr2().equals(""))    groundSearch.setAddr2(member.getAddr2());
+                groundViewDtos = groundService.findAllGroundforMember(pageable, groundSearch);
+                groundSearch.setAddr1("");
+                groundSearch.setAddr2("");
+            } else {
+                groundViewDtos = groundService.findAllGround(pageable, groundSearch);
+            }
         } else {
-            groundViewDtos = groundService.findAllGround(pageable, groundSearch);
+            groundViewDtos = groundService.findAllSearch(pageable, groundSearch);
         }
         int startPage = Math.max(1, groundViewDtos.getPageable().getPageNumber() - 4);
         int endPage = Math.min(groundViewDtos.getTotalPages(), groundViewDtos.getPageable().getPageNumber() + 4);

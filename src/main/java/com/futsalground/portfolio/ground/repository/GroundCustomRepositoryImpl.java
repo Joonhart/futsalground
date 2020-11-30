@@ -36,7 +36,7 @@ public class GroundCustomRepositoryImpl implements GroundCustomRepository {
     public Page<Ground> findAllGroundforMember(Pageable pageable, GroundSearch groundSearch) {
         String sql = "select * " +
                 "from t_ground t " +
-                "order by field(t.road_addr, t.road_addr like '%" + groundSearch.getAddr1() + "%' or t.road_addr like '%" + groundSearch.getAddr2() + "%') ASC, ground_id ASC;";
+                "order by field(t.road_addr, t.road_addr like '%" + groundSearch.getAddr2() + "%' or t.road_addr like '%" + groundSearch.getAddr1() + "%') ASC, ground_id ASC;";
         Query nativeQuery = em.createNativeQuery(sql, Ground.class);
         List<Ground> grounds = nativeQuery.getResultList();
 

@@ -21,6 +21,8 @@ public interface GroundService {
 
     Page<GroundViewDto> findAllGroundforMember(Pageable pageable, GroundSearch groundSearch);
 
+    Page<GroundViewDto> findAllSearch(Pageable pageable, GroundSearch groundSearch);
+
     Optional<GroundViewDto> findGround(Long id);
 
     void reservation(ReservationDto reservationDto) throws MemberNotFoundException;
