@@ -73,9 +73,10 @@
  
 ####  4. 풋살장 대관
 <div>
-<img src="https://user-images.githubusercontent.com/64246924/100692234-c0269b80-33cd-11eb-959e-e1fbece4a97f.JPG">
-<img src="https://user-images.githubusercontent.com/64246924/100692237-c288f580-33cd-11eb-834b-8f7fb925be0f.JPG">
+<img width="450" src="https://user-images.githubusercontent.com/64246924/100692234-c0269b80-33cd-11eb-959e-e1fbece4a97f.JPG">
+<img width="450" src="https://user-images.githubusercontent.com/64246924/100692237-c288f580-33cd-11eb-834b-8f7fb925be0f.JPG">
 </div>
+
  - 로그인을 안했을 경우 최근 등록된 순서대로 풋살장을 보여줍니다.
  - 두번째 화면은 로그인을 하였을 경우이며, 회원 가입시 선택한 선호지역을 우선으로 하여 풋살장을 보여줍니다. 선호지역이 기흥구 보정동 으로 등록되어있는 회원입니다.
  - 선호지역은마이페이지에서 수정이 가능합니다.
