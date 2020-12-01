@@ -66,7 +66,12 @@
                 <tbody>
                 <tr th:each="applyMember : ${applyMembers}">
                     <td th:text="${applyMember.applicant.email}"></td>
-                    <td th:text="${applyMember.applicant.position}"></td>
+                    <td>
+                        <span th:if="${applyMember.applicant.position.contains('g')} == true">골키퍼</span>
+                        <span th:if="${applyMember.applicant.position.contains('d')} == true">수비수</span>
+                        <span th:if="${applyMember.applicant.position.contains('m')} == true">미드필더</span>
+                        <span th:if="${applyMember.applicant.position.contains('f')} == true">공격수</span>
+                    </td>
                     <td th:text="${applyMember.applicant.applycnt}"></td>
                     <td th:text="${applyMember.selected} == false ? '대기중' : '선택'"></td>
                     <form th:action="@{/recruit/choice}" method="post">
