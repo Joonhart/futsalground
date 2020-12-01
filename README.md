@@ -1,6 +1,9 @@
 ## futsalground   
+<img src="https://user-images.githubusercontent.com/64246924/100685490-d9285000-33bf-11eb-92e6-d268c70a36f1.JPG">
+
+
 ### 프로젝트 사이트 링크
-[futsalground](http://ec2-3-35-65-254.ap-northeast-2.compute.amazonaws.com:8080/)
+[futsalground바로가기](http://ec2-3-35-65-254.ap-northeast-2.compute.amazonaws.com:8080/)
 - 회원 아이디 : test1@test.com ~ test10@test.com 10개, 비밀번호는 1234 입니다.
 ### 프로젝트 개요
 - 풋살장 대관 사이트
@@ -22,11 +25,17 @@
 
 ### 기능 상세 소개
 1. 회원 가입 및 로그인
-(회원가입 창), (로그인 창)
- - 회원 가입 및 로그인입니다. 선호지역에 따라 구장 리스트 조회 시 선호지역 우선으로 조회됩니다.
+<div>
+<img width="300" src="https://user-images.githubusercontent.com/64246924/100685494-da597d00-33bf-11eb-8f04-2b833f448f39.JPG">
+<img width="300" src="https://user-images.githubusercontent.com/64246924/100685492-da597d00-33bf-11eb-882c-06703863f2a8.JPG"> 
+ </div>
+ 
+   - 회원 가입 및 로그인입니다. 선호지역에 따라 구장 리스트 조회 시 선호지역 우선으로 조회됩니다.
 
 2. 간편 게시판
-(게시판 창)
+<img src="https://user-images.githubusercontent.com/64246924/100686675-2c9b9d80-33c2-11eb-8897-5a01a9465851.JPG">
+<img src="https://user-images.githubusercontent.com/64246924/100686679-2e656100-33c2-11eb-8949-d8bdad94d3e4.JPG"> 
+
  - CRUD 기능을 갖춘 게시판
  
 3. 용병 모집 & 지원
