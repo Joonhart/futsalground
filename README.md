@@ -54,9 +54,11 @@
 <img src="https://user-images.githubusercontent.com/64246924/100690766-9ae45e00-33ca-11eb-9789-2a482320f861.JPG">
 
  - 마이페이지에서 회원이 등록한 용병모집 글 현황을 확인할 수 있습니다  
+ 
 <img src="https://user-images.githubusercontent.com/64246924/100690777-9ddf4e80-33ca-11eb-91ea-a452cda20e85.JPG">
 
  - 마이페이지에서 자신의 용병모집 글에 지원한 지원자들의 정보를 확인할 수 있고, 지원자를 선별할 수 있습니다. 
+ 
 <img src="https://user-images.githubusercontent.com/64246924/100691043-2c53d000-33cb-11eb-9e8c-81b44f0eecf1.JPG">
 
   - 용병 모집 인원이 마감되면 용병 게시글에서 모집 마감이라고 변경됩니다.
@@ -82,13 +84,16 @@
  - 선호지역은마이페이지에서 수정이 가능합니다.
  
 <img src="https://user-images.githubusercontent.com/64246924/100692474-404d0100-33ce-11eb-85f8-538186586006.JPG">
+
  - 지역 혹은 풋살장 이름으로 검색할 수 있습니다. 
 
 <img src="https://user-images.githubusercontent.com/64246924/100692745-d2eda000-33ce-11eb-91ed-5aab2c340900.JPG">
+
  - 예약은 2시간 단위로 가능하며, 현재날짜 이후로 30일 동안만 가능합니다.
  - 현재시간 이후로만 예약이 가능하며, 시간 선택 시 금액이 표시됩니다. 시간은 중복선택 할 수 있습니다.
  
 <img src="https://user-images.githubusercontent.com/64246924/100692817-fc0e3080-33ce-11eb-9506-c75982ffe1c6.JPG">
+
  - 예약 즉시 마이페이지로 이동하며, 구장예약 현황 확인 및 취소를 할 수 있습니다. 
  - 사용이 완료된 구장은 상태가 '사용완료'로 표시됩니다.
   
