@@ -132,7 +132,7 @@ public class GroundServiceImpl implements GroundService {
                 reservation.getRevTime(),
                 reservation.getCost(),
                 reservation.getPayMethod(),
-                !reservation.getRevDate().isBefore(nowDate) && (reservation.getRevDate().isEqual(nowDate) == (Integer.parseInt(reservation.getRevTime().substring(0, 2)) <= hour))
+                reservation.getRevDate().isBefore(nowDate) || (reservation.getRevDate().isEqual(nowDate) && (Integer.parseInt(reservation.getRevTime().substring(0, 2)) <= hour))
         )).collect(Collectors.toList());
 
         return new PageImpl<>(collect, pageable, reservationPage.getTotalElements());
