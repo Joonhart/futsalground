@@ -45,21 +45,26 @@
                         <span>모집기간종료</span>
                     </span>
                 </td>
-                <span th:if="${session.member} != null">
-                    <span th:if="${recruitPageViewDto.recruitMember.email} == ${session.member.email}"><td><a type="button" class="btn btn-danger" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">수정/삭제</a></td></span>
-                    <span th:if="${recruitPageViewDto.recruitMember.email} != ${session.member.email}">
-                        <span th:if="${recruitPageViewDto.seledtedMembers} < ${recruitPageViewDto.volume}"><td><a type="button" class="btn btn-primary" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">지원하기</a></td></span>
-                        <span th:if="${recruitPageViewDto.seledtedMembers} >= ${recruitPageViewDto.volume}"><td><a type="button" class="btn btn-info" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">내용보기(모집마감)</a></td></span>
+                <span th:if="${recruitPageViewDto.isOpen() == true}">
+                    <span th:if="${session.member} != null">
+                        <span th:if="${recruitPageViewDto.recruitMember.email} == ${session.member.email}"><td><a type="button" class="btn btn-danger" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">수정/삭제</a></td></span>
+                        <span th:if="${recruitPageViewDto.recruitMember.email} != ${session.member.email}">
+                            <span th:if="${recruitPageViewDto.seledtedMembers} < ${recruitPageViewDto.volume}"><td><a type="button" class="btn btn-primary" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">지원하기</a></td></span>
+                            <span th:if="${recruitPageViewDto.seledtedMembers} >= ${recruitPageViewDto.volume}"><td><a type="button" class="btn btn-info" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">내용보기(모집마감)</a></td></span>
+                        </span>
                     </span>
-                </span>
-                <span th:if="${session.member} == null">
-                    <span th:if="${recruitPageViewDto.isOpen() == true}">
+                    <span th:if="${session.member} == null">
                         <td><button type="button" class="btn btn-primary" th:if="${recruitPageViewDto.seledtedMembers} < ${recruitPageViewDto.volume}" onclick="onlyMember()">지원하기</button></td>
                     </span>
-                    <span th:if="${recruitPageViewDto.isOpen() == false}">
-                        <td><button type="button" class="btn btn-primary" th:if="${recruitPageViewDto.seledtedMembers} < ${recruitPageViewDto.volume}">기간마감</button></td>
+                </span>
+                <span th:if="${recruitPageViewDto.isOpen() == false}">
+                    <span th:if="${session.member} != null">
+                        <span th:if="${recruitPageViewDto.recruitMember.email} == ${session.member.email}"><td><a type="button" class="btn btn-info" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">모집기간종료</a></td></span>
+                        <span th:if="${recruitPageViewDto.recruitMember.email} != ${session.member.email}"><td><a type="button" class="btn btn-info" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">모집기간종료</a></td></span>
                     </span>
-                    <td><button type="button" class="btn btn-info" th:if="${recruitPageViewDto.seledtedMembers} >= ${recruitPageViewDto.volume}" onclick="onlyMember()">내용보기(모집마감)</button></td>
+                    <span th:if="${session.member} == null">
+                        <td><button type="button" class="btn btn-info" >모집기간종료</button></td>
+                    </span>
                 </span>
             </tr>
             </tbody>
