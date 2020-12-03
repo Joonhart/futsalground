@@ -23,6 +23,8 @@ public interface RecruitService {
 
     Page<RecruitPageViewDto> findAll(Pageable pageable);
 
+    Page<RecruitPageViewDto> findRecruting(Pageable pageable);
+
     void apply(Long id, Member member) throws RecruitNotFoundException;
 
     List<MyApplyShowDto> findMyApplys(Member member);
@@ -39,7 +41,7 @@ public interface RecruitService {
 
     void delete(Long id);
 
-//    Page<RecruitPageViewDto> findByAddr1(String addr1, Pageable pageable);
-//
-//    Page<RecruitPageViewDto> findByGroundname(String groundname, Pageable pageable);
+    Page<RecruitPageViewDto> findByAddr(Pageable pageable, String addr);
+
+    Page<RecruitPageViewDto> findByGrdName(Pageable pageable, String grdName);
 }

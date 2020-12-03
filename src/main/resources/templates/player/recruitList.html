@@ -7,7 +7,6 @@
     <div th:replace="fragments/bodyHeader :: menu('player')"/>
 
     <main role="main">
-
         <section class="py-3 text-center">
             <div class="container">
                 <h1>용병모집/지원하기</h1>
@@ -15,76 +14,85 @@
             </div>
         </section>
 
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>구장명</th>
-                <th>지역</th>
-                <th>매치일/시</th>
-                <th>선택인원 / 모집인원</th>
-                <th>모집상태</th>
-                <th>더보기</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="recruitPageViewDto : ${recruitPageViewDtos}">
-                <td th:text="${recruitPageViewDto.groundname}"></td>
-                <td th:text="${recruitPageViewDto.addr1}"></td>
-                <td th:text="${#temporals.format(recruitPageViewDto.starttime, 'yyyy-MM-dd(E) HH:mm')}"></td>
-                <td>
-                    <span th:text="${recruitPageViewDto.seledtedMembers}"></span>
-                    /
-                    <span th:text="${recruitPageViewDto.volume}"></span>
-                </td>
-                <td>
+        <div class="d-flex justify-content-end py-2">
+            <button id="getAll" class="btn btn-primary mx-2" onclick="getAll()">전체</button>
+            <button id="getRecruit" class="btn btn-dark mx-2" onclick="getRecruit()">모집중</button>
+        </div>
+        <div id="list">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>구장명</th>
+                    <th>지역</th>
+                    <th>매치일/시</th>
+                    <th>선택인원 / 모집인원</th>
+                    <th>모집상태</th>
+                    <th>더보기</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="recruitPageViewDto : ${recruitPageViewDtos}">
+                    <td th:text="${recruitPageViewDto.groundname}"></td>
+                    <td th:text="${recruitPageViewDto.addr1}"></td>
+                    <td th:text="${#temporals.format(recruitPageViewDto.starttime, 'yyyy-MM-dd(E) HH:mm')}"></td>
+                    <td>
+                        <span th:text="${recruitPageViewDto.seledtedMembers}"></span>
+                        /
+                        <span th:text="${recruitPageViewDto.volume}"></span>
+                    </td>
+                    <td>
+                        <span th:if="${recruitPageViewDto.isOpen() == true}">
+                            <span class="text-primary" th:if="${recruitPageViewDto.seledtedMembers} < ${recruitPageViewDto.volume}">모집중</span>
+                            <span class="text-danger" th:if="${recruitPageViewDto.seledtedMembers} >= ${recruitPageViewDto.volume}">모집마감</span>
+                        </span>
+                        <span th:if="${recruitPageViewDto.isOpen() == false}">
+                            <span>모집기간종료</span>
+                        </span>
+                    </td>
                     <span th:if="${recruitPageViewDto.isOpen() == true}">
-                        <span class="text-primary" th:if="${recruitPageViewDto.seledtedMembers} < ${recruitPageViewDto.volume}">모집중</span>
-                        <span class="text-danger" th:if="${recruitPageViewDto.seledtedMembers} >= ${recruitPageViewDto.volume}">모집마감</span>
-                    </span>
-                    <span th:if="${recruitPageViewDto.isOpen() == false}">
-                        <span>모집기간종료</span>
-                    </span>
-                </td>
-                <span th:if="${recruitPageViewDto.isOpen() == true}">
-                    <span th:if="${session.member} != null">
-                        <td th:if="${recruitPageViewDto.recruitMember.email} == ${session.member.email}"><a type="button" class="btn btn-danger" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">수정/삭제</a></td>
-                        <span th:if="${recruitPageViewDto.recruitMember.email} != ${session.member.email}">
-                            <td th:if="${recruitPageViewDto.seledtedMembers} < ${recruitPageViewDto.volume}"><a type="button" class="btn btn-primary" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">지원하기</a></td>
-                            <td th:if="${recruitPageViewDto.seledtedMembers} >= ${recruitPageViewDto.volume}"><a type="button" class="btn btn-info" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">내용보기(모집마감)</a></td>
+                        <span th:if="${session.member} != null">
+                            <td th:if="${recruitPageViewDto.recruitMember.email} == ${session.member.email}"><a type="button" class="btn btn-danger" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">수정/삭제</a></td>
+                            <span th:if="${recruitPageViewDto.recruitMember.email} != ${session.member.email}">
+                                <td th:if="${recruitPageViewDto.seledtedMembers} < ${recruitPageViewDto.volume}"><a type="button" class="btn btn-primary" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">지원하기</a></td>
+                                <td th:if="${recruitPageViewDto.seledtedMembers} >= ${recruitPageViewDto.volume}"><a type="button" class="btn btn-info" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">내용보기(모집마감)</a></td>
+                            </span>
+                        </span>
+                        <span th:if="${session.member} == null">
+                            <td th:if="${recruitPageViewDto.seledtedMembers} < ${recruitPageViewDto.volume}"><button type="button" class="btn btn-primary" onclick="onlyMember()">지원하기</button></td>
+                            <td th:if="${recruitPageViewDto.seledtedMembers} >= ${recruitPageViewDto.volume}"><button type="button" class="btn btn-info" onclick="onlyMember()">내용보기(모집마감)</button></td>
                         </span>
                     </span>
-                    <td th:if="${session.member} == null"><button type="button" class="btn btn-primary" th:if="${recruitPageViewDto.seledtedMembers} < ${recruitPageViewDto.volume}" onclick="onlyMember()">지원하기</button></td>
-                </span>
-                <span th:if="${recruitPageViewDto.isOpen() == false}">
-                    <span th:if="${session.member} != null">
-                        <td th:if="${recruitPageViewDto.recruitMember.email} == ${session.member.email}"><a type="button" class="btn btn-info" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">모집기간종료</a></td>
-                        <td th:if="${recruitPageViewDto.recruitMember.email} != ${session.member.email}"><a type="button" class="btn btn-info" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">모집기간종료</a></td>
+                    <span th:if="${recruitPageViewDto.isOpen() == false}">
+                        <span th:if="${session.member} != null">
+                            <td th:if="${recruitPageViewDto.recruitMember.email} == ${session.member.email}"><a type="button" class="btn btn-info" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">모집기간종료</a></td>
+                            <td th:if="${recruitPageViewDto.recruitMember.email} != ${session.member.email}"><a type="button" class="btn btn-info" th:href="@{/recruit/{id} (id=${recruitPageViewDto.id})}">모집기간종료</a></td>
+                        </span>
+                        <span th:if="${session.member} == null">
+                            <td><button type="button" class="btn btn-info" >모집기간종료</button></td>
+                        </span>
                     </span>
-                    <span th:if="${session.member} == null">
-                        <td><button type="button" class="btn btn-info" >모집기간종료</button></td>
-                    </span>
-                </span>
-            </tr>
-            </tbody>
-        </table>
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${1 == recruitPageViewDtos.pageable.pageNumber + 1} ? 'disabled'">
-                    <a class="page-link" href="#"  th:href="@{/recruit(page=${recruitPageViewDtos.pageable.pageNumber}-1)}">Previous</a>
-                </li>
-                <li class="page-item" th:classappend="${curPage == i} ? 'disabled'" th:each="i : ${#numbers.sequence(startPage, endPage)}" >
-                    <a class="page-link" href="#" th:href="@{/recruit(page=${i}-1)}" th:text="${i}" >1</a></li>
-                <li class="page-item" th:classappend="${totalPage == recruitPageViewDtos.pageable.pageNumber+1} ? 'disabled'">
-                    <a class="page-link" href="#" th:href="@{/recruit(page=${recruitPageViewDtos.pageable.pageNumber}+1)}">Next</a>
-                </li>
-            </ul>
-        </nav>
+                </tr>
+                </tbody>
+            </table>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${1 == recruitPageViewDtos.pageable.pageNumber + 1} ? 'disabled'">
+                        <a class="page-link" href="#"  th:href="@{/recruit(page=${recruitPageViewDtos.pageable.pageNumber}-1)}">Previous</a>
+                    </li>
+                    <li class="page-item" th:classappend="${curPage == i} ? 'disabled'" th:each="i : ${#numbers.sequence(startPage, endPage)}" >
+                        <a class="page-link" href="#" th:href="@{/recruit(page=${i}-1)}" th:text="${i}" >1</a></li>
+                    <li class="page-item" th:classappend="${totalPage == recruitPageViewDtos.pageable.pageNumber+1} ? 'disabled'">
+                        <a class="page-link" href="#" th:href="@{/recruit(page=${recruitPageViewDtos.pageable.pageNumber}+1)}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
         <div class="d-flex justify-content-start">
-            <form class="form-inline" method="get" th:action="@{/recruit}">
+            <form class="form-inline" method="get" th:action="@{/recruit}" th:object="${recruitSearch}">
                 <select class="custom-select" id="searchCond" name="searchCond">
                     <option value="" selected>검색조건</option>
-                    <option value="title">구장명</option>
-                    <option value="content">지역</option>
+                    <option value="grdName">구장명</option>
+                    <option value="addr">지역</option>
                 </select>
                 <div class="form-group mx-sm-3 mb-2">
                     <label for="searchText" class="sr-only">search</label>
@@ -109,4 +117,6 @@
         location.href = "/member/login";
     }
 </script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script th:src="@{/js/changeList.js}"></script>
 </html>

@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -72,6 +73,26 @@ public class RecruitServiceImpl implements RecruitService {
     public Page<RecruitPageViewDto> findAll(Pageable pageable) {
         Page<Recruit> recruits = recruitRepository.findAll(pageable);
         List<RecruitPageViewDto> recruitPageViewDtos = pageToList(recruits);
+        recruitPageViewDtos.sort((o1, o2) -> {
+            if (o1.isOpen() && o1.getStarttime().isAfter(o2.getStarttime())) {
+                return -1;
+            } else {
+                return 1;
+            }
+        });
+        return new PageImpl<>(recruitPageViewDtos, pageable, recruits.getTotalElements());
+    }
+
+    @Override
+    public Page<RecruitPageViewDto> findRecruting(Pageable pageable) {
+        Page<Recruit> recruits = recruitCustomRepository.findRecruting(pageable);
+        List<RecruitPageViewDto> recruitPageViewDtos = pageToList(recruits);
+        for (int i = recruitPageViewDtos.size() - 1; i >= 0; i--) {
+            if (recruitPageViewDtos.get(i).getSeledtedMembers() >= recruitPageViewDtos.get(i).getVolume()) {
+                recruitPageViewDtos.remove(recruitPageViewDtos.get(i));
+            }
+        }
+
         return new PageImpl<>(recruitPageViewDtos, pageable, recruits.getTotalElements());
     }
 
@@ -82,21 +103,21 @@ public class RecruitServiceImpl implements RecruitService {
         recruitApplyRepository.save(applyMember);
     }
 
-//    @Override
-//    public Page<RecruitPageViewDto> findByAddr1(String addr1, Pageable pageable) {
-//        Page<Recruit> recruits = recruitRepository.findByAddr1(addr1, pageable);
-//        List<RecruitPageViewDto> recruitPageViewDtos = pageToList(recruits);
-//        return new PageImpl<>(recruitPageViewDtos, pageable, recruits.getTotalElements());
-//    }
-//
-//    @Override
-//    public Page<RecruitPageViewDto> findByGroundname(String groundname, Pageable pageable) {
-//        Page<Recruit> recruits = recruitRepository.findByGroundname(groundname, pageable);
-//        List<RecruitPageViewDto> recruitPageViewDtos = pageToList(recruits);
-//        return new PageImpl<>(recruitPageViewDtos, pageable, recruits.getTotalElements());
-//    }
+    @Override
+    public Page<RecruitPageViewDto> findByAddr(Pageable pageable, String addr) {
+        Page<Recruit> recruits = recruitCustomRepository.findByAddr1Containing(addr, pageable);
+        List<RecruitPageViewDto> recruitPageViewDtos = pageToList(recruits);
+        recruitPageViewDtos.sort((o1, o2) -> o1.getStarttime().isAfter(o2.getStarttime()) ? -1 : 1);
+        return new PageImpl<>(recruitPageViewDtos, pageable, recruits.getTotalElements());
+    }
 
-    // 날짜로 검색 추가
+    @Override
+    public Page<RecruitPageViewDto> findByGrdName(Pageable pageable, String grdName) {
+        Page<Recruit> recruits = recruitCustomRepository.findByGrdNameContaining(grdName, pageable);
+        List<RecruitPageViewDto> recruitPageViewDtos = pageToList(recruits);
+        recruitPageViewDtos.sort((o1, o2) -> o1.getStarttime().isAfter(o2.getStarttime()) ? -1 : 1);
+        return new PageImpl<>(recruitPageViewDtos, pageable, recruits.getTotalElements());
+    }
 
     private List<RecruitPageViewDto> pageToList(Page<Recruit> recruits) {
         LocalDateTime now = LocalDateTime.now();
